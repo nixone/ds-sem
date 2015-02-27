@@ -1,18 +1,20 @@
 package sk.nixone.ds.sem1;
 
-import sk.nixone.ds.core.EventProbabilityObserver;
+import sk.nixone.ds.core.ProbabilityObserver;
 
-public class PlayerStayedAliveObserver extends EventProbabilityObserver<boolean[]> {
+public class PlayerStayedAliveObserver extends ProbabilityObserver {
 
 	private int n;
+	private Game game;
 	
-	public PlayerStayedAliveObserver(int n) {
+	public PlayerStayedAliveObserver(Game game, int n) {
 		this.n = n;
+		this.game = game;
 	}
 	
 	@Override
-	public boolean isSuccessfull(boolean[] result)
+	public boolean isSuccessfull()
 	{
-		return result[n];
+		return game.isPlayerAlive(n);
 	}
 }

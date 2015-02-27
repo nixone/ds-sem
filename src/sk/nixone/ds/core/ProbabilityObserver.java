@@ -1,17 +1,21 @@
 package sk.nixone.ds.core;
 
-public abstract class EventProbabilityObserver<T> implements StaticSimulation.Observer<T> {
+public abstract class ProbabilityObserver extends ValueObserver<Double> {
 	
 	private int totalTries = 0;
 	private int successTries = 0;
 	
 	@Override
-	public void doObserve(T result)
-	{
+	public void update(int replicationIndex) {
 		totalTries++;
-		if(isSuccessfull(result)) {
+		if(isSuccessfull()) {
 			successTries++;
 		}
+	}
+	
+	@Override
+	public void updateUI(int replicationIndex) {
+		emitUI(replicationIndex, getProbability());
 	}
 	
 	@Override
@@ -26,5 +30,5 @@ public abstract class EventProbabilityObserver<T> implements StaticSimulation.Ob
 		return Double.NaN;
 	}
 
-	public abstract boolean isSuccessfull(T result);
+	public abstract boolean isSuccessfull();
 }

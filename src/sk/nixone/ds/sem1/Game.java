@@ -3,7 +3,11 @@ package sk.nixone.ds.sem1;
 import sk.nixone.ds.core.Random;
 import sk.nixone.ds.core.Randoms;
 
-public abstract class Game {
+public class Game {
+
+	enum Strategy {
+		BEST, RANDOM;
+	}
 	
 	static final private double[] ACCURACIES = {
 		0.6, 0.7, 0.75, 0.25, 0.10, 0.90
@@ -19,22 +23,38 @@ public abstract class Game {
 	private Random [] shootRandoms = null;
 	private Random [] selectionRandoms = null;
 	private int alivePlayers = 0;
-	private Randoms randoms;
 	
 	private int [] shooties = null;
+	
+	private Strategy strategy = Strategy.BEST;
 	
 	public Game(Randoms randoms) {
 		isAlive = new boolean[PLAYER_COUNT];
 		shooties = new int[PLAYER_COUNT];
 		
-		this.randoms = randoms;
+		this.strategy = strategy;
 		this.shootRandoms = new Random[PLAYER_COUNT];
 		this.selectionRandoms = new Random[PLAYER_COUNT];
+		
+		for(int p=0; p<PLAYER_COUNT; p++) {
+			this.shootRandoms[p] = randoms.getNextRandom();
+			this.selectionRandoms[p] = randoms.getNextRandom();
+		}
 		
 		reset();
 	}
 	
-	protected abstract int selectShootie(int shooter);
+	private int selectShootie(int shooter) {
+		if(strategy == Strategy.BEST) {
+			return getBestShootie(shooter);
+		} else {
+			return getRandomShootieFor(shooter);
+		}
+	}
+	
+	public void setStrategy(Strategy strategy) {
+		this.strategy = strategy;
+	}
 	
 	public int getRandomShootieFor(int shooter) {
 		int shootieNumber = selectionRandoms[shooter].nextInt(alivePlayers-1);
@@ -94,8 +114,6 @@ public abstract class Game {
 	public void reset() {
 		for(int p=0; p<PLAYER_COUNT; p++) {
 			isAlive[p] = true;
-			this.shootRandoms[p] = randoms.getNextRandom();
-			this.selectionRandoms[p] = randoms.getNextRandom();
 		}
 		alivePlayers = PLAYER_COUNT;
 	}
@@ -109,5 +127,13 @@ public abstract class Game {
 			makeShootieSelection();
 			makeSelectedShoot();
 		}
+	}
+	
+	public boolean isPlayerAlive(int n) {
+		return isAlive[n];
+	}
+	
+	public boolean areAllDead() {
+		return alivePlayers == 0;
 	}
 }

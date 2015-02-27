@@ -1,46 +1,48 @@
 package sk.nixone.ds.core;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashSet;
 
-public class StaticSimulation<T> {
-
-	public interface Thrower<T> {
-		public void reset();
-		public T doThrow();
-	}
+public abstract class StaticSimulation {
 	
-	public interface Observer<T> {
-		public void reset();
-		public void doObserve(T result);
-	}
+	private Collection<ValueObserver<?>> observers = new HashSet<ValueObserver<?>>();
 	
-	private Thrower<T> thrower = null;
-	private List<Observer<T>> observers = null;
-	
-	public StaticSimulation() {
-		this.observers = new LinkedList<Observer<T>>();
-	}
-	
-	public void setThrower(Thrower<T> thrower) {
-		this.thrower = thrower;
-	}
-	
-	public void addObserver(Observer<T> observer) {
-		this.observers.add(observer);
-	}
-	
-	public void run(int replications) {
-		thrower.reset();
-		for(Observer<T> observer : observers) {
+	public void reset() {
+		for(ValueObserver<?> observer : observers) {
 			observer.reset();
 		}
-		
+	}
+	
+	public abstract void runReplication();
+	
+	public void addObserver(ValueObserver<?> observer) {
+		observers.add(observer);
+	}
+	
+	public void removeObserver(ValueObserver<?> observer) {
+		observers.remove(observer);
+	}
+	
+	public void run(int replications, int updateUIEvery) {
+		reset();
 		for(int replication=0; replication<replications; replication++) {
-			T result = thrower.doThrow();
-			for(Observer<T> observer : observers) {
-				observer.doObserve(result);
+			runReplication();
+			updateObservers(replication);
+			if(replication % updateUIEvery == 0) {
+				updateObserversUI(replication);
 			}
+		}
+	}
+	
+	private void updateObservers(int r) {
+		for(ValueObserver<?> observer : observers) {
+			observer.update(r);
+		}
+	}
+	
+	private void updateObserversUI(int r) {
+		for(ValueObserver<?> observer : observers) {
+			observer.updateUI(r);
 		}
 	}
 }
