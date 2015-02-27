@@ -1,6 +1,7 @@
 package sk.nixone.ds.core;
 
 import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
 
 public class PercentageLabelEmitter implements Emitter<Integer, Double> {
 	
@@ -10,7 +11,18 @@ public class PercentageLabelEmitter implements Emitter<Integer, Double> {
 		this.label = label;
 	}
 	
+	@Override
 	public void emit(Integer key, Double value) {
-		label.setText(String.format("%.6f", value*100)+" %");
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				label.setText(String.format("%.6f", value*100)+" %");
+			}
+		});
+	}
+	
+	@Override
+	public void reset() {
+		emit(0, 0.);
 	}
 }

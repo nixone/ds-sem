@@ -9,6 +9,7 @@ import javax.swing.JLabel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
@@ -31,6 +32,7 @@ public class TabContent extends Container {
 	
 	public TabContent(String dataName, ProbabilityObserver valueObserver) {
 		series = new XYSeries(dataName);
+		
 		seriesCollection = new XYSeriesCollection();
 		seriesCollection.addSeries(series);
 		seriesEmitter = new XYSeriesEmitter(series);
@@ -42,12 +44,17 @@ public class TabContent extends Container {
 		valueObserver.addUIEmitter(seriesEmitter);
 	}
 	
+	public void setMaximumDataPoints(int maximumDataPoints) {
+		series.setMaximumItemCount(maximumDataPoints);
+	}
+	
 	private void createComponents(String dataName) {
 		JFreeChart chart = ChartFactory.createXYLineChart(dataName, "Replications", "Probability", seriesCollection);
-		seriesCollection.setAutoWidth(true);
+		NumberAxis axis = (NumberAxis)chart.getXYPlot().getRangeAxis();
+		axis.setAutoRangeIncludesZero(false);
 		
 		chartPanel = new ChartPanel(chart);
-		chartPanel.setPreferredSize(new Dimension(600, 300));
+		chartPanel.setPreferredSize(new Dimension(800, 600));
 		
 		legendLabel.setFont(legendLabel.getFont().deriveFont(24f));
 		dataLabel.setFont(dataLabel.getFont().deriveFont(30f));

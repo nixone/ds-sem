@@ -20,6 +20,7 @@ public abstract class ProbabilityObserver extends ValueObserver<Double> {
 	
 	@Override
 	public void reset() {
+		super.reset();
 		totalTries = successTries = 0;
 	}
 	

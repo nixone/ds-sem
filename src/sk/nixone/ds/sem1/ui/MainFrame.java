@@ -2,6 +2,7 @@ package sk.nixone.ds.sem1.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashSet;
 
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
@@ -9,9 +10,11 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
+import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
+import sk.nixone.ds.core.NumberUtil;
 import sk.nixone.ds.sem1.Game;
 import sk.nixone.ds.sem1.GameSimulation;
 
@@ -23,13 +26,19 @@ public class MainFrame extends JFrame {
 	private JRadioButton strategyBestButton = new JRadioButton("Best");
 	private JLabel replicationNumberLabel = new JLabel("Replications:");
 	private JTextField replicationNumberInput = new JTextField();
-	private JLabel displayDataCountLabel = new JLabel("Show records:");
-	private JTextField displayDataCountInput = new JTextField();
+	private JLabel dataPercentageLabel = new JLabel("Show %:");
+	private JSlider dataPercentageSlider = new JSlider(0, 1000, 500);
+	private JLabel cropPercentageLabel = new JLabel("Crop %:");
+	private JSlider cropPercentageSlider = new JSlider(0, 1000, 50);
 	private JButton startButton = new JButton("Simulate");
 	
 	private JTabbedPane tabs = new JTabbedPane();
 	
 	private GameSimulation simulation;
+	
+	private volatile boolean isSimulationRunning = false;
+	
+	private HashSet<TabContent> tabContents = new HashSet<TabContent>();
 	
 	public MainFrame(GameSimulation simulation) {
 		super("1. simulácia - Semestrálna práca - Martin Olešnaník");
@@ -44,17 +53,20 @@ public class MainFrame extends JFrame {
 	}
 	
 	private void createComponents() {
-		replicationNumberInput.setText("10000000");
-		displayDataCountInput.setText("1000000");
+		replicationNumberInput.setText("100m");
 		
 		strategyGroup.add(strategyBestButton);
 		strategyBestButton.setSelected(true);
 		strategyGroup.add(strategyRandomButton);
 		
-		tabs.addTab("All dead", new TabContent("All dead", simulation.getAllDeadObserver()));
+		TabContent tabContent = new TabContent("All dead", simulation.getAllDeadObserver());
+		tabs.addTab("All dead", tabContent);
+		tabContents.add(tabContent);
 		for(int p=0; p<Game.PLAYER_COUNT; p++) {
 			String name = (char)('A'+p)+" stayed";
-			tabs.addTab(name, new TabContent(name, simulation.getPlayerStayedAliveObserver(p)));
+			tabContent = new TabContent(name, simulation.getPlayerStayedAliveObserver(p));
+			tabs.addTab(name, tabContent);
+			tabContents.add(tabContent);
 		}
 		
 		startButton.addActionListener(new ActionListener() {
@@ -78,8 +90,10 @@ public class MainFrame extends JFrame {
 						.addComponent(strategyRandomButton)
 						.addComponent(replicationNumberLabel)
 						.addComponent(replicationNumberInput)
-						.addComponent(displayDataCountLabel)
-						.addComponent(displayDataCountInput)
+						.addComponent(cropPercentageLabel)
+						.addComponent(cropPercentageSlider)
+						.addComponent(dataPercentageLabel)
+						.addComponent(dataPercentageSlider)
 						.addComponent(startButton)
 						)
 				.addComponent(tabs)
@@ -92,8 +106,10 @@ public class MainFrame extends JFrame {
 						.addComponent(strategyRandomButton)
 						.addComponent(replicationNumberLabel)
 						.addComponent(replicationNumberInput)
-						.addComponent(displayDataCountLabel)
-						.addComponent(displayDataCountInput)
+						.addComponent(cropPercentageLabel)
+						.addComponent(cropPercentageSlider)
+						.addComponent(dataPercentageLabel)
+						.addComponent(dataPercentageSlider)
 						.addComponent(startButton)
 						)
 				.addComponent(tabs)
@@ -101,15 +117,28 @@ public class MainFrame extends JFrame {
 	}
 	
 	private void startSimulation() {
-		final int replicationCount = Integer.parseInt(replicationNumberInput.getText());
-		final int displayDataCount = Integer.parseInt(displayDataCountInput.getText());
-		final int refreshUIEvery = 50000;
+		if(isSimulationRunning) {
+			return;
+		}
+		isSimulationRunning = true;
+		
+		final int replicationCount = NumberUtil.readBig(replicationNumberInput.getText());
+		double percentageToShow = (double)dataPercentageSlider.getValue() / dataPercentageSlider.getMaximum();
+		final int refreshUIEvery = 20000 < replicationCount ? 20000 : 1;
+		int maxDataPointsToShow = (int)(replicationCount * percentageToShow / refreshUIEvery) + 1;  
+		final int cropReplications = (int)(replicationCount * ((double)cropPercentageSlider.getValue() / cropPercentageSlider.getMaximum()));
+		
+		for(TabContent tabContent : tabContents) {
+			tabContent.setMaximumDataPoints(maxDataPointsToShow);
+		}
 		
 		new Thread(new Runnable() {
 			@Override
 			public void run()
 			{
-				simulation.run(replicationCount, refreshUIEvery);
+				simulation.run(replicationCount, refreshUIEvery, cropReplications);
+				
+				isSimulationRunning = false;
 			}
 		}).start();
 	}
