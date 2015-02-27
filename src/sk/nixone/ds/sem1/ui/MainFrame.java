@@ -6,6 +6,7 @@ import java.util.HashSet;
 
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -101,7 +102,7 @@ public class MainFrame extends JFrame {
 				);
 		
 		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addGroup(layout.createParallelGroup()
+				.addGroup(layout.createParallelGroup(Alignment.CENTER)
 						.addComponent(strategyLabel)
 						.addComponent(strategyBestButton)
 						.addComponent(strategyRandomButton)
