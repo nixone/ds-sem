@@ -13,6 +13,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import sk.nixone.ds.core.NumberUtil;
 import sk.nixone.ds.sem1.Game;
@@ -41,7 +42,7 @@ public class MainFrame extends JFrame {
 	private HashSet<TabContent> tabContents = new HashSet<TabContent>();
 	
 	public MainFrame(GameSimulation simulation) {
-		super("1. simulácia - Semestrálna práca - Martin Olešnaník");
+		super("1st semestral work - Martin Olešnaník - nixone.sk");
 		
 		this.simulation = simulation;
 		
@@ -58,7 +59,7 @@ public class MainFrame extends JFrame {
 		strategyGroup.add(strategyBestButton);
 		strategyBestButton.setSelected(true);
 		strategyGroup.add(strategyRandomButton);
-		
+
 		TabContent tabContent = new TabContent("All dead", simulation.getAllDeadObserver());
 		tabs.addTab("All dead", tabContent);
 		tabContents.add(tabContent);
@@ -121,6 +122,7 @@ public class MainFrame extends JFrame {
 			return;
 		}
 		isSimulationRunning = true;
+		startButton.setEnabled(false);
 		
 		final int replicationCount = NumberUtil.readBig(replicationNumberInput.getText());
 		double percentageToShow = (double)dataPercentageSlider.getValue() / dataPercentageSlider.getMaximum();
@@ -138,7 +140,13 @@ public class MainFrame extends JFrame {
 			{
 				simulation.run(replicationCount, refreshUIEvery, cropReplications);
 				
-				isSimulationRunning = false;
+				SwingUtilities.invokeLater(new Runnable(){
+					@Override
+					public void run() {
+						isSimulationRunning = false;
+						startButton.setEnabled(true);
+					}
+				});
 			}
 		}).start();
 	}

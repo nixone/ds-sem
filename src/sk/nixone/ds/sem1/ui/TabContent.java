@@ -5,6 +5,7 @@ import java.awt.Dimension;
 
 import javax.swing.GroupLayout;
 import javax.swing.JLabel;
+import javax.swing.GroupLayout.Alignment;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -66,7 +67,7 @@ public class TabContent extends Container {
 		layout.setAutoCreateContainerGaps(true);
 		layout.setAutoCreateGaps(true);
 		
-		layout.setHorizontalGroup(layout.createParallelGroup()
+		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.CENTER)
 				.addComponent(chartPanel)
 				.addGroup(layout.createSequentialGroup()
 						.addComponent(legendLabel)
@@ -76,7 +77,7 @@ public class TabContent extends Container {
 		
 		layout.setVerticalGroup(layout.createSequentialGroup()
 				.addComponent(chartPanel)
-				.addGroup(layout.createParallelGroup()
+				.addGroup(layout.createParallelGroup(Alignment.CENTER)
 						.addComponent(legendLabel)
 						.addComponent(dataLabel)
 						)
