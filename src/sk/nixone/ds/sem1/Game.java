@@ -5,7 +5,7 @@ import sk.nixone.ds.core.Randoms;
 
 public class Game {
 
-	enum Strategy {
+	public enum Strategy {
 		BEST, RANDOM;
 	}
 	

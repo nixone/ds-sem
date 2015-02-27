@@ -129,6 +129,8 @@ public class MainFrame extends JFrame {
 		final int refreshUIEvery = 20000 < replicationCount ? 20000 : 1;
 		int maxDataPointsToShow = (int)(replicationCount * percentageToShow / refreshUIEvery) + 1;  
 		final int cropReplications = (int)(replicationCount * ((double)cropPercentageSlider.getValue() / cropPercentageSlider.getMaximum()));
+		simulation.getGame().setStrategy(strategyBestButton.isSelected() ? Game.Strategy.BEST : Game.Strategy.RANDOM);
+		
 		
 		for(TabContent tabContent : tabContents) {
 			tabContent.setMaximumDataPoints(maxDataPointsToShow);

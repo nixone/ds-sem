@@ -26,7 +26,7 @@ public class TabContent extends Container {
 	private XYSeriesCollection seriesCollection;
 	
 	private JLabel legendLabel = new JLabel("Probability:");
-	private JLabel dataLabel = new JLabel("0.000000 %");
+	private JLabel dataLabel = new JLabel("unknown %");
 	
 	private PercentageLabelEmitter labelEmitter = new PercentageLabelEmitter(dataLabel);
 	private XYSeriesEmitter seriesEmitter;
