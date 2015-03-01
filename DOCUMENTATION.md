@@ -14,18 +14,18 @@ bolo zisťovať a analyzovať výsledok hry pri veľkom množstve opakovaní.
 Cieľom tejto semestrálnej práce, pomocou metódy Monte Carlo bolo zistiť pravdepodobnosti,
 že po ukončení hry
 
-a) sú všetci strelci mŕtvi
-b) prežije strelec A
-c) prežije strelec B
-d) prežije strelec C
-e) prežije strelec D
-f) prežije strelec E
-g) prežije streleg F
+* sú všetci strelci mŕtvi
+* prežije strelec A
+* prežije strelec B
+* prežije strelec C
+* prežije strelec D
+* prežije strelec E
+* prežije streleg F
 
 za dvoch rozličných predpokladov, ktoré boli použité ako jeden z parametrov simulácie:
 
-A) všetci strelci si svoj cieľ vyberajú náhodne
-b) všetci strelci strieľajú na najlepšieho živého strelca (okrem seba)
+* všetci strelci si svoj cieľ vyberajú náhodne
+* všetci strelci strieľajú na najlepšieho živého strelca (okrem seba)
 
 ## Vypracovanie
 
@@ -57,7 +57,7 @@ parametre simulácie.
 Simulačný model po 100 miliónoch replikácií odhadol nasledovné pravdepodobnosti:
 
 Stratégia | Sledovaný aspekt | Pravdepodobnosť
-- | - | -
+--- | --- | ---
 Náhodný výber | Všetci mŕtvi | 25.38 %
 Náhodný výber | Ostal hráč A | 12.89 %
 Náhodný výber | Ostal hráč B | 14.72 %
