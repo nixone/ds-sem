@@ -53,7 +53,7 @@ public class Game {
 	/**
 	 * Pole generatorov, ktore sa ku kazdemu hracovi pouzije na generovanie nahodneho hraca, ktoreho dany hrac zastreli.
 	 */
-	private Random [] selectionRandoms = null;
+	private Random [][] selectionRandoms = null;
 	
 	/**
 	 * Pocet momentalne zijucich hracov v hre.
@@ -80,11 +80,14 @@ public class Game {
 		shooties = new int[PLAYER_COUNT];
 		
 		this.shootRandoms = new Random[PLAYER_COUNT];
-		this.selectionRandoms = new Random[PLAYER_COUNT];
+		this.selectionRandoms = new Random[PLAYER_COUNT][4];
 		
 		for(int p=0; p<PLAYER_COUNT; p++) {
 			this.shootRandoms[p] = randoms.getNextRandom();
-			this.selectionRandoms[p] = randoms.getNextRandom();
+			for(int i=0; i<4; i++) {
+				this.selectionRandoms[p][i] = randoms.getNextRandom();
+			}
+			
 		}
 		
 		reset();
@@ -120,7 +123,11 @@ public class Game {
 	 * @return index cielu
 	 */
 	public int getRandomShootieFor(int shooter) {
-		int shootieNumber = selectionRandoms[shooter].nextInt(alivePlayers-1);
+		int i = alivePlayers-3;
+		int shootieNumber = 0;
+		if(i >= 0) {
+			shootieNumber = selectionRandoms[shooter][i].nextInt(alivePlayers-1);
+		}
 		
 		int aliveShootie = 0;
 		for(int p=0; p<PLAYER_COUNT; p++) {
