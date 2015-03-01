@@ -20,8 +20,14 @@ import sk.nixone.ds.core.NumberUtil;
 import sk.nixone.ds.sem1.Game;
 import sk.nixone.ds.sem1.GameSimulation;
 
+/**
+ * Hlavne okno, ktore obsahuje interaktivne rozhranie pre uzivatela na nastavenie, spustenie a sledovanie priebehu simulacie.
+ * 
+ * @author nixone
+ *
+ */
 public class MainFrame extends JFrame {
-	
+
 	private JLabel strategyLabel = new JLabel("Strategy:");
 	private ButtonGroup strategyGroup = new ButtonGroup();
 	private JRadioButton strategyRandomButton = new JRadioButton("Random");
@@ -41,7 +47,12 @@ public class MainFrame extends JFrame {
 	private volatile boolean isSimulationRunning = false;
 	
 	private HashSet<TabContent> tabContents = new HashSet<TabContent>();
-	
+
+	/**
+	 * Vytvori nove okno na zaklade urciteho simulacneho modelu
+	 * 
+	 * @param simulation
+	 */
 	public MainFrame(GameSimulation simulation) {
 		super("1st semestral work - Martin Olešnaník - nixone.sk");
 		
@@ -54,6 +65,9 @@ public class MainFrame extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 	
+	/**
+	 * Vytvori zakladne komponenty a ich nastavenia
+	 */
 	private void createComponents() {
 		replicationNumberInput.setText("100m");
 		
@@ -79,6 +93,9 @@ public class MainFrame extends JFrame {
 		});
 	}
 	
+	/**
+	 * Vytvori a nastavi rozlozenie prvkov v okne
+	 */
 	private void createLayout() {
 		GroupLayout layout = new GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
@@ -118,6 +135,9 @@ public class MainFrame extends JFrame {
 				);
 	}
 	
+	/**
+	 * Odstartuje simulaciu, ak momentalne ziadna nebezi. Simulacia je odstartovana v samostatnom vlakne.
+	 */
 	private void startSimulation() {
 		if(isSimulationRunning) {
 			return;

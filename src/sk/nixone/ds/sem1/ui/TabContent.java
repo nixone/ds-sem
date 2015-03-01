@@ -18,6 +18,13 @@ import sk.nixone.ds.core.PercentageLabelEmitter;
 import sk.nixone.ds.core.ProbabilityObserver;
 import sk.nixone.ds.core.XYSeriesEmitter;
 
+/**
+ * Zobrazovaci panel zodpovedny za zobrazenie jednej sledovanej hodnoty v priebehu simulacie (napriklad pritomnost
+ * udalosti "Na konci hry ostali vsetci hraci mrtvi".
+ * 
+ * @author nixone
+ *
+ */
 public class TabContent extends Container {
 	
 	private ChartPanel chartPanel;
@@ -31,6 +38,12 @@ public class TabContent extends Container {
 	private PercentageLabelEmitter labelEmitter = new PercentageLabelEmitter(dataLabel);
 	private XYSeriesEmitter seriesEmitter;
 	
+	/**
+	 * Vytvori panel v zavislosti od daneho pozorovatela v ramci simulacie.
+	 * 
+	 * @param dataName popisny nazov sledovanej udalosti pre uzivatela
+	 * @param valueObserver pozorovatel, na zaklade ktoreho budu zobrazovanie data uzivatelovi
+	 */
 	public TabContent(String dataName, ProbabilityObserver valueObserver) {
 		series = new XYSeries(dataName);
 		
@@ -45,10 +58,18 @@ public class TabContent extends Container {
 		valueObserver.addUIEmitter(seriesEmitter);
 	}
 	
+	/**
+	 * Nastavi maximalny pocet dat, ktore su historicky uzivatelovi prezentovane
+	 * @param maximumDataPoints pocet dat
+	 */
 	public void setMaximumDataPoints(int maximumDataPoints) {
 		series.setMaximumItemCount(maximumDataPoints);
 	}
 	
+	/**
+	 * Vytvori zakladne komponenty panelu a nastavi ich
+	 * @param dataName popisny nazov sledovanej udalosti pre uzivatela
+	 */
 	private void createComponents(String dataName) {
 		JFreeChart chart = ChartFactory.createXYLineChart(dataName, "Replications", "Probability", seriesCollection);
 		NumberAxis axis = (NumberAxis)chart.getXYPlot().getRangeAxis();
@@ -61,6 +82,9 @@ public class TabContent extends Container {
 		dataLabel.setFont(dataLabel.getFont().deriveFont(30f));
 	}
 	
+	/**
+	 * Vytvori a nastavi rozlozenie prvkov uzivatelskeho rozhrania na paneli
+	 */
 	private void createLayout() {
 		GroupLayout layout = new GroupLayout(this);
 		setLayout(layout);

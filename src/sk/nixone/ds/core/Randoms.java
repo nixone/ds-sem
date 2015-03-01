@@ -1,5 +1,12 @@
 package sk.nixone.ds.core;
 
+/**
+ * Generator generatorov, ktoreho instancia by v ramci aplikacie mala byt pre ucely statistickych pravidiel vytvorena len jedna. Ostatne
+ * generatory su nasledne generovane za pomoci tohto generatora.
+ * 
+ * @author nixone
+ *
+ */
 public class Randoms
 {
 	private Random seedGenerator;
