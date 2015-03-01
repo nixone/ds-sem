@@ -20,7 +20,7 @@ Cieľom tejto semestrálnej práce, pomocou metódy Monte Carlo bolo zistiť pra
 * prežije strelec C
 * prežije strelec D
 * prežije strelec E
-* prežije streleg F
+* prežije strelec F
 
 za dvoch rozličných predpokladov, ktoré boli použité ako jeden z parametrov simulácie:
 
