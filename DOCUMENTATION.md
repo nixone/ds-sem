@@ -66,11 +66,11 @@ Náhodný výber | Ostal hráč D | 7.29 %
 Náhodný výber | Ostal hráč E | 4.95 %
 Náhodný výber | Ostal hráč F | 19.05 %
 Najlepší strelec | Všetci mŕtvi | 7.15 %
-Najlepší strelec | Ostal hráč A | 14.37 %
+Najlepší strelec | Ostal hráč A | 14.14 %
 Najlepší strelec | Ostal hráč B | 9.55 %
 Najlepší strelec | Ostal hráč C | 0.07 %
 Najlepší strelec | Ostal hráč D | 40.59 %
-Najlepší strelec | Ostal hráč E | 28.47 %
+Najlepší strelec | Ostal hráč E | 28.48 %
 Najlepší strelec | Ostal hráč F | 0.02 %
 
 ## Záver
