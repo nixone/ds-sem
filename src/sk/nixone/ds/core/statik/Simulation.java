@@ -13,15 +13,15 @@ import javax.swing.SwingUtilities;
  * @author nixone
  *
  */
-public abstract class StaticSimulation {
+public abstract class Simulation {
 	
-	private Collection<ValueObserver<?>> observers = new HashSet<ValueObserver<?>>();
+	private Collection<Observer<?>> observers = new HashSet<Observer<?>>();
 	
 	/**
 	 * Indikuje zaciatok novej simulacie, a teda resetuje vsetkych pozorovatelov simulacie 
 	 */
 	private void reset() {
-		for(ValueObserver<?> observer : observers) {
+		for(Observer<?> observer : observers) {
 			observer.reset();
 		}
 	}
@@ -36,7 +36,7 @@ public abstract class StaticSimulation {
 	 * 
 	 * @param observer
 	 */
-	public void addObserver(ValueObserver<?> observer) {
+	public void addObserver(Observer<?> observer) {
 		observers.add(observer);
 	}
 	
@@ -44,7 +44,7 @@ public abstract class StaticSimulation {
 	 * Vymaze zo systemu pozorovatela priebehu
 	 * @param observer
 	 */
-	public void removeObserver(ValueObserver<?> observer) {
+	public void removeObserver(Observer<?> observer) {
 		observers.remove(observer);
 	}
 	
@@ -67,13 +67,13 @@ public abstract class StaticSimulation {
 	}
 	
 	private void updateObservers(int r) {
-		for(ValueObserver<?> observer : observers) {
+		for(Observer<?> observer : observers) {
 			observer.update(r);
 		}
 	}
 	
 	private void updateObserversUI(int r) {
-		for(ValueObserver<?> o : observers) {
+		for(Observer<?> o : observers) {
 			o.updateUI(r);
 		}
 	}

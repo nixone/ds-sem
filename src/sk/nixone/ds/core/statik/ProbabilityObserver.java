@@ -6,7 +6,7 @@ package sk.nixone.ds.core.statik;
  * @author nixone
  *
  */
-public abstract class ProbabilityObserver extends ValueObserver<Double> {
+public abstract class ProbabilityObserver extends Observer<Double> {
 	
 	private int totalTries = 0;
 	private int successTries = 0;

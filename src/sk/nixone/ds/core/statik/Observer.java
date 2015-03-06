@@ -13,7 +13,7 @@ import sk.nixone.ds.core.Emitter;
  *
  * @param <T> typ hodnoty, ktora je sledovana a dalej prezentovana
  */
-public abstract class ValueObserver<T> {
+public abstract class Observer<T> {
 	
 	/**
 	 * Aktualizuje pozorovatela, v tejto metode je potrebne implementovat zakladnu funkcionalitu, nakolko
