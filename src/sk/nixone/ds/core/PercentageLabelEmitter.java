@@ -23,7 +23,7 @@ public class PercentageLabelEmitter implements Emitter<Integer, Double> {
 	}
 	
 	@Override
-	public void emit(Integer key, Double value) {
+	public void emit(Integer key, final Double value) {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {

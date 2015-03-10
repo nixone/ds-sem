@@ -21,10 +21,6 @@ public class XYSeriesEmitter implements Emitter<Integer, Double> {
 	
 	@Override
 	public void emit(final Integer key, final Double value) {
-		if(!Double.isFinite(value)) {
-			return;
-		}
-		
 		SwingUtilities.invokeLater(new Runnable(){
 			@Override
 			public void run() {

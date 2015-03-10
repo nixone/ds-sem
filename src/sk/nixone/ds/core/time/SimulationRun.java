@@ -11,7 +11,7 @@ public class SimulationRun {
 	private boolean running = false;
 
 	public SimulationRun() {
-		eventCalendar = new PriorityQueue<PlannedEvent>(PlannedEvent.TIME_COMPARATOR);
+		eventCalendar = new PriorityQueue<PlannedEvent>(10, PlannedEvent.TIME_COMPARATOR);
 	}
 
 	public float getCurrentSimulationTime() {
