@@ -15,4 +15,16 @@ public class Random extends java.util.Random
 	public Random(long seed) {
 		super(seed);
 	}
+	
+	/**
+	 * 
+	 * - Ak poissonovo popisuje pocetnost za jednotku casu, exponencionalne popisuje medzery medzi prichodmi.
+	 * 
+	 * @param lambda
+	 * @return 
+	 */
+	public double nextExponential(double lambda) {
+		double u = nextDouble();
+		return -Math.log(u)/lambda;
+	}
 }
