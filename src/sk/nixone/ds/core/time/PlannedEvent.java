@@ -8,7 +8,7 @@ public class PlannedEvent {
 	
 	@Override
 	public int compare(PlannedEvent o1, PlannedEvent o2) {
-	    return Double.compare(o1.getScheduledTime(), o2.getScheduledTime());
+	    return Double.compare(o1.getExecutionTime(), o2.getExecutionTime());
 	}
     };
     

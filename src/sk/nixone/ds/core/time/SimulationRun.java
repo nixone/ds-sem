@@ -1,6 +1,8 @@
 package sk.nixone.ds.core.time;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.PriorityQueue;
 
 public class SimulationRun {
@@ -120,5 +122,20 @@ public class SimulationRun {
 		for(Observer observer : copyObservers()) {
 			observer.onEventPlanned(this, event);
 		}
+	}
+	
+	/**
+	 * Casovo narocna operacia! Vrati zoradene prvky v kalendari udalosti.
+	 * @return
+	 */
+	public List<PlannedEvent> getPlannedEvents() {
+		PriorityQueue<PlannedEvent> calendarCopy = new PriorityQueue<>(10, PlannedEvent.TIME_COMPARATOR);
+		calendarCopy.addAll(eventCalendar);
+		
+		ArrayList<PlannedEvent> orderedList = new ArrayList<PlannedEvent>(calendarCopy.size());
+		while(!calendarCopy.isEmpty()) {
+			orderedList.add(calendarCopy.poll());
+		}
+		return orderedList;
 	}
 }

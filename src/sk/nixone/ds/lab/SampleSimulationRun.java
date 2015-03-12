@@ -40,6 +40,10 @@ public class SampleSimulationRun extends SimulationRun {
 			CustomerArrived arrived = new CustomerArrived();
 			plan(customerArrivalRandom.nextExponential(LAMBDA_CUSTOMER_TIME), arrived);
 		}
+		
+		public String toString() {
+			return "Customer arrived";
+		}
 	}
 	
 	public class CustomerStarted implements Event {
@@ -52,6 +56,10 @@ public class SampleSimulationRun extends SimulationRun {
 			CustomerFinished finished = new CustomerFinished();
 			finished.customer = customer;
 			plan(processDurationRandom.nextExponential(LAMBDA_PROCESS_TIEM), finished);
+		}
+		
+		public String toString() {
+			return "Customer started";
 		}
 	}
 	
@@ -69,6 +77,10 @@ public class SampleSimulationRun extends SimulationRun {
 				started.customer = customer;
 				planImmediately(started);
 			}
+		}
+		
+		public String toString() {
+			return "Customer finished";
 		}
 	}
 	
