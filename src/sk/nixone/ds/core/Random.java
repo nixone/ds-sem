@@ -27,4 +27,27 @@ public class Random extends java.util.Random
 		double u = nextDouble();
 		return -Math.log(u)/lambda;
 	}
+	
+	public double nextTriangle(double left, double center, double right) {
+		double u = nextDouble();
+		double d = (center-left)/(right-left);
+		
+		if(u < d) {
+			return left + Math.sqrt(u*(right-left)*(center-left));
+		}
+		return right - Math.sqrt((1-u)*(right-left)*(right-center));
+	}
+	
+	public int nextClass(Double... probabilities) {
+		double u = nextDouble();
+		double cumulative = 0;
+		
+		for(int i=0; i<probabilities.length; i++) {
+			cumulative += probabilities[i];
+			if (cumulative >= u) {
+				return i;
+			}
+		}
+		return probabilities.length - 1;
+	}
 }
