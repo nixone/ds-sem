@@ -35,9 +35,9 @@ public class MainFrame extends JFrame {
 	private JLabel replicationNumberLabel = new JLabel("Replications:");
 	private JTextField replicationNumberInput = new JTextField();
 	private JLabel dataPercentageLabel = new JLabel("Show %:");
-	private JSlider dataPercentageSlider = new JSlider(0, 1000, 500);
+	private JSlider dataPercentageSlider = new JSlider(0, 100, 50);
 	private JLabel cropPercentageLabel = new JLabel("Crop %:");
-	private JSlider cropPercentageSlider = new JSlider(0, 1000, 50);
+	private JSlider cropPercentageSlider = new JSlider(0, 100, 5);
 	private JButton startButton = new JButton("Simulate");
 	
 	private JTabbedPane tabs = new JTabbedPane();
