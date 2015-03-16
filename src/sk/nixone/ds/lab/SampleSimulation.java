@@ -37,6 +37,9 @@ public class SampleSimulation extends Simulation {
 				started.customer = customer;
 				run.planImmediately(started);
 			} else {
+				queueLength.add(customerQueue.size() / (run.getCurrentSimulationTime() - lastQueueLengthTime));
+				lastQueueLengthTime = run.getCurrentSimulationTime();
+				
 				customerQueue.addLast(customer);
 			}
 			
@@ -81,6 +84,9 @@ public class SampleSimulation extends Simulation {
 			
 			processingCustomer = null;
 			if(!customerQueue.isEmpty()) {
+				queueLength.add(customerQueue.size() / (run.getCurrentSimulationTime() - lastQueueLengthTime));
+				lastQueueLengthTime = run.getCurrentSimulationTime();
+				
 				Customer customer = customerQueue.removeFirst();
 				CustomerStarted started = new CustomerStarted();
 				started.customer = customer;
@@ -102,6 +108,9 @@ public class SampleSimulation extends Simulation {
 	private Statistic customerWaitingTime = new Statistic();
 	private Statistic customerInSystemTime = new Statistic();
 	private Statistic customerProcessTime = new Statistic();
+	private Statistic queueLength = new Statistic();
+	private double lastQueueLengthTime;
+	private Statistic maximalQueueLength = new Statistic();
 	
 	public SampleSimulation(Randoms randoms) {
 		customerArrivalRandom = randoms.getNextRandom();
@@ -112,6 +121,7 @@ public class SampleSimulation extends Simulation {
 	public void initializeRun(SimulationRun run) {
 		customerQueue.clear();
 		processingCustomer = null;
+		lastQueueLengthTime = run.getCurrentSimulationTime();
 		
 		run.setMaximumSimulationTime(31536000);
 		run.plan(customerArrivalRandom.nextExponential(LAMBDA_CUSTOMER_TIME), new CustomerArrived());
@@ -127,5 +137,13 @@ public class SampleSimulation extends Simulation {
 	
 	public Statistic getCustomerWaitingTime() {
 		return customerWaitingTime;
+	}
+	
+	public Statistic getQueueLength() {
+		return queueLength;
+	}
+	
+	public Statistic getMaximalQueueLength() {
+		return maximalQueueLength;
 	}
 }

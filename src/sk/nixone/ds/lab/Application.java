@@ -22,17 +22,13 @@ public class Application {
 		SampleSimulation simulation = new SampleSimulation(new Randoms());
 		
 		SimulationFrame frame = new SimulationFrame(simulation);
-		frame.addStatistic("In system", "Time of customer in system", simulation.getCustomerInSystemTime());
-		frame.addStatistic("Process time", "Time of customer being processed", simulation.getCustomerProcessTime());
-		frame.addStatistic("Wait time", "Time of customer waiting", simulation.getCustomerWaitingTime());
+		frame.addStatistic("T. in system", "Time customer spent in system", simulation.getCustomerInSystemTime());
+		frame.addStatistic("Process t.", "Process time", simulation.getCustomerProcessTime());
+		frame.addStatistic("Wait t.", "Waiting time for start", simulation.getCustomerWaitingTime());
 		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
-		
-		//final AsyncTimeJumper jumper = new AsyncTimeJumper();
-		//frame.setAsyncTimeJumper(jumper);
-		//final NiceProgressTimeJumper jumper = new NiceProgressTimeJumper(0.0001, 1);
 		final SimpleTimeJumper jumper = new SimpleTimeJumper();
 		
 		new Thread(new Runnable() {
