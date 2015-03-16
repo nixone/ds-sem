@@ -12,7 +12,7 @@ public class NiceProgressTimeJumper implements TimeJumper {
 	
 	public NiceProgressTimeJumper(double timeFactor, double biggestJump) {
 		this.timeFactor = timeFactor;
-		this.biggestJump = biggestJump;
+		this.biggestJump = biggestJump / timeFactor;
 	}
 	
 	@Override

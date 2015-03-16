@@ -1,28 +1,24 @@
 package sk.nixone.ds.core.time;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
 
 public class SimulationRun {
-	
-	public interface Observer {
-		public void onEventPlanned(SimulationRun run, PlannedEvent event);
-		public void onExecutedEvent(SimulationRun run, PlannedEvent executedEvent);
-		public void onVoidStep(SimulationRun run);
-	}
 
 	private double currentSimulationTime = 0f;
 
 	private PriorityQueue<PlannedEvent> eventCalendar;
-	private HashSet<Observer> observers;
 	
 	private boolean running = false;
 
-	public SimulationRun() {
+	private Simulation simulation;
+	
+	private double maximumSimulationTime = 0;
+	
+	public SimulationRun(Simulation simulation) {
 		eventCalendar = new PriorityQueue<>(10, PlannedEvent.TIME_COMPARATOR);
-		observers = new HashSet<>();
+		this.simulation = simulation;
 	}
 
 	public double getCurrentSimulationTime() {
@@ -32,7 +28,7 @@ public class SimulationRun {
 	protected PlannedEvent planToTime(double timeToExecute, Event event) {
 		PlannedEvent plannedEvent = new PlannedEvent(this, timeToExecute, currentSimulationTime, event);
 		eventCalendar.add(plannedEvent);
-		dispatchEventPlanned(plannedEvent);
+		simulation.dispatchEventPlanned(this, plannedEvent);
 		return plannedEvent;
 	}
 	
@@ -44,13 +40,17 @@ public class SimulationRun {
 		return planToTime(timeFromNow + currentSimulationTime, event);
 	}
 
+	public void setMaximumSimulationTime(double maximumSimulationTime) {
+		this.maximumSimulationTime = maximumSimulationTime;
+	}
+	
 	public void run() {
 		run(new SimpleTimeJumper());
 	}
 
 	public void run(TimeJumper timeJumper) {
 		running = true;
-		while (running && !eventCalendar.isEmpty()) {
+		while (running && !eventCalendar.isEmpty() && (maximumSimulationTime == 0 || currentSimulationTime < maximumSimulationTime)) {
 			nextStep(timeJumper);
 		}
 		running = false;
@@ -64,15 +64,16 @@ public class SimulationRun {
 		PlannedEvent probablyNext = eventCalendar.peek();
 		
 		if (currentSimulationTime < probablyNext.getExecutionTime()) {
-			currentSimulationTime = timeJumper.jump(currentSimulationTime, probablyNext.getExecutionTime());
+			double nextTime = maximumSimulationTime == 0 ? probablyNext.getExecutionTime() : Math.min(maximumSimulationTime, probablyNext.getExecutionTime());
+			currentSimulationTime = timeJumper.jump(currentSimulationTime, nextTime);
 		}
 		
 		if (currentSimulationTime == probablyNext.getExecutionTime()) {
 			probablyNext = eventCalendar.poll();
-			probablyNext.getEvent().execute();
-			dispatchExecutedEvent(probablyNext);
+			probablyNext.getEvent().execute(this);
+			simulation.dispatchExecutedEvent(this, probablyNext);
 		} else {
-			dispatchVoidStep();
+			simulation.dispatchVoidStep(this);
 		}
 	}
 
@@ -82,46 +83,6 @@ public class SimulationRun {
 
 	public void stop() {
 		running = false;
-	}
-	
-	public void addObserver(Observer observer) {
-		synchronized(observers) {
-			observers.add(observer);
-		}
-	}
-	
-	public void removeObserver(Observer observer) {
-		synchronized(observers) {
-			observers.remove(observer);
-		}
-	}
-	
-	private HashSet<Observer> copyObservers() {
-		HashSet<Observer> observersCopy = new HashSet<>();
-		
-		synchronized(observers) {
-			observersCopy.addAll(observers);
-		}
-		
-		return observersCopy;
-	}
-	
-	private void dispatchExecutedEvent(PlannedEvent event) {
-		for(Observer observer : copyObservers()) {
-			observer.onExecutedEvent(this, event);
-		}
-	}
-	
-	private void dispatchVoidStep() {
-		for(Observer observer : copyObservers()) {
-			observer.onVoidStep(this);
-		}
-	}
-	
-	private void dispatchEventPlanned(PlannedEvent event) {
-		for(Observer observer : copyObservers()) {
-			observer.onEventPlanned(this, event);
-		}
 	}
 	
 	/**

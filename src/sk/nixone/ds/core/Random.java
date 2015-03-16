@@ -6,8 +6,8 @@ package sk.nixone.ds.core;
  * @author nixone
  *
  */
-public class Random extends java.util.Random
-{
+public class Random extends java.util.Random {
+	
 	public Random() {
 		super();
 	}
@@ -38,7 +38,7 @@ public class Random extends java.util.Random
 		return right - Math.sqrt((1-u)*(right-left)*(right-center));
 	}
 	
-	public int nextClass(Double... probabilities) {
+	public int nextClass(double... probabilities) {
 		double u = nextDouble();
 		double cumulative = 0;
 		

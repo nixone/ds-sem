@@ -1,19 +1,22 @@
 package sk.nixone.ds.lab;
 
 import java.util.LinkedList;
+
 import sk.nixone.ds.core.Random;
 import sk.nixone.ds.core.Randoms;
+import sk.nixone.ds.core.Statistic;
 import sk.nixone.ds.core.time.Event;
+import sk.nixone.ds.core.time.Simulation;
 import sk.nixone.ds.core.time.SimulationRun;
 
 /**
  *
  * @author olesnanik2
  */
-public class SampleSimulationRun extends SimulationRun {
+public class SampleSimulation extends Simulation {
 	
-	static private double LAMBDA_CUSTOMER_TIME = 1/45f;
-	static private double LAMBDA_PROCESS_TIEM = 1/100f;
+	static private double LAMBDA_CUSTOMER_TIME = 1/100.;
+	static private double LAMBDA_PROCESS_TIEM = 1/45.;
 	
 	public class Customer {
 		private double startedTime;
@@ -25,20 +28,20 @@ public class SampleSimulationRun extends SimulationRun {
 		private Customer customer;
 		
 		@Override
-		public void execute() {
+		public void execute(SimulationRun run) {
 			customer = new Customer();
-			customer.startedTime = getCurrentSimulationTime();
+			customer.startedTime = run.getCurrentSimulationTime();
 			
 			if (processingCustomer == null) {
 				CustomerStarted started = new CustomerStarted();
 				started.customer = customer;
-				planImmediately(started);
+				run.planImmediately(started);
 			} else {
 				customerQueue.addLast(customer);
 			}
 			
 			CustomerArrived arrived = new CustomerArrived();
-			plan(customerArrivalRandom.nextExponential(LAMBDA_CUSTOMER_TIME), arrived);
+			run.plan(customerArrivalRandom.nextExponential(LAMBDA_CUSTOMER_TIME), arrived);
 		}
 		
 		public String toString() {
@@ -50,12 +53,15 @@ public class SampleSimulationRun extends SimulationRun {
 		private Customer customer;
 		
 		@Override
-		public void execute() {
-			customer.processStartedTime = getCurrentSimulationTime();
+		public void execute(SimulationRun run) {
+			customer.processStartedTime = run.getCurrentSimulationTime();
+			
+			customerWaitingTime.add(customer.processStartedTime - customer.startedTime);
+			
 			processingCustomer = customer;
 			CustomerFinished finished = new CustomerFinished();
 			finished.customer = customer;
-			plan(processDurationRandom.nextExponential(LAMBDA_PROCESS_TIEM), finished);
+			run.plan(processDurationRandom.nextExponential(LAMBDA_PROCESS_TIEM), finished);
 		}
 		
 		public String toString() {
@@ -67,15 +73,18 @@ public class SampleSimulationRun extends SimulationRun {
 		public Customer customer;
 		
 		@Override
-		public void execute() {
-			customer.endedTime = getCurrentSimulationTime();
+		public void execute(SimulationRun run) {
+			customer.endedTime = run.getCurrentSimulationTime();
+			
+			customerInSystemTime.add(customer.endedTime - customer.startedTime);
+			customerProcessTime.add(customer.endedTime - customer.processStartedTime);
 			
 			processingCustomer = null;
 			if(!customerQueue.isEmpty()) {
 				Customer customer = customerQueue.removeFirst();
 				CustomerStarted started = new CustomerStarted();
 				started.customer = customer;
-				planImmediately(started);
+				run.planImmediately(started);
 			}
 		}
 		
@@ -90,10 +99,33 @@ public class SampleSimulationRun extends SimulationRun {
 	private Random customerArrivalRandom;
 	private Random processDurationRandom;
 	
-	public SampleSimulationRun(Randoms randoms) {
+	private Statistic customerWaitingTime = new Statistic();
+	private Statistic customerInSystemTime = new Statistic();
+	private Statistic customerProcessTime = new Statistic();
+	
+	public SampleSimulation(Randoms randoms) {
 		customerArrivalRandom = randoms.getNextRandom();
 		processDurationRandom = randoms.getNextRandom();
+	}
+
+	@Override
+	public void initializeRun(SimulationRun run) {
+		customerQueue.clear();
+		processingCustomer = null;
 		
-		plan(customerArrivalRandom.nextExponential(LAMBDA_CUSTOMER_TIME), new CustomerArrived());
+		run.setMaximumSimulationTime(31536000);
+		run.plan(customerArrivalRandom.nextExponential(LAMBDA_CUSTOMER_TIME), new CustomerArrived());
+	}
+	
+	public Statistic getCustomerInSystemTime() {
+		return customerInSystemTime;
+	}
+	
+	public Statistic getCustomerProcessTime() {
+		return customerProcessTime;
+	}
+	
+	public Statistic getCustomerWaitingTime() {
+		return customerWaitingTime;
 	}
 }

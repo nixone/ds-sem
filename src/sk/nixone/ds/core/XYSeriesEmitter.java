@@ -11,7 +11,7 @@ import org.jfree.data.xy.XYSeries;
  * @author nixone
  *
  */
-public class XYSeriesEmitter implements Emitter<Integer, Double> {
+public class XYSeriesEmitter implements Emitter<Double, Double> {
 
 	private XYSeries series;
 	
@@ -20,7 +20,7 @@ public class XYSeriesEmitter implements Emitter<Integer, Double> {
 	}
 	
 	@Override
-	public void emit(final Integer key, final Double value) {
+	public void emit(final Double key, final Double value) {
 		SwingUtilities.invokeLater(new Runnable(){
 			@Override
 			public void run() {
