@@ -18,7 +18,7 @@ public abstract class LabelEmitter<TK, TV> implements Emitter<TK, TV> {
 	}
 	
 	@Override
-	public void emit(TK key, final TV value) {
+	public void emit(final TK key, final TV value) {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {

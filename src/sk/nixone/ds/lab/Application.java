@@ -5,8 +5,6 @@ import java.io.IOException;
 import javax.swing.JFrame;
 
 import sk.nixone.ds.core.Randoms;
-import sk.nixone.ds.core.time.AsyncTimeJumper;
-import sk.nixone.ds.core.time.NiceProgressTimeJumper;
 import sk.nixone.ds.core.time.SimpleTimeJumper;
 import sk.nixone.ds.core.time.ui.SimulationFrame;
 import sk.nixone.util.AppearanceUtil;
@@ -19,7 +17,7 @@ public class Application {
 	public static void main(String [] arguments) throws IOException {
 		AppearanceUtil.setNiceSwingLookAndFeel();
 		
-		SampleSimulation simulation = new SampleSimulation(new Randoms());
+		final SampleSimulation simulation = new SampleSimulation(new Randoms());
 		
 		SimulationFrame frame = new SimulationFrame(simulation);
 		frame.addStatistic("T. in system", "Time customer spent in system", simulation.getCustomerInSystemTime());
@@ -29,13 +27,5 @@ public class Application {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
-		final SimpleTimeJumper jumper = new SimpleTimeJumper();
-		
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				simulation.run(jumper, 1);
-			}
-		}).start();
 	}
 }
