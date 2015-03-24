@@ -4,21 +4,19 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class DelayedEmitter<K, V> implements Emitter<K, V> {
+public class DelayedEmitter<T> implements Emitter<T> {
 	
 	private static ScheduledExecutorService schedulingService = null;
 
-	private Emitter<K, V> emitter;
-	private ScheduledExecutorService service;
+	private Emitter<T> emitter;
 	
 	private boolean pending = false;
 	
 	private long delay;
 	
-	private K lastKey = null;
-	private V lastValue = null;
+	private T last = null;
 	
-	public DelayedEmitter(Emitter<K, V> emitter, long delay) {
+	public DelayedEmitter(Emitter<T> emitter, long delay) {
 		this.emitter = emitter;
 		this.delay = delay;
 		
@@ -33,10 +31,9 @@ public class DelayedEmitter<K, V> implements Emitter<K, V> {
 	}
 
 	@Override
-	public void emit(K key, V value) {
+	public void emit(T current) {
 		synchronized(this) {
-			lastKey = key;
-			lastValue = value;
+			last = current;
 			
 			if(!pending) {
 				pending = true;
@@ -44,16 +41,14 @@ public class DelayedEmitter<K, V> implements Emitter<K, V> {
 				schedulingService.schedule(new Runnable() {
 					@Override
 					public void run() {
-						K keyToEmmit;
-						V valueToEmmit;
+						T toEmmit;
 						
 						synchronized(DelayedEmitter.this) {
-							keyToEmmit = lastKey;
-							valueToEmmit = lastValue;
+							toEmmit = last;
 							pending = false;
 						}
 						
-						emitter.emit(keyToEmmit, valueToEmmit);
+						emitter.emit(toEmmit);
 					}
 				}, delay, TimeUnit.MILLISECONDS);
 			}

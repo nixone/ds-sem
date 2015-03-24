@@ -5,6 +5,7 @@ import java.util.HashSet;
 import javax.swing.SwingUtilities;
 
 import sk.nixone.ds.core.Emitter;
+import sk.nixone.ds.core.Pair;
 
 /**
  * Pozorovatel priebehu urcitej hodnoty pocas simulacie simulacneho modelu.
@@ -32,13 +33,13 @@ public abstract class Observer<T> {
 	 */
 	public abstract void updateUI(int replicationIndex);
 	
-	private HashSet<Emitter<Integer, T>> uiEmitters = new HashSet<Emitter<Integer, T>>();
+	private HashSet<Emitter<Pair<Integer, T>>> uiEmitters = new HashSet<Emitter<Pair<Integer, T>>>();
 	
 	/**
 	 * Oznami vsetkym objektom zodpovednym za prezentovanie medzivysledkov na nastavenie do vychodzieho stavu.
 	 */
 	public void reset() {
-		for(Emitter<Integer, T> emitter : uiEmitters) {
+		for(Emitter<Pair<Integer, T>> emitter : uiEmitters) {
 			emitter.reset();
 		}
 	}
@@ -48,7 +49,7 @@ public abstract class Observer<T> {
 	 * 
 	 * @param emitter spominany objekt
 	 */
-	public void addUIEmitter(Emitter<Integer, T> emitter) {
+	public void addUIEmitter(Emitter<Pair<Integer, T>> emitter) {
 		uiEmitters.add(emitter);
 	}
 	
@@ -56,7 +57,7 @@ public abstract class Observer<T> {
 	 * Odstrani objekt, ktory uz nadalej nebude aktualizovany medzivysledkami simualcie
 	 * @param emitter
 	 */
-	public void removeUIEmitter(Emitter<Integer, T> emitter) {
+	public void removeUIEmitter(Emitter<Pair<Integer, T>> emitter) {
 		uiEmitters.remove(emitter);
 	}
 	
@@ -67,8 +68,8 @@ public abstract class Observer<T> {
 	 * @param value
 	 */
 	protected void emitUI(final int replicationIndex, final T value) {
-		for(Emitter<Integer, T> emitter : uiEmitters) {
-			emitter.emit(replicationIndex, value);
+		for(Emitter<Pair<Integer, T>> emitter : uiEmitters) {
+			emitter.emit(new Pair<Integer, T>(replicationIndex, value));
 		}
 	}
 }

@@ -16,6 +16,7 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 import sk.nixone.ds.core.DelayedEmitter;
 import sk.nixone.ds.core.Emitter;
+import sk.nixone.ds.core.Pair;
 import sk.nixone.ds.core.Statistic;
 import sk.nixone.ds.core.XYSeriesEmitter;
 import sk.nixone.ds.core.time.PlannedEvent;
@@ -34,8 +35,8 @@ public class StatisticPanel extends JPanel implements Observer {
 	private JLabel meanLabel = new JLabel("Mean:");
 	private JLabel meanData = new JLabel();
 	
-	private Emitter<Object, Double> meanEmitter = new DelayedEmitter<Object, Double>(new NumberLabelEmitter(meanData, 5), 50);
-	private Emitter<Double, Double> seriesEmitter;
+	private Emitter<Double> meanEmitter = new DelayedEmitter<Double>(new NumberLabelEmitter(meanData, 5), 50);
+	private Emitter<Pair<Double, Double>> seriesEmitter;
 
 	private Statistic statistic;
 	
@@ -46,7 +47,7 @@ public class StatisticPanel extends JPanel implements Observer {
 		
 		seriesCollection = new XYSeriesCollection();
 		seriesCollection.addSeries(series);
-		seriesEmitter = new DelayedEmitter<Double, Double>(new XYSeriesEmitter(series), 50);
+		seriesEmitter = new DelayedEmitter<Pair<Double, Double>>(new XYSeriesEmitter(series), 50);
 		
 		createComponents(dataName);
 		createLayout();
@@ -106,8 +107,8 @@ public class StatisticPanel extends JPanel implements Observer {
 
 	@Override
 	public void onExecutedEvent(SimulationRun run, PlannedEvent executedEvent) {
-		meanEmitter.emit(null, statistic.getMean());
-		seriesEmitter.emit(run.getCurrentSimulationTime(), statistic.getMean());
+		meanEmitter.emit(statistic.getMean());
+		seriesEmitter.emit(new Pair<Double, Double>(run.getCurrentSimulationTime(), statistic.getMean()));
 	}
 
 	@Override

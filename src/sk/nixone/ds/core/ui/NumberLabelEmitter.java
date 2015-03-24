@@ -2,7 +2,7 @@ package sk.nixone.ds.core.ui;
 
 import javax.swing.JLabel;
 
-public class NumberLabelEmitter extends LabelEmitter<Object, Double> {
+public class NumberLabelEmitter extends LabelEmitter<Double> {
 	
 	private int precision;
 	
@@ -19,11 +19,11 @@ public class NumberLabelEmitter extends LabelEmitter<Object, Double> {
 	
 	@Override
 	public void reset() {
-		emit(null, 0.);
+		emit(0.);
 	}
 
 	@Override
-	public void setToLabel(JLabel label, Object key, Double value) {
+	public void setToLabel(JLabel label, Double value) {
 		if(precision == 0) {
 			label.setText(String.format("%d", (int)Math.round(value)));
 		} else {

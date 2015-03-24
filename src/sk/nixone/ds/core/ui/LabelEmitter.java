@@ -5,7 +5,7 @@ import javax.swing.SwingUtilities;
 
 import sk.nixone.ds.core.Emitter;
 
-public abstract class LabelEmitter<TK, TV> implements Emitter<TK, TV> {
+public abstract class LabelEmitter<T> implements Emitter<T> {
 	
 	private JLabel label;
 	
@@ -18,14 +18,14 @@ public abstract class LabelEmitter<TK, TV> implements Emitter<TK, TV> {
 	}
 	
 	@Override
-	public void emit(final TK key, final TV value) {
+	public void emit(final T value) {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				setToLabel(label, key, value);
+				setToLabel(label, value);
 			}
 		});
 	}
 	
-	public abstract void setToLabel(JLabel label, TK key, TV value);
+	public abstract void setToLabel(JLabel label, T value);
 }

@@ -1,24 +1,22 @@
 package sk.nixone.ds.core;
 
 /**
- * Rozhranie popisujuce cokolvek, co je schopne prijmat pary klucov a im prisluchajucim hodnot.
+ * Rozhranie popisujuce cokolvek, co je schopne prijmat akekolvek hodnoty
  * 
  * @author nixone
  *
- * @param <K> typ kluca
- * @param <V> typ hodnot
+ * @param <T> typ obejktu
  */
-public interface Emitter<K, V> {
+public interface Emitter<T> {
 	/**
 	 * Indikuje novu mnozinu prichadzajucich parov.
 	 */
 	public void reset();
 	
 	/**
-	 * Indikuje novy par.
+	 * Indikuje novy objekt.
 	 * 
-	 * @param key kluc
-	 * @param value hodnota
+	 * @param value objekt
 	 */
-	public void emit(K key, V value);
+	public void emit(T value);
 }

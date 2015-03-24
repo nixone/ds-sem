@@ -30,11 +30,11 @@ public class SimulationFrame extends JFrame implements Observer {
 	
 	private JLabel timeDataLabel = new JLabel("Simulation time:");
 	private JLabel timeDataNumber = new JLabel();
-	private Emitter<Object, Double> timeEmitter = new DelayedEmitter<Object, Double>(new NumberLabelEmitter(timeDataNumber, 2), 50);
+	private Emitter<Double> timeEmitter = new DelayedEmitter<Double>(new NumberLabelEmitter(timeDataNumber, 2), 50);
 
 	private JLabel replicationLabel = new JLabel("Replication:");
 	private JLabel replicationNumber = new JLabel();
-	private Emitter<Object, Double> replicationEmitter = new DelayedEmitter<Object, Double>(new NumberLabelEmitter(replicationNumber), 50); 
+	private Emitter<Double> replicationEmitter = new DelayedEmitter<Double>(new NumberLabelEmitter(replicationNumber), 50); 
 	
 	private JButton nextStepButton = new JButton("Next step");
 	
@@ -172,12 +172,12 @@ public class SimulationFrame extends JFrame implements Observer {
 
 	@Override
 	public void onExecutedEvent(SimulationRun run, PlannedEvent executedEvent) {
-		timeEmitter.emit(null, run.getCurrentSimulationTime());
+		timeEmitter.emit(run.getCurrentSimulationTime());
 	}
 
 	@Override
 	public void onVoidStep(SimulationRun run) {
-		timeEmitter.emit(null, run.getCurrentSimulationTime());
+		timeEmitter.emit(run.getCurrentSimulationTime());
 	}
 
 	@Override
@@ -188,14 +188,14 @@ public class SimulationFrame extends JFrame implements Observer {
 
 	@Override
 	public void onReplicationStarted(int replicationIndex, SimulationRun run) {
-		replicationEmitter.emit(null, (double)replicationIndex);
-		timeEmitter.emit(null, run.getCurrentSimulationTime());
+		replicationEmitter.emit((double)replicationIndex);
+		timeEmitter.emit(run.getCurrentSimulationTime());
 	}
 
 	@Override
 	public void onReplicationEnded(int replicationIndex, SimulationRun run) {
-		replicationEmitter.emit(null, (double)replicationIndex);
-		timeEmitter.emit(null, run.getCurrentSimulationTime());
+		replicationEmitter.emit((double)replicationIndex);
+		timeEmitter.emit(run.getCurrentSimulationTime());
 	}
 
 	@Override

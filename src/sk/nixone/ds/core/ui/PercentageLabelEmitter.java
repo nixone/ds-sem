@@ -9,7 +9,7 @@ import javax.swing.JLabel;
  * @author nixone
  *
  */
-public class PercentageLabelEmitter extends LabelEmitter<Integer, Double> {
+public class PercentageLabelEmitter extends LabelEmitter<Double> {
 	/**
 	 * 
 	 * @param label <code>JLabel</code>, v ktorom chceme data zobrazit
@@ -20,11 +20,11 @@ public class PercentageLabelEmitter extends LabelEmitter<Integer, Double> {
 	
 	@Override
 	public void reset() {
-		emit(0, 0.);
+		emit(0.);
 	}
 
 	@Override
-	public void setToLabel(JLabel label, Integer key, Double value) {
+	public void setToLabel(JLabel label, Double value) {
 		label.setText(String.format("%.6f", value*100)+" %");
 	}
 }
