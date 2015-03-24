@@ -8,12 +8,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
+import sk.nixone.ds.core.Emitter;
 import sk.nixone.ds.core.time.PlannedEvent;
 import sk.nixone.ds.core.time.Simulation;
 import sk.nixone.ds.core.time.Simulation.Observer;
 import sk.nixone.ds.core.time.SimulationRun;
 
-public class EventCalendarPanel extends JPanel implements Observer {
+public class EventCalendarPanel extends JPanel implements Emitter<Object> {
 
 	private JTable table;
 	
@@ -23,44 +24,29 @@ public class EventCalendarPanel extends JPanel implements Observer {
 	
 	private EventCalendarTableModel model = new EventCalendarTableModel();
 	
-	public EventCalendarPanel(Simulation simulation) {		
+	private Simulation simulation;
+	
+	public EventCalendarPanel(Simulation simulation) {
+		this.simulation = simulation;
+		
 		table = new JTable(model);
 		scrollPane = JTable.createScrollPaneForTable(table);
 		scrollPane.setPreferredSize(new Dimension(600, 100));
-		add(scrollPane);
 		
-		simulation.addObserver(this);
+		add(scrollPane);
 	}
-
+	
 	@Override
-	public void onSimulationStarted() {}
-
-	@Override
-	public void onReplicationStarted(int replicationIndex, SimulationRun run) {}
-
-	@Override
-	public void onEventPlanned(SimulationRun run, PlannedEvent event) {
-		eventCalendar = run.getPlannedEvents();
-		model.fireTableDataChanged();
-	}
-
-	@Override
-	public void onExecutedEvent(SimulationRun run, PlannedEvent executedEvent) {
-		eventCalendar = run.getPlannedEvents();
-		model.fireTableDataChanged();
-	}
-
-	@Override
-	public void onVoidStep(SimulationRun run) {}
-
-	@Override
-	public void onReplicationEnded(int replicationIndex, SimulationRun run) {
+	public void reset() {
 		eventCalendar = null;
 		model.fireTableDataChanged();
 	}
 
 	@Override
-	public void onSimulationEnded() {}
+	public void emit(Object o) {
+		eventCalendar = simulation.getCurrentSimulationRun().getPlannedEvents();
+		model.fireTableDataChanged();
+	}
 	
 	public class EventCalendarTableModel extends AbstractTableModel {
 

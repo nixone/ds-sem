@@ -33,6 +33,8 @@ public abstract class Simulation {
 	
 	private HashSet<Observer> observers;
 	
+	private SimulationRun currentSimulationRun = null;
+	
 	public Simulation() {
 		observers = new HashSet<>();
 	}
@@ -46,14 +48,19 @@ public abstract class Simulation {
 	public void run(TimeJumper jumper, int replications) {
 		dispatchSimulationStarted();
 		for(int replication=0; replication<replications; replication++) {
-			SimulationRun run = new SimulationRun(this);
-			initializeRun(run);
+			currentSimulationRun = new SimulationRun(this);
+			initializeRun(currentSimulationRun);
 			
-			dispatchReplicaitonStarted(replication, run);
-			run.run(jumper);
-			dispatchReplicationEnded(replication, run);
+			dispatchReplicaitonStarted(replication, currentSimulationRun);
+			currentSimulationRun.run(jumper);
+			dispatchReplicationEnded(replication, currentSimulationRun);
+			currentSimulationRun = null;
 		}
 		dispatchSimulationEnded();
+	}
+	
+	public SimulationRun getCurrentSimulationRun() {
+		return currentSimulationRun;
 	}
 	
 	public void addObserver(Observer observer) {

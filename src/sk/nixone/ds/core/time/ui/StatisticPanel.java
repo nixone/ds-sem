@@ -25,7 +25,7 @@ import sk.nixone.ds.core.time.Simulation.Observer;
 import sk.nixone.ds.core.time.SimulationRun;
 import sk.nixone.ds.core.ui.NumberLabelEmitter;
 
-public class StatisticPanel extends JPanel implements Observer {
+public class StatisticPanel extends JPanel implements Emitter<Object> {
 
 	private ChartPanel chartPanel;
 	
@@ -39,9 +39,11 @@ public class StatisticPanel extends JPanel implements Observer {
 	private Emitter<Pair<Double, Double>> seriesEmitter;
 
 	private Statistic statistic;
+	private Simulation simulation;
 	
 	public StatisticPanel(Simulation simulation, Statistic statistic, String dataName) {
 		this.statistic = statistic;
+		this.simulation = simulation;
 		
 		series = new XYSeries(dataName);
 		
@@ -51,8 +53,6 @@ public class StatisticPanel extends JPanel implements Observer {
 		
 		createComponents(dataName);
 		createLayout();
-		
-		simulation.addObserver(this);
 	}
 	
 	private void createComponents(String dataName) {
@@ -92,31 +92,16 @@ public class StatisticPanel extends JPanel implements Observer {
 						)
 				);
 	}
-
+	
 	@Override
-	public void onSimulationStarted() {
+	public void reset() {
 		meanEmitter.reset();
 		seriesEmitter.reset();
 	}
 
 	@Override
-	public void onReplicationStarted(int replicationIndex, SimulationRun run) {}
-
-	@Override
-	public void onEventPlanned(SimulationRun run, PlannedEvent event) {}
-
-	@Override
-	public void onExecutedEvent(SimulationRun run, PlannedEvent executedEvent) {
+	public void emit(Object value) {
 		meanEmitter.emit(statistic.getMean());
-		seriesEmitter.emit(new Pair<Double, Double>(run.getCurrentSimulationTime(), statistic.getMean()));
+		seriesEmitter.emit(new Pair<Double, Double>(simulation.getCurrentSimulationRun().getCurrentSimulationTime(), statistic.getMean()));
 	}
-
-	@Override
-	public void onVoidStep(SimulationRun run) {}
-
-	@Override
-	public void onReplicationEnded(int replicationIndex, SimulationRun run) {}
-
-	@Override
-	public void onSimulationEnded() {}
 }

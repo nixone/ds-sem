@@ -3,8 +3,6 @@ package sk.nixone.ds.core.statik;
 import java.util.Collection;
 import java.util.HashSet;
 
-import javax.swing.SwingUtilities;
-
 /**
  * Zaklad statickej simulacie, ktora sa od ostatnych odlisuje hlavne absenciou casu pocas priebehu simulacie.
  * Pred simulovanim je mozne statickej simulacii pridelit roznych pozorovatelov stavu simulacie, ktori su automaticky
