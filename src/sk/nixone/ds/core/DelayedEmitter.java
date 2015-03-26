@@ -37,18 +37,21 @@ public class DelayedEmitter<T> implements Emitter<T> {
 			
 			if(!pending) {
 				pending = true;
-				
 				schedulingService.schedule(new Runnable() {
 					@Override
 					public void run() {
-						T toEmmit;
-						
-						synchronized(DelayedEmitter.this) {
-							toEmmit = last;
-							pending = false;
+						try {
+							T toEmmit;
+							
+							synchronized(DelayedEmitter.this) {
+								toEmmit = last;
+								pending = false;
+							}
+	
+							emitter.emit(toEmmit);
+						} catch(Throwable t) {
+							t.printStackTrace();
 						}
-						
-						emitter.emit(toEmmit);
 					}
 				}, delay, TimeUnit.MILLISECONDS);
 			}

@@ -123,7 +123,7 @@ public class SampleSimulation extends Simulation {
 		processingCustomer = null;
 		lastQueueLengthTime = run.getCurrentSimulationTime();
 		
-		run.setMaximumSimulationTime(31536000);
+		run.setMaximumSimulationTime(3600);
 		run.plan(customerArrivalRandom.nextExponential(LAMBDA_CUSTOMER_TIME), new CustomerArrived());
 	}
 	

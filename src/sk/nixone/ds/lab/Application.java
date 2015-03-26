@@ -5,8 +5,6 @@ import java.io.IOException;
 import javax.swing.JFrame;
 
 import sk.nixone.ds.core.Randoms;
-import sk.nixone.ds.core.time.SimpleTimeJumper;
-import sk.nixone.ds.core.time.ui.SimulationFrame;
 import sk.nixone.util.AppearanceUtil;
 
 /**

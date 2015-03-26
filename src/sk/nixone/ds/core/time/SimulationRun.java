@@ -21,6 +21,10 @@ public class SimulationRun {
 		this.simulation = simulation;
 	}
 
+	public void setCurrentSimulationTime(double simulationTime) {
+		currentSimulationTime = simulationTime;
+	}
+	
 	public double getCurrentSimulationTime() {
 		return currentSimulationTime;
 	}
@@ -28,7 +32,6 @@ public class SimulationRun {
 	protected PlannedEvent planToTime(double timeToExecute, Event event) {
 		PlannedEvent plannedEvent = new PlannedEvent(this, timeToExecute, currentSimulationTime, event);
 		eventCalendar.add(plannedEvent);
-		simulation.dispatchEventPlanned(this, plannedEvent);
 		return plannedEvent;
 	}
 	
@@ -43,37 +46,30 @@ public class SimulationRun {
 	public void setMaximumSimulationTime(double maximumSimulationTime) {
 		this.maximumSimulationTime = maximumSimulationTime;
 	}
-	
-	public void run() {
-		run(new SimpleTimeJumper());
-	}
 
-	public void run(TimeJumper timeJumper) {
+	public void run(SimulationConfig config) {
 		running = true;
 		while (running && !eventCalendar.isEmpty() && (maximumSimulationTime == 0 || currentSimulationTime < maximumSimulationTime)) {
-			nextStep(timeJumper);
+			nextStep(config);
 		}
 		running = false;
 	}
-
-	public void nextStep() {
-		nextStep(new SimpleTimeJumper());
-	}
 	
-	public void nextStep(TimeJumper timeJumper) {
+	public void nextStep(SimulationConfig config) {
 		PlannedEvent probablyNext = eventCalendar.peek();
 		
 		if (currentSimulationTime < probablyNext.getExecutionTime()) {
 			double nextTime = maximumSimulationTime == 0 ? probablyNext.getExecutionTime() : Math.min(maximumSimulationTime, probablyNext.getExecutionTime());
-			currentSimulationTime = timeJumper.jump(currentSimulationTime, nextTime);
+			currentSimulationTime = config.getJumper().jump(currentSimulationTime, nextTime);
 		}
 		
 		if (currentSimulationTime == probablyNext.getExecutionTime()) {
 			probablyNext = eventCalendar.poll();
 			probablyNext.getEvent().execute(this);
-			simulation.dispatchExecutedEvent(this, probablyNext);
-		} else {
-			simulation.dispatchVoidStep(this);
+		}
+		
+		if (!config.isIgnoreRunImmediateEmitters()) {
+			simulation.dispatchSimulationUpdated();
 		}
 	}
 

@@ -15,6 +15,7 @@ public abstract class LabelEmitter<T> implements Emitter<T> {
 	 */
 	public LabelEmitter(JLabel label) {
 		this.label = label;
+		reset();
 	}
 	
 	@Override

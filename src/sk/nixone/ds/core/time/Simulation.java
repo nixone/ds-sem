@@ -2,128 +2,159 @@ package sk.nixone.ds.core.time;
 
 import java.util.HashSet;
 
+import sk.nixone.ds.core.Emitter;
+
 public abstract class Simulation {
 	
-	public interface Observer {
-		public void onSimulationStarted();
-		public void onReplicationStarted(int replicationIndex, SimulationRun run);
-		public void onEventPlanned(SimulationRun run, PlannedEvent event);
-		public void onExecutedEvent(SimulationRun run, PlannedEvent executedEvent);
-		public void onVoidStep(SimulationRun run);
-		public void onReplicationEnded(int replicationIndex, SimulationRun run);
-		public void onSimulationEnded();
-	}
-	
-	public class ObserverAdapter implements Observer {
-		@Override
-		public void onSimulationStarted() {}
-		@Override
-		public void onReplicationStarted(int replicationIndex, SimulationRun run) {}
-		@Override
-		public void onEventPlanned(SimulationRun run, PlannedEvent event) {}
-		@Override
-		public void onExecutedEvent(SimulationRun run, PlannedEvent executedEvent) {}
-		@Override
-		public void onVoidStep(SimulationRun run) {}
-		@Override
-		public void onReplicationEnded(int replicationIndex, SimulationRun run) {}
-		@Override
-		public void onSimulationEnded() {}
-	}
-	
-	private HashSet<Observer> observers;
+	private HashSet<Emitter<Object>> startedEmitters = new HashSet<Emitter<Object>>();
+	private HashSet<Emitter<Object>> endedEmitters = new HashSet<Emitter<Object>>();
+	private HashSet<Emitter<Integer>> replicationStartedEmitters = new HashSet<Emitter<Integer>>();
+	private HashSet<Emitter<Integer>> replicationEndedEmitters = new HashSet<Emitter<Integer>>();
+	private HashSet<Emitter<Object>> simulationUpdatedEmitters = new HashSet<Emitter<Object>>();
 	
 	private SimulationRun currentSimulationRun = null;
 	
-	public Simulation() {
-		observers = new HashSet<>();
+	private int currentReplicationNumber = -1;
+
+	public void addStartedEmitter(Emitter<Object> emitter) {
+		synchronized(startedEmitters) {
+			startedEmitters.add(emitter);
+		}
+	}
+	
+	public void addEndedEmitter(Emitter<Object> emitter) {
+		synchronized(endedEmitters) {
+			endedEmitters.add(emitter);
+		}
+	}
+	
+	public void addReplicationStartedEmitter(Emitter<Integer> emitter) {
+		synchronized(replicationStartedEmitters) {
+			replicationStartedEmitters.add(emitter);
+		}
+	}
+	
+	public void addReplicationEndedEmitter(Emitter<Integer> emitter) {
+		synchronized(replicationEndedEmitters) {
+			replicationEndedEmitters.add(emitter);
+		}
+	}
+	
+	public void addSimulationUpdaterEmitter(Emitter<Object> emitter) {
+		synchronized(simulationUpdatedEmitters) {
+			simulationUpdatedEmitters.add(emitter);
+		}
 	}
 	
 	public abstract void initializeRun(SimulationRun run);
 	
-	public void run(int replications) {
-		run(new SimpleTimeJumper(), replications);
-	}
-	
-	public void run(TimeJumper jumper, int replications) {
+	public void run(SimulationConfig config) {
 		dispatchSimulationStarted();
-		for(int replication=0; replication<replications; replication++) {
+		for(currentReplicationNumber=0; currentReplicationNumber<config.getReplications(); currentReplicationNumber++) {
 			currentSimulationRun = new SimulationRun(this);
 			initializeRun(currentSimulationRun);
 			
-			dispatchReplicaitonStarted(replication, currentSimulationRun);
-			currentSimulationRun.run(jumper);
-			dispatchReplicationEnded(replication, currentSimulationRun);
+			if (!config.isIgnoreImmediateEmitters()) {
+				dispatchReplicationStarted(currentReplicationNumber);
+			}
+			
+			currentSimulationRun.run(config);
+			
+			if (!config.isIgnoreImmediateEmitters()) {
+				dispatchReplicationEnded(currentReplicationNumber);
+			}
 			currentSimulationRun = null;
 		}
+		if (config.isIgnoreImmediateEmitters()) {
+			dispatchReplicationStarted(currentReplicationNumber);
+			if (config.isIgnoreRunImmediateEmitters()) {
+				dispatchSimulationUpdated();
+			}
+			dispatchReplicationEnded(currentReplicationNumber);
+		}
 		dispatchSimulationEnded();
+	}
+	
+	public int getCurrentReplicationNumber() {
+		return currentReplicationNumber;
 	}
 	
 	public SimulationRun getCurrentSimulationRun() {
 		return currentSimulationRun;
 	}
 	
-	public void addObserver(Observer observer) {
-		synchronized(observers) {
-			observers.add(observer);
+	private <T> HashSet<Emitter<T>> syncCopy(HashSet<Emitter<T>> original) {
+		HashSet<Emitter<T>> result = new HashSet<Emitter<T>>();
+		synchronized(original) {
+			result.addAll(original);
 		}
-	}
-	
-	public void removeObserver(Observer observer) {
-		synchronized(observers) {
-			observers.remove(observer);
-		}
-	}
-	
-	private HashSet<Observer> copyObservers() {
-		HashSet<Observer> observersCopy = new HashSet<>();
-		
-		synchronized(observers) {
-			observersCopy.addAll(observers);
-		}
-		
-		return observersCopy;
+		return result;
 	}
 	
 	private void dispatchSimulationStarted() {
-		for(Observer observer : copyObservers()) {
-			observer.onSimulationStarted();
+		try {
+			for (Emitter<?> emitter : syncCopy(startedEmitters)) {
+				emitter.reset();
+			}
+			for (Emitter<?> emitter : syncCopy(endedEmitters)) {
+				emitter.reset();
+			}
+			for (Emitter<?> emitter : syncCopy(replicationStartedEmitters)) {
+				emitter.reset();
+			}
+			for (Emitter<?> emitter : syncCopy(simulationUpdatedEmitters)) {
+				emitter.reset();
+			}
+			
+			for (Emitter<?> emitter : syncCopy(startedEmitters)) {
+				emitter.emit(null);
+			}
+		} catch(Throwable cause) {
+			cause.printStackTrace();
 		}
 	}
 	
-	private void dispatchReplicaitonStarted(int replicationIndex, SimulationRun run) {
-		for(Observer observer : copyObservers()) {
-			observer.onReplicationStarted(replicationIndex, run);
+	private void dispatchReplicationStarted(int replicationIndex) {
+		try {
+			for (Emitter<?> emitter : syncCopy(simulationUpdatedEmitters)) {
+				emitter.reset();
+			}
+			
+			for (Emitter<Integer> emitter : syncCopy(replicationStartedEmitters)) {
+				emitter.emit(replicationIndex);
+			}
+		} catch(Throwable cause) {
+			cause.printStackTrace();
 		}
 	}
 	
-	private void dispatchReplicationEnded(int replicationIndex, SimulationRun run) {
-		for(Observer observer : copyObservers()) {
-			observer.onReplicationEnded(replicationIndex, run);
+	protected void dispatchSimulationUpdated() {
+		try {
+			for (Emitter<Object> emitter : syncCopy(simulationUpdatedEmitters)) {
+				emitter.emit(null);
+			}
+		} catch(Throwable cause) {
+			cause.printStackTrace();
+		}
+	}
+	
+	private void dispatchReplicationEnded(int replicationIndex) {
+		try {
+			for (Emitter<Integer> emitter : syncCopy(replicationEndedEmitters)) {
+				emitter.emit(replicationIndex);
+			}
+		} catch(Throwable cause) {
+			cause.printStackTrace();
 		}
 	}
 	
 	private void dispatchSimulationEnded() {
-		for(Observer observer : copyObservers()) {
-			observer.onSimulationEnded();
-		}
-	}
-	
-	protected void dispatchExecutedEvent(SimulationRun run, PlannedEvent event) {
-		for(Observer observer : copyObservers()) {
-			observer.onExecutedEvent(run, event);
-		}
-	}
-	
-	protected void dispatchVoidStep(SimulationRun run) {
-		for(Observer observer : copyObservers()) {
-			observer.onVoidStep(run);
-		}
-	}
-	
-	protected void dispatchEventPlanned(SimulationRun run, PlannedEvent event) {
-		for(Observer observer : copyObservers()) {
-			observer.onEventPlanned(run, event);
+		try {
+			for (Emitter<?> emitter : syncCopy(endedEmitters)) {
+				emitter.emit(null);
+			}
+		} catch(Throwable cause) {
+			cause.printStackTrace();
 		}
 	}
 }

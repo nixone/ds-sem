@@ -11,7 +11,6 @@ import javax.swing.table.AbstractTableModel;
 import sk.nixone.ds.core.Emitter;
 import sk.nixone.ds.core.time.PlannedEvent;
 import sk.nixone.ds.core.time.Simulation;
-import sk.nixone.ds.core.time.Simulation.Observer;
 import sk.nixone.ds.core.time.SimulationRun;
 
 public class EventCalendarPanel extends JPanel implements Emitter<Object> {
