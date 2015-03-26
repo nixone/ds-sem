@@ -1,16 +1,20 @@
 package sk.nixone.ds.core.time;
 
-public class NiceProgressTimeJumper implements TimeJumper {
+public class ControllableTimeJumper implements TimeJumper {
 
 	private double timeFactor;
 	
 	private double biggestJump;
 	
-	public NiceProgressTimeJumper() {
+	private boolean paused = false;
+	
+	private boolean allowedNextStep = false;
+	
+	public ControllableTimeJumper() {
 		this(1., 0.1);
 	}
 	
-	public NiceProgressTimeJumper(double timeFactor, double biggestJump) {
+	public ControllableTimeJumper(double timeFactor, double biggestJump) {
 		this.timeFactor = timeFactor;
 		this.biggestJump = biggestJump / timeFactor;
 	}

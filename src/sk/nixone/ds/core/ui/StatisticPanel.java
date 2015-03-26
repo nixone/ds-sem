@@ -1,4 +1,4 @@
-package sk.nixone.ds.core.time.ui;
+package sk.nixone.ds.core.ui;
 
 import java.awt.Dimension;
 
@@ -23,7 +23,6 @@ import sk.nixone.ds.core.time.PlannedEvent;
 import sk.nixone.ds.core.time.Simulation;
 import sk.nixone.ds.core.time.Simulation.Observer;
 import sk.nixone.ds.core.time.SimulationRun;
-import sk.nixone.ds.core.ui.NumberLabelEmitter;
 
 public class StatisticPanel extends JPanel implements Emitter<Object> {
 

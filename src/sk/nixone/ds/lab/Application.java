@@ -19,10 +19,7 @@ public class Application {
 		
 		final SampleSimulation simulation = new SampleSimulation(new Randoms());
 		
-		SimulationFrame frame = new SimulationFrame(simulation);
-		frame.addStatistic("T. in system", "Time customer spent in system", simulation.getCustomerInSystemTime());
-		frame.addStatistic("Process t.", "Process time", simulation.getCustomerProcessTime());
-		frame.addStatistic("Wait t.", "Waiting time for start", simulation.getCustomerWaitingTime());
+		SampleSimulationFrame frame = new SampleSimulationFrame(simulation);
 		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);

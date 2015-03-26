@@ -1,6 +1,8 @@
 package sk.nixone.ds.core.time.ui;
 
 import java.awt.AWTEventMulticaster;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,7 +19,7 @@ import sk.nixone.ds.core.DelayedEmitter;
 import sk.nixone.ds.core.Emitter;
 import sk.nixone.ds.core.Statistic;
 import sk.nixone.ds.core.time.AsyncTimeJumper;
-import sk.nixone.ds.core.time.NiceProgressTimeJumper;
+import sk.nixone.ds.core.time.ControllableTimeJumper;
 import sk.nixone.ds.core.time.PlannedEvent;
 import sk.nixone.ds.core.time.SimpleTimeJumper;
 import sk.nixone.ds.core.time.Simulation;
@@ -25,12 +27,13 @@ import sk.nixone.ds.core.time.Simulation.Observer;
 import sk.nixone.ds.core.time.SimulationRun;
 import sk.nixone.ds.core.time.TimeJumper;
 import sk.nixone.ds.core.ui.NumberLabelEmitter;
+import sk.nixone.ds.core.ui.TimeLabelEmitter;
 
 public class SimulationFrame extends JFrame implements Observer {
 	
 	private JLabel timeDataLabel = new JLabel("Simulation time:");
 	private JLabel timeDataNumber = new JLabel();
-	private Emitter<Double> timeEmitter = new DelayedEmitter<Double>(new NumberLabelEmitter(timeDataNumber, 2), 50);
+	private Emitter<Double> timeEmitter = new DelayedEmitter<Double>(new TimeLabelEmitter(timeDataNumber), 50);
 
 	private JLabel replicationLabel = new JLabel("Replication:");
 	private JLabel replicationNumber = new JLabel();
@@ -82,7 +85,7 @@ public class SimulationFrame extends JFrame implements Observer {
 		switch(runTypeBox.getSelectedIndex()) {
 		case 0: return new SimpleTimeJumper();
 		case 1: return buttonTimeJumper;
-		case 2: return new NiceProgressTimeJumper(getSelectedTimeFactor(), 0.1);
+		case 2: return new ControllableTimeJumper(getSelectedTimeFactor(), 0.1);
 		}
 		return null;
 	}
@@ -162,9 +165,9 @@ public class SimulationFrame extends JFrame implements Observer {
 			}
 		});
 	}
-
-	public void addStatistic(String tabName, String dataName, Statistic statistic) {
-		tabs.add(tabName, new StatisticPanel(simulation, statistic, dataName));
+	
+	public void addTab(String tabName, Component component) {
+		tabs.add(tabName, component);
 	}
 	
 	@Override
