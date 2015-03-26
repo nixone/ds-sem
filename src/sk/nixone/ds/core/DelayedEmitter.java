@@ -16,6 +16,12 @@ public class DelayedEmitter<T> implements Emitter<T> {
 	
 	private T last = null;
 	
+	private boolean resetAfter = false;
+	
+	private boolean resetBefore = false;
+	
+	private boolean hasValue = false;
+	
 	public DelayedEmitter(Emitter<T> emitter, long delay) {
 		this.emitter = emitter;
 		this.delay = delay;
@@ -26,35 +32,61 @@ public class DelayedEmitter<T> implements Emitter<T> {
 	}
 
 	@Override
-	public void reset() {
-		emitter.reset();
+	public synchronized void reset() {
+		resetAfter = true;
+		trigger();
 	}
-
-	@Override
-	public void emit(T current) {
-		synchronized(this) {
-			last = current;
-			
-			if(!pending) {
-				pending = true;
-				schedulingService.schedule(new Runnable() {
-					@Override
-					public void run() {
-						try {
-							T toEmmit;
-							
-							synchronized(DelayedEmitter.this) {
-								toEmmit = last;
-								pending = false;
-							}
 	
-							emitter.emit(toEmmit);
-						} catch(Throwable t) {
-							t.printStackTrace();
+	@Override
+	public synchronized void emit(T current) {
+		last = current;
+		hasValue = true;
+		if (resetAfter) {
+			resetBefore = true;
+			resetAfter = false;
+		}
+		trigger();
+	}
+	
+	private void trigger() {
+		if(!pending) {
+			pending = true;
+			schedulingService.schedule(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						T toEmmit;
+						boolean toResetAfter;
+						boolean toResetBefore;
+						boolean toHasValue;
+						
+						synchronized(DelayedEmitter.this) {
+							toHasValue = hasValue;
+							toEmmit = last;
+							toResetAfter = resetAfter;
+							toResetBefore = resetBefore;
+							hasValue = false;
+							resetAfter = false;
+							resetBefore = false;
+							pending = false;
 						}
+						
+						if (toResetBefore) {
+							emitter.reset();
+						}
+						
+						if (toHasValue) {
+							emitter.emit(toEmmit);
+						}
+						
+						if (toResetAfter) {
+							emitter.reset();
+						}
+					} catch(Throwable t) {
+						t.printStackTrace();
 					}
-				}, delay, TimeUnit.MILLISECONDS);
-			}
+				}
+			}, delay, TimeUnit.MILLISECONDS);
 		}
 	}
 }
