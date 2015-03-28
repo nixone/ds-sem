@@ -8,7 +8,7 @@ public class Luggage {
 	
 	ProcessMarker waitingToBeScanned = new ProcessMarker();
 	ProcessMarker scanning = new ProcessMarker();
-	ProcessMarker waitingToBePicked = new ProcessMarker(); // TODO
+	ProcessMarker waitingToBePicked = new ProcessMarker();
 	
 	public Luggage(Traveler traveler) {
 		this.traveler = traveler;

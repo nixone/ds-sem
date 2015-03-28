@@ -9,15 +9,15 @@ public class SampleSimulationFrame extends SimulationFrame {
 		super(simulation);
 		
 		StatisticPanel panel = new StatisticPanel(simulation, simulation.getCustomerInSystemTime(), "Time customer spent in system");
-		simulation.addSimulationUpdaterEmitter(panel);
+		simulation.getSimulationUpdated().add(panel);
 		addTab("T. in system", panel);
 		
 		panel = new StatisticPanel(simulation, simulation.getCustomerProcessTime(), "Process time");
-		simulation.addSimulationUpdaterEmitter(panel);
+		simulation.getSimulationUpdated().add(panel);
 		addTab("Process t.", panel);
 		
 		panel = new StatisticPanel(simulation, simulation.getCustomerWaitingTime(), "Waiting time for start");
-		simulation.addSimulationUpdaterEmitter(panel);
+		simulation.getSimulationUpdated().add(panel);
 		addTab("Wait t.", panel);
 	}
 	

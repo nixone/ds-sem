@@ -60,7 +60,7 @@ public class SimulationFrame extends JFrame {
 			}
 		};
 		
-		simulation.addSimulationUpdaterEmitter(updater);
+		simulation.getSimulationUpdated().add(updater);
 	}
 	
 	private void createLayout() {
