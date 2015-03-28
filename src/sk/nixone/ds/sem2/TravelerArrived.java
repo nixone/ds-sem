@@ -15,5 +15,6 @@ public class TravelerArrived extends Event {
 		boolean hasLuggage = simulation.hasLuggageGenerator.next();
 		Traveler traveler = new Traveler(line, hasLuggage);
 		simulation.travellersWithLuggage.get(line).add(run, traveler);
+		traveler.stayInSystem.started(run);
 	}
 }

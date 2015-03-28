@@ -27,6 +27,18 @@ public class Queue<T> {
 			throw new RuntimeException("isFull");
 		}
 		internal.addLast(item);
+		onItemAdded(run, item);
+	}
+	
+	public void onItemAdded(SimulationRun run, T item) {
+	}
+	
+	public void onItemRemoved(SimulationRun run, T item) {
+	}
+	
+	public void remove(SimulationRun run, T item) {
+		internal.remove(item);
+		onItemRemoved(run, item);
 	}
 	
 	public T peek() {
@@ -37,7 +49,9 @@ public class Queue<T> {
 		if (isEmpty()) {
 			throw new RuntimeException("isEmpty");
 		}
-		return internal.removeFirst();
+		T item = internal.removeFirst();
+		onItemRemoved(run, item);
+		return item;
 	}
 	
 	public int size() {
@@ -50,5 +64,9 @@ public class Queue<T> {
 	
 	public boolean isFull() {
 		return maximum > 0 && internal.size() == maximum;
+	}
+	
+	public void clear() {
+		internal.clear();
 	}
 }

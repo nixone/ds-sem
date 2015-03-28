@@ -25,7 +25,10 @@ public class Simulation extends sk.nixone.ds.core.time.Simulation {
 	List<TravelerWithLuggageQueue> travellersWithLuggage = new ArrayList<TravelerWithLuggageQueue>(2);
 	List<BeforeLuggageQueue> beforeLuggageQueues = new ArrayList<BeforeLuggageQueue>(2);
 	Luggage [] processingLuggage = new Luggage[2];
+	List<AfterLuggageQueue> afterLuggageQueues = new ArrayList<AfterLuggageQueue>(2);
 	
+	List<BeforeCheckupQueue> beforeCheckupQueues = new ArrayList<BeforeCheckupQueue>(2);
+	Traveler [] checkingTravelers = new Traveler[2];
 	
 	public Simulation(Randoms randoms) {
 		// TODO Ask about mean in this generator
@@ -38,7 +41,12 @@ public class Simulation extends sk.nixone.ds.core.time.Simulation {
 	
 		for(int i=0; i<2; i++) {
 			travellersWithLuggage.add(new TravelerWithLuggageQueue(this, i));
+			beforeLuggageQueues.add(new BeforeLuggageQueue(this, i));
 			processingLuggage[i] = null;
+			afterLuggageQueues.add(new AfterLuggageQueue(this, i));
+			
+			beforeCheckupQueues.add(new BeforeCheckupQueue(this, i));
+			checkingTravelers[i] = null;
 		}
 	}
 	
@@ -52,5 +60,9 @@ public class Simulation extends sk.nixone.ds.core.time.Simulation {
 			return 0;
 		}
 		return 1;
+	}
+	
+	public void finish(Traveler traveler) {
+		// TODO
 	}
 }
