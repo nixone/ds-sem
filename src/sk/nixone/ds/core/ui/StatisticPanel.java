@@ -32,11 +32,13 @@ public class StatisticPanel extends JPanel implements Emitter<Object> {
 	private JLabel meanLabel = new JLabel("Mean:");
 	private JLabel meanData = new JLabel();
 	
-	private Emitter<Double> meanEmitter = new DelayedEmitter<Double>(new NumberLabelEmitter(meanData, 5), 50);
+	private Emitter<Double> meanEmitter = new DelayedEmitter<Double>(new NumberLabelEmitter(meanData, 5), 15);
 	private Emitter<Pair<Double, Double>> seriesEmitter;
 
 	private Statistic statistic;
 	private Simulation simulation;
+	
+	private int key = 0;
 	
 	public StatisticPanel(Simulation simulation, Statistic statistic, String dataName) {
 		this.statistic = statistic;
@@ -92,6 +94,7 @@ public class StatisticPanel extends JPanel implements Emitter<Object> {
 	
 	@Override
 	public void reset() {
+		key = 0;
 		meanEmitter.reset();
 		seriesEmitter.reset();
 	}
@@ -100,10 +103,6 @@ public class StatisticPanel extends JPanel implements Emitter<Object> {
 	public void emit(Object value) {
 		meanEmitter.emit(statistic.getMean());
 		
-		SimulationRun run = simulation.getCurrentSimulationRun();
-		
-		if (run != null) {
-			seriesEmitter.emit(new Pair<Double, Double>(simulation.getCurrentSimulationRun().getCurrentSimulationTime(), statistic.getMean()));
-		}
+		seriesEmitter.emit(new Pair<Double, Double>((double)key++, statistic.getMean()));
 	}
 }

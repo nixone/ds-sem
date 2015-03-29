@@ -16,6 +16,13 @@ public class Statistic {
 		minimum = Math.min(value, minimum);
 	}
 	
+	public void clear() {
+		samples = 0;
+		sum = 0;
+		maximum = Double.MIN_VALUE;
+		minimum = Double.MAX_VALUE;
+	}
+	
 	public double getMean() {
 		return sum / samples;
 	}

@@ -6,9 +6,11 @@ public abstract class Simulation {
 	
 	private Emitters<Object> startedEmitters = new Emitters<Object>();
 	private Emitters<Object> endedEmitters = new Emitters<Object>();
-	private Emitters<Integer> replicationStartedEmitters = new Emitters<Integer>();
-	private Emitters<Integer> replicationEndedEmitters = new Emitters<Integer>();
+	private Emitters<Object> replicationStartedEmitters = new Emitters<Object>();
+	private Emitters<Object> replicationEndedEmitters = new Emitters<Object>();
 	private Emitters<Object> simulationUpdatedEmitters = new Emitters<Object>();
+	
+	private boolean running = false;
 	
 	private SimulationRun currentSimulationRun = null;
 	
@@ -22,11 +24,11 @@ public abstract class Simulation {
 		return endedEmitters;
 	}
 	
-	public Emitters<Integer> getReplicationStarted() {
+	public Emitters<Object> getReplicationStarted() {
 		return replicationStartedEmitters;
 	}
 	
-	public Emitters<Integer> getReplicationEnded() {
+	public Emitters<Object> getReplicationEnded() {
 		return replicationEndedEmitters;
 	}
 	
@@ -37,6 +39,7 @@ public abstract class Simulation {
 	public abstract void initializeRun(SimulationRun run);
 	
 	public void run(SimulationConfig config) {
+		running = true;
 		dispatchSimulationStarted();
 		for(currentReplicationNumber=0; currentReplicationNumber<config.getReplications(); currentReplicationNumber++) {
 			currentSimulationRun = new SimulationRun(this);
@@ -63,6 +66,7 @@ public abstract class Simulation {
 			dispatchReplicationEnded(currentReplicationNumber);
 		}
 		dispatchSimulationEnded();
+		running = false;
 	}
 	
 	public int getCurrentReplicationNumber() {
@@ -101,4 +105,8 @@ public abstract class Simulation {
 	public abstract void onReplicationStart(int replicationIndex);
 	
 	public abstract void onReplicationEnd(int replicationIndex);
+	
+	public boolean isRunning() {
+		return running;
+	}
 }

@@ -20,7 +20,7 @@ public class TravelerArrived extends Event {
 		// plan new arrival
 		double delta = simulation.travelerArrivalGenerator.next();
 		double total = run.getCurrentSimulationTime()+delta;
-		if (total <= simulation.latestArrivalTime) {
+		if (total <= simulation.modelDuration) {
 			simulation.arrivalEvent = run.plan(delta, new TravelerArrived(simulation));
 		} else {
 			simulation.arrivalEvent = null;

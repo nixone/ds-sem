@@ -1,102 +1,112 @@
 package sk.nixone.ds.sem2;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import sk.nixone.ds.core.Emitter;
-import sk.nixone.ds.core.time.PlannedEvent;
+import sk.nixone.ds.core.NumberUtil;
+import sk.nixone.ds.core.ui.SwingEmitter;
 
 public class SimulationPanel extends JPanel {
+
+	private JLabel capacityLabel = new JLabel("Capacity:");
+	private JTextField capacityField = new JTextField("5300");
+	private JLabel capacityBeforeLabel = new JLabel("Capacity before RTG:");
+	private JTextField capacityBeforeField = new JTextField("4");
+	private JLabel capacityAfterLabel = new JLabel("Capacity after RTG:");
+	private JTextField capacityAfterField = new JTextField("5");
+	private SimulationCanvas canvas;
 	
-	int w = 100;
-	int h = 100;
-	double ox = 0;
-	double oy = 0;
-	Graphics2D g;
-	Simulation simulation;
+	private Simulation simulation;
 	
-	public SimulationPanel(Simulation simulation) {
+	public SimulationPanel(final Simulation simulation) {
 		super();
+		canvas = new SimulationCanvas(simulation);
 		this.simulation = simulation;
 		
-		simulation.getSimulationUpdated().add(new Emitter<Object>() {
+		createLayout();
+	}
+	
+	private void createComponents() {
+		final ActionListener listener = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				simulation.setEstimatedCapacity(NumberUtil.readBig(capacityField.getText()));
+				simulation.setBeforeLimit(NumberUtil.readBig(capacityBeforeField.getText()));
+				simulation.setAfterLimit(NumberUtil.readBig(capacityAfterField.getText()));
+			}
+		};
+		
+		capacityField.addActionListener(listener);
+		capacityBeforeField.addActionListener(listener);
+		capacityAfterField.addActionListener(listener);
+		
+		listener.actionPerformed(null);
+		
+		simulation.getStarted().add(new SwingEmitter<Object>(new Emitter<Object>() {
 			
 			@Override
 			public void reset() {
-				repaint();
+				// nothing
 			}
 			
 			@Override
 			public void emit(Object value) {
-				repaint();
+				capacityField.setEnabled(false);
+				capacityBeforeField.setEnabled(false);
+				capacityAfterField.setEnabled(false);
 			}
-		});
-	}
-	
-	@Override
-	public void paintComponent(Graphics g) {
-		this.g = (Graphics2D)g;
-		w = getWidth(); h = getHeight();
+		}));
 		
-		g.setColor(Color.WHITE);
-		g.fillRect(0, 0, w, h);
+		simulation.getEnded().add(new SwingEmitter<Object>(new Emitter<Object>() {
+			@Override
+			public void reset() {
+				// nothing
+			}
+			
+			@Override
+			public void emit(Object value) {
+				capacityField.setEnabled(true);
+				capacityBeforeField.setEnabled(true);
+				capacityAfterField.setEnabled(true);
+			}
+		}));
+	}
+	
+	private void createLayout() {
+		GroupLayout layout = new GroupLayout(this);
+		setLayout(layout);
+		layout.setAutoCreateContainerGaps(true);
+		layout.setAutoCreateGaps(true);
 		
-		resetPosition();
-		paintProgress(0.5, 0.1, simulation.arrivalEvent);
-		move(0.25, 0);
-		paintLine(0);
-		move(0.5, 0);
-		paintLine(1);
-		resetPosition();
-		paintCount(0.5, 0.8, simulation.finishedTravelers);
-	}
-	
-	private void move(double x, double y) {
-		ox += x;
-		oy += y;
-	}
-	
-	private void resetPosition() {
-		oy = ox = 0;
-	}
-	
-	private int tx(double x) {
-		return (int)((ox+x)*w);
-	}
-	
-	private int ty(double y) {
-		return (int)((oy+y)*h);
-	}
-	
-	private void paintCount(double x, double y, int count) {
-		g.setColor(Color.BLACK);
-		g.drawRect(tx(x)-20, ty(y)-20, 40, 40);
-		g.drawString(String.valueOf(count), tx(x)-10, ty(y)+10);
-	}
-	
-	private void paintProgress(double x, double y, PlannedEvent event) {
-		paintProgress(x, y, event == null ? 0 : event.getProgress());
-	}
-	
-	private void paintProgress(double x, double y, double progress) {
-		int width = 100;
-		int height = 40;
-		g.setColor(Color.BLACK);
-		g.drawRect(tx(x)-width/2, ty(y)-height/2, width, height);
-		g.setColor(Color.GREEN);
-		g.fillRect(tx(x)+1-width/2, ty(y)+1-height/2, (int)((width-1)*progress), height-1);
-	}
-	
-	private void paintLine(int line) {
-		paintCount(0, 0.2, simulation.travellersWithLuggage.get(line).size());
-		paintCount(-0.1, 0.3, simulation.beforeLuggageQueues.get(line).size());
-		paintCount(0.1, 0.3, simulation.beforeCheckupQueues.get(line).size());
-		paintProgress(-0.1, 0.4, simulation.processingEvents[line]);
-		paintProgress(0.1, 0.4, simulation.detectorEvents[line]);
-		paintProgress(0.1, 0.5, simulation.checkupEvents[line]);
-		paintCount(-0.1, 0.6, simulation.afterLuggageQueues.get(line).size());
+		layout.setVerticalGroup(layout.createSequentialGroup()
+				.addGroup(layout.createParallelGroup(Alignment.CENTER)
+						.addComponent(capacityLabel)
+						.addComponent(capacityField)
+						.addComponent(capacityBeforeLabel)
+						.addComponent(capacityBeforeField)
+						.addComponent(capacityAfterLabel)
+						.addComponent(capacityAfterField)
+						)
+				.addComponent(canvas)
+				);
+		
+		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.CENTER)
+				.addGroup(layout.createSequentialGroup()
+						.addComponent(capacityLabel)
+						.addComponent(capacityField)
+						.addComponent(capacityBeforeLabel)
+						.addComponent(capacityBeforeField)
+						.addComponent(capacityAfterLabel)
+						.addComponent(capacityAfterField)
+						)
+				.addComponent(canvas)
+				);
 	}
 }

@@ -22,11 +22,11 @@ public class SimulationFrame extends JFrame {
 	
 	private JLabel timeDataLabel = new JLabel("Simulation time:");
 	private JLabel timeDataNumber = new JLabel();
-	private Emitter<Double> timeEmitter = new DelayedEmitter<Double>(new TimeLabelEmitter(timeDataNumber), 20);
+	private Emitter<Double> timeEmitter = new DelayedEmitter<Double>(new TimeLabelEmitter(timeDataNumber), 15);
 
 	private JLabel replicationLabel = new JLabel("Replication:");
 	private JLabel replicationNumber = new JLabel();
-	private Emitter<Double> replicationEmitter = new DelayedEmitter<Double>(new NumberLabelEmitter(replicationNumber), 20); 
+	private Emitter<Double> replicationEmitter = new DelayedEmitter<Double>(new NumberLabelEmitter(replicationNumber), 15); 
 	
 	private SimulationController controller;
 	

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sk.nixone.ds.core.Randoms;
+import sk.nixone.ds.core.Statistic;
 import sk.nixone.ds.core.generators.ExponentialDelayGenerator;
 import sk.nixone.ds.core.generators.Generator;
 import sk.nixone.ds.core.generators.OccurenceGenerator;
@@ -14,7 +15,7 @@ import sk.nixone.ds.core.time.SimulationRun;
 
 public class Simulation extends sk.nixone.ds.core.time.Simulation {
 
-	double latestArrivalTime = 86400;
+	double modelDuration = 86400;
 	
 	Generator<Double> travelerArrivalGenerator;
 	Generator<Boolean> hasLuggageGenerator;
@@ -36,16 +37,23 @@ public class Simulation extends sk.nixone.ds.core.time.Simulation {
 	PlannedEvent arrivalEvent = null;
 	
 	int finishedTravelers = 0;
+	int finishedTravelersInTime = 0;
+	
+	Randoms randoms;
+	
+	Statistic localStayInSystem = new Statistic();
+	Statistic globalStayInSystem = new Statistic();
+	Statistic servedPeople = new Statistic();
 	
 	public Simulation(Randoms randoms) {
-		// TODO Ask about mean in this generator
+		this.randoms = randoms;
 		travelerArrivalGenerator = new ExponentialDelayGenerator(randoms.getNextRandom(), 864f);
 		hasLuggageGenerator = new OccurenceGenerator(randoms.getNextRandom(), 0.88);
 		needsPersonalCheckupGenerator = new OccurenceGenerator(randoms.getNextRandom(), 0.13);
 		checkupDurationGenerator = new UniformGenerator(randoms.getNextRandom(), 7, 17);
 		luggageScanDurationGenerator = new UniformGenerator(randoms.getNextRandom(), 10, 57);
 		personalCheckupDurationGenerator = new TriangleGenerator(randoms.getNextRandom(), 10, 25, 120);
-	
+		
 		for(int i=0; i<2; i++) {
 			travellersWithLuggage.add(new TravelerWithLuggageQueue(this, i));
 			beforeLuggageQueues.add(new BeforeLuggageQueue(this, i));
@@ -58,6 +66,11 @@ public class Simulation extends sk.nixone.ds.core.time.Simulation {
 		
 		setBeforeLimit(4);
 		setAfterLimit(5);
+		setEstimatedCapacity(5000);
+	}
+	
+	public void setEstimatedCapacity(int people) {
+		travelerArrivalGenerator = new ExponentialDelayGenerator(randoms.getNextRandom(), 86400./people);
 	}
 	
 	public void setBeforeLimit(int limit) {
@@ -73,7 +86,6 @@ public class Simulation extends sk.nixone.ds.core.time.Simulation {
 	@Override
 	public void initializeRun(SimulationRun run) {
 		arrivalEvent = run.plan(travelerArrivalGenerator.next(), new TravelerArrived(this));
-		finishedTravelers = 0;
 	}
 	
 	public int getShorterLineIndex() {
@@ -84,12 +96,18 @@ public class Simulation extends sk.nixone.ds.core.time.Simulation {
 	}
 	
 	public void finish(Traveler traveler) {
-		// TODO
 		finishedTravelers++;
+		if(traveler.stayInSystem.getStartTime() >= 0 && traveler.stayInSystem.getEndTime() < modelDuration) {
+			finishedTravelersInTime++;
+		}
+		localStayInSystem.add(traveler.stayInSystem.getDuration());
 	}
 
 	@Override
 	public void onReplicationStart(int replicationIndex) {
+		localStayInSystem.clear();
+		finishedTravelers = 0;
+		finishedTravelersInTime = 0;
 		for(int i=0; i<2; i++) {
 			travellersWithLuggage.get(i).clear();
 			beforeLuggageQueues.get(i).clear();
@@ -107,6 +125,8 @@ public class Simulation extends sk.nixone.ds.core.time.Simulation {
 
 	@Override
 	public void onReplicationEnd(int replicationIndex) {
-		// TODO Gather statistics for replication
+		//servedPeople.add(finishedTravelersInTime);
+		servedPeople.add(finishedTravelers);
+		globalStayInSystem.add(localStayInSystem.getMean());
 	}
 }
