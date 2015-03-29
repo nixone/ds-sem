@@ -11,9 +11,7 @@ public class BeforeCheckupQueue extends Queue<Traveler> {
 	@Override
 	public void onItemAdded(SimulationRun run, Traveler traveler) {
 		traveler.waitingForCheckup.started(run);
-		if(size() == 1) {
-			checkFirst(run);
-		}
+		checkFirst(run);
 	}
 	
 	@Override
@@ -22,17 +20,18 @@ public class BeforeCheckupQueue extends Queue<Traveler> {
 	}
 	
 	protected void checkFirst(SimulationRun run) {
+		if(isEmpty()) return;
+		
 		Traveler traveler = peek();
 		// if we are not checking anybody
 		if(simulation.checkingTravelers[line] == null) {
+			remove(run);
 			traveler.stayWithDetector.started(run);
 			
 			// start checking up and plan the finish
 			simulation.checkingTravelers[line] = traveler;
 			CheckupFinished event = new CheckupFinished(simulation, line);
-			run.plan(simulation.checkupDurationGenerator.next(), event);
-			
-			remove(run);
+			simulation.detectorEvents[line] = run.plan(simulation.checkupDurationGenerator.next(), event);
 		}
 	}
 }

@@ -7,11 +7,17 @@ public class ProcessMarker {
 	private double endTime;
 	
 	public void started(SimulationRun run) {
+		if(started) {
+			throw new IllegalStateException("started==true");
+		}
 		started = true;
 		startTime = run.getCurrentSimulationTime();
 	}
 	
 	public void ended(SimulationRun run) {
+		if(ended) {
+			throw new IllegalStateException("ended==true");
+		}
 		ended = true;
 		endTime = run.getCurrentSimulationTime();
 	}

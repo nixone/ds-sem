@@ -16,5 +16,14 @@ public class TravelerArrived extends Event {
 		Traveler traveler = new Traveler(line, hasLuggage);
 		simulation.travellersWithLuggage.get(line).add(run, traveler);
 		traveler.stayInSystem.started(run);
+		
+		// plan new arrival
+		double delta = simulation.travelerArrivalGenerator.next();
+		double total = run.getCurrentSimulationTime()+delta;
+		if (total <= simulation.latestArrivalTime) {
+			simulation.arrivalEvent = run.plan(delta, new TravelerArrived(simulation));
+		} else {
+			simulation.arrivalEvent = null;
+		}
 	}
 }

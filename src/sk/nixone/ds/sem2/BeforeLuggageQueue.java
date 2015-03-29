@@ -11,9 +11,7 @@ public class BeforeLuggageQueue extends Queue<Luggage> {
 	@Override
 	public void onItemAdded(SimulationRun run, Luggage luggage) {
 		luggage.waitingToBeScanned.started(run);
-		if(size() == 1) {
-			checkFirst(run);
-		}
+		checkFirst(run);
 	}
 	
 	@Override
@@ -22,18 +20,18 @@ public class BeforeLuggageQueue extends Queue<Luggage> {
 	}
 	
 	protected void checkFirst(SimulationRun run) {
+		if(isEmpty()) return;
+		
 		// we are not yet processing anything and we will have space after scanning
 		if(simulation.processingLuggage[line] == null && !simulation.afterLuggageQueues.get(line).isFull()) {
 			// add to process, plan finish and remove
-			Luggage luggage = simulation.processingLuggage[line] = peek();
+			Luggage luggage = simulation.processingLuggage[line] = remove(run);
 			
 			luggage.waitingToBeScanned.ended(run);
 			luggage.scanning.started(run);
 			
 			LuggageScanFinished finishEvent = new LuggageScanFinished(simulation, line);
-			run.plan(simulation.luggageScanDurationGenerator.next(), finishEvent);
-			
-			remove(run);
+			simulation.processingEvents[line] = run.plan(simulation.luggageScanDurationGenerator.next(), finishEvent);
 		}
 	}
 }

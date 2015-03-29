@@ -13,16 +13,21 @@ public class PersonalCheckupFinished extends Event {
 
 	@Override
 	public void execute(SimulationRun run) {
+		simulation.checkupEvents[line] = null;
 		Traveler traveler = simulation.checkingTravelers[line];
 		traveler.stayWithPersonalCheckup.ended(run);
 		traveler.waitingForLuggage.started(run);
 		
 		// if we already did scan his luggage, finish him
-		if(traveler.luggage.scanning.didFinish()) {
+		if(traveler.luggage != null && traveler.luggage.waitingToBePicked.didHappen()) {
 			simulation.afterLuggageQueues.get(line).remove(run, traveler.luggage);
 			traveler.waitingForLuggage.ended(run);
 			traveler.stayInSystem.ended(run);
 			traveler.luggage.waitingToBePicked.ended(run);
+			simulation.finish(traveler);
+		} else if(traveler.luggage == null) {
+			traveler.waitingForLuggage.ended(run);
+			traveler.stayInSystem.ended(run);
 			simulation.finish(traveler);
 		}
 		

@@ -40,6 +40,7 @@ public abstract class Simulation {
 		dispatchSimulationStarted();
 		for(currentReplicationNumber=0; currentReplicationNumber<config.getReplications(); currentReplicationNumber++) {
 			currentSimulationRun = new SimulationRun(this);
+			onReplicationStart(currentReplicationNumber);
 			initializeRun(currentSimulationRun);
 			
 			if (!config.isIgnoreImmediateEmitters()) {
@@ -47,6 +48,7 @@ public abstract class Simulation {
 			}
 			
 			currentSimulationRun.run(config);
+			onReplicationEnd(currentReplicationNumber);
 			
 			if (!config.isIgnoreImmediateEmitters()) {
 				dispatchReplicationEnded(currentReplicationNumber);
@@ -95,4 +97,8 @@ public abstract class Simulation {
 	private void dispatchSimulationEnded() {
 		endedEmitters.emit(null);
 	}
+	
+	public abstract void onReplicationStart(int replicationIndex);
+	
+	public abstract void onReplicationEnd(int replicationIndex);
 }

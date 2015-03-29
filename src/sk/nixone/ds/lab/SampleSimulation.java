@@ -146,4 +146,16 @@ public class SampleSimulation extends Simulation {
 	public Statistic getMaximalQueueLength() {
 		return maximalQueueLength;
 	}
+
+	@Override
+	public void onReplicationStart(int replicationIndex) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onReplicationEnd(int replicationIndex) {
+		// TODO Auto-generated method stub
+		
+	}
 }

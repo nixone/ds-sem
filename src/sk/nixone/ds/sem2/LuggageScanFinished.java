@@ -13,6 +13,7 @@ public class LuggageScanFinished extends Event {
 
 	@Override
 	public void execute(SimulationRun run) {
+		simulation.processingEvents[line] = null;
 		Luggage luggage = simulation.processingLuggage[line];
 		luggage.scanning.ended(run);
 		luggage.waitingToBePicked.started(run);

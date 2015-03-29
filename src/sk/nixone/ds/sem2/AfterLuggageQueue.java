@@ -11,11 +11,11 @@ public class AfterLuggageQueue extends Queue<Luggage> {
 	@Override
 	public void onItemAdded(SimulationRun run, Luggage luggage) {
 		if(luggage.traveler.waitingForLuggage.didHappen()) {
+			remove(run, luggage);
 			luggage.traveler.stayInSystem.ended(run);
 			luggage.traveler.waitingForLuggage.ended(run);
 			luggage.waitingToBePicked.ended(run);
 			simulation.finish(luggage.traveler);
-			remove(run, luggage);
 		}
 	}
 	

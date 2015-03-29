@@ -2,6 +2,7 @@ package sk.nixone.ds.sem2;
 
 import java.util.LinkedList;
 
+import sk.nixone.ds.core.time.Event;
 import sk.nixone.ds.core.time.SimulationRun;
 
 public class Queue<T> {
@@ -22,12 +23,18 @@ public class Queue<T> {
 		this.maximum = maximum;
 	}
 	
-	public void add(SimulationRun run, T item) {
+	public void add(SimulationRun run, final T item) {
 		if (isFull()) {
 			throw new RuntimeException("isFull");
 		}
 		internal.addLast(item);
-		onItemAdded(run, item);
+		
+		run.planImmediately(new Event() {
+			@Override
+			public void execute(SimulationRun run) {
+				onItemAdded(run, item);
+			}
+		});
 	}
 	
 	public void onItemAdded(SimulationRun run, T item) {
@@ -36,9 +43,14 @@ public class Queue<T> {
 	public void onItemRemoved(SimulationRun run, T item) {
 	}
 	
-	public void remove(SimulationRun run, T item) {
+	public void remove(SimulationRun run, final T item) {
 		internal.remove(item);
-		onItemRemoved(run, item);
+		run.planImmediately(new Event() {
+			@Override
+			public void execute(SimulationRun run) {
+				onItemRemoved(run, item);
+			}
+		});
 	}
 	
 	public T peek() {
@@ -50,7 +62,12 @@ public class Queue<T> {
 			throw new RuntimeException("isEmpty");
 		}
 		T item = internal.removeFirst();
-		onItemRemoved(run, item);
+		run.planImmediately(new Event() {
+			@Override
+			public void execute(SimulationRun run) {
+				onItemRemoved(run, item);
+			}
+		});
 		return item;
 	}
 	
