@@ -1,22 +1,31 @@
 package sk.nixone.ds.core;
 
-public class TimeStatistic extends Statistic {
+public class TimeStatistic implements Statistic {
 
+	double sum = 0;
+	double weights = 0;
 	double lastTime = 0;
 	
-	@Override
 	public void clear() {
-		super.clear();
-		lastTime = 0;
+		lastTime = sum = weights = 0;
 	}
 	
 	public void add(double currentTime, double amount) {
-		double delta = currentTime - lastTime;
-		if(delta <= 0) {
+		double weight = currentTime - lastTime;
+		if(weight <= 0) {
 			return;
 		}
+		// TODO
 		
-		super.add(amount/delta);
+		sum += amount*weight;
+		weights += weight;
 		lastTime = currentTime;
+	}
+	
+	public double getMean() {
+		if(weights <= 0) {
+			return 0;
+		}
+		return sum/weights;
 	}
 }

@@ -47,23 +47,13 @@ public abstract class Simulation {
 			currentSimulationRun = newSimulationRun;
 			
 			onReplicationStart(currentReplicationNumber);
-			
-			if (!config.isIgnoreImmediateEmitters()) {
-				dispatchReplicationStarted(currentReplicationNumber);
-			}
-			
-			currentSimulationRun.run(config);
-			onReplicationEnd(currentReplicationNumber);
-			
-			if (!config.isIgnoreImmediateEmitters()) {
-				dispatchReplicationEnded(currentReplicationNumber);
-			}
-		}
-		if (config.isIgnoreImmediateEmitters()) {
 			dispatchReplicationStarted(currentReplicationNumber);
-			if (config.isIgnoreRunImmediateEmitters()) {
+			currentSimulationRun.run(config);
+			if (config.isIgnoreImmediateEmitters()) {
 				dispatchSimulationUpdated();
 			}
+			
+			onReplicationEnd(currentReplicationNumber);
 			dispatchReplicationEnded(currentReplicationNumber);
 		}
 		currentSimulationRun = null;
@@ -123,6 +113,8 @@ public abstract class Simulation {
 	public abstract void onReplicationStart(int replicationIndex);
 	
 	public abstract void onReplicationEnd(int replicationIndex);
+	
+	public abstract void onUpdated(SimulationRun run);
 	
 	public boolean isRunning() {
 		return running;

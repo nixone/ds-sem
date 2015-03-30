@@ -20,7 +20,6 @@ import sk.nixone.ds.core.Pair;
 import sk.nixone.ds.core.Statistic;
 import sk.nixone.ds.core.XYSeriesEmitter;
 import sk.nixone.ds.core.time.Simulation;
-import sk.nixone.ds.core.time.SimulationRun;
 
 public class StatisticPanel extends JPanel implements Emitter<Object> {
 
@@ -107,6 +106,6 @@ public class StatisticPanel extends JPanel implements Emitter<Object> {
 	}
 	
 	public Emitter<Double> createEmitter(JLabel label) {
-		return new NumberLabelEmitter(label);
+		return new NumberLabelEmitter(label, 3);
 	}
 }

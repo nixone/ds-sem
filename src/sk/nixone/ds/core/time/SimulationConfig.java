@@ -5,7 +5,6 @@ public class SimulationConfig {
 	private TimeJumper jumper;
 	private int replications;
 	private boolean ignoreImmediateEmitters = false;
-	private boolean ignoreRunImmediateEmitters = false;
 	
 	public SimulationConfig(TimeJumper jumper, int replications) {
 		this.jumper = jumper;
@@ -36,11 +35,4 @@ public class SimulationConfig {
 		this.ignoreImmediateEmitters = ignoreImmediateEmitters;
 	}
 
-	public boolean isIgnoreRunImmediateEmitters() {
-		return ignoreRunImmediateEmitters;
-	}
-
-	public void setIgnoreRunImmediateEmitters(boolean ignoreRunImmediateEmitters) {
-		this.ignoreRunImmediateEmitters = ignoreRunImmediateEmitters;
-	}
 }

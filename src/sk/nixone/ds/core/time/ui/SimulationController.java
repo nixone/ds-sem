@@ -51,7 +51,6 @@ public class SimulationController extends JPanel {
 		}
 		
 		SimulationConfig config = new SimulationConfig(jumper, NumberUtil.readBig(replicationsCount.getText()));
-		config.setIgnoreRunImmediateEmitters(!observeBox.isSelected());
 		config.setIgnoreImmediateEmitters(!observeBox.isSelected());
 		
 		return config;

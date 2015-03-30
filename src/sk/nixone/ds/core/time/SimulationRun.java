@@ -70,9 +70,11 @@ public class SimulationRun {
 			probablyNext.getEvent().execute(this);
 		}
 		
-		if (!config.isIgnoreRunImmediateEmitters()) {
+		if (!config.isIgnoreImmediateEmitters()) {
 			simulation.dispatchSimulationUpdated();
 		}
+		
+		simulation.onUpdated(this);
 	}
 
 	public boolean isRunning() {

@@ -96,11 +96,15 @@ public class SimulationCanvas extends JPanel {
 	}
 	
 	private void paintCount(double x, double y, int count) {
+		int width = 50;
+		int height = 30;
+		
 		g.setColor(Color.WHITE);
-		g.fillRect(tx(x)-20, ty(y)-20, 40, 40);
+		g.fillRect(tx(x)-width/2, ty(y)-height/2, width, height);
 		g.setColor(Color.BLACK);
-		g.drawRect(tx(x)-20, ty(y)-20, 40, 40);
-		g.drawString(String.valueOf(count), tx(x)-10, ty(y)+10);
+		g.drawRect(tx(x)-width/2, ty(y)-height/2, width, height);
+		
+		str(String.valueOf(count), x, y);
 	}
 	
 	private void paintProgress(double x, double y, PlannedEvent event, String dsc) {
@@ -112,7 +116,6 @@ public class SimulationCanvas extends JPanel {
 	}
 	
 	private void paintProgress(double x, double y, double progress, String description) {
-
 		int width = 140;
 		int height = 30;
 		g.setColor(Color.WHITE);

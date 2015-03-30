@@ -4,18 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sk.nixone.ds.core.Randoms;
-import sk.nixone.ds.core.Statistic;
+import sk.nixone.ds.core.SequenceStatistic;
+import sk.nixone.ds.core.TimeStatistic;
 import sk.nixone.ds.core.generators.ExponentialDelayGenerator;
 import sk.nixone.ds.core.generators.Generator;
 import sk.nixone.ds.core.generators.OccurenceGenerator;
 import sk.nixone.ds.core.generators.TriangleGenerator;
 import sk.nixone.ds.core.generators.UniformGenerator;
 import sk.nixone.ds.core.time.PlannedEvent;
+import sk.nixone.ds.core.time.SimulationConfig;
 import sk.nixone.ds.core.time.SimulationRun;
 
 public class Simulation extends sk.nixone.ds.core.time.Simulation {
 
 	static public final double MODEL_DURATION = 86400;
+	
+	static public final int CAPACITY = 5300;
 	
 	Generator<Double> travelerArrivalGenerator;
 	Generator<Boolean> hasLuggageGenerator;
@@ -40,9 +44,20 @@ public class Simulation extends sk.nixone.ds.core.time.Simulation {
 	
 	Randoms randoms;
 	
-	Statistic localStayInSystem = new Statistic();
-	Statistic globalStayInSystem = new Statistic();
-	Statistic servedPeople = new Statistic();
+	SequenceStatistic localStayInSystem = new SequenceStatistic();
+	SequenceStatistic globalStayInSystem = new SequenceStatistic();
+	SequenceStatistic servedPeople = new SequenceStatistic();
+	
+	SequenceStatistic globalQueueLength = new SequenceStatistic();
+	SequenceStatistic globalDetectorQueueLength = new SequenceStatistic();
+	TimeStatistic localQueueLength = new TimeStatistic();
+	TimeStatistic localDetectorQueueLength = new TimeStatistic();
+	
+	int lowPeople = 0;
+	int highPeople = 0;
+	int people = 0;
+	
+	private boolean stopped = false;
 	
 	public Simulation(Randoms randoms) {
 		this.randoms = randoms;
@@ -64,7 +79,37 @@ public class Simulation extends sk.nixone.ds.core.time.Simulation {
 		}
 	}
 	
-	public void setEstimatedCapacity(int people) {
+	public void setPeopleDimens(int low, int high) {
+		lowPeople = low;
+		highPeople = high;
+	}
+	
+	@Override
+	public void stop() {
+		super.stop();
+		stopped = true;
+	}
+	
+	@Override
+	public void run(SimulationConfig config) {
+		stopped = false;
+		int jump = (highPeople-lowPeople)/20;
+		if(jump > 1) {
+			for(int p=lowPeople; p<=highPeople; p += jump) {
+				setEstimatedCapacity(p);
+				super.run(config);
+				if(stopped) {
+					return;
+				}
+			}
+		} else {
+			setEstimatedCapacity(lowPeople);
+			super.run(config);
+		}
+	}
+	
+	private void setEstimatedCapacity(int people) {
+		this.people = people;
 		travelerArrivalGenerator = new ExponentialDelayGenerator(randoms.getNextRandom(), 86400./people);
 	}
 	
@@ -93,6 +138,8 @@ public class Simulation extends sk.nixone.ds.core.time.Simulation {
 	@Override
 	public void onReplicationStart(int replicationIndex) {
 		localStayInSystem.clear();
+		localQueueLength.clear();
+		localDetectorQueueLength.clear();
 		finishedTravelers = 0;
 	}
 
@@ -101,14 +148,19 @@ public class Simulation extends sk.nixone.ds.core.time.Simulation {
 		if(replicationIndex > 0) {
 			servedPeople.add(finishedTravelers);
 			globalStayInSystem.add(localStayInSystem.getMean());
+			globalQueueLength.add(localQueueLength.getMean());
+			globalDetectorQueueLength.add(localDetectorQueueLength.getMean());
 		}
-
 	}
 
 	@Override
 	public void onStarted() {
 		globalStayInSystem.clear();
 		localStayInSystem.clear();
+		localQueueLength.clear();
+		localDetectorQueueLength.clear();
+		globalQueueLength.clear();
+		globalDetectorQueueLength.clear();
 		finishedTravelers = 0;
 		for(int i=0; i<2; i++) {
 			travellersWithLuggage.get(i).clear();
@@ -136,5 +188,14 @@ public class Simulation extends sk.nixone.ds.core.time.Simulation {
 			original.replanInto(newOne, MODEL_DURATION);
 		}
 		newOne.setMaximumSimulationTime(MODEL_DURATION);
+	}
+
+	@Override
+	public void onUpdated(SimulationRun run) {
+		int det = beforeCheckupQueues.get(0).size()+beforeCheckupQueues.get(1).size();
+		int wait = travellersWithLuggage.get(0).size()+travellersWithLuggage.get(1).size();
+		
+		localQueueLength.add(run.getCurrentSimulationTime(), det+wait);
+		localDetectorQueueLength.add(run.getCurrentSimulationTime(), det);
 	}
 }

@@ -1,9 +1,7 @@
 package sk.nixone.ds.sem2;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.awt.Font;
+import java.util.regex.Pattern;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -17,10 +15,12 @@ import sk.nixone.ds.core.Emitter;
 import sk.nixone.ds.core.NumberUtil;
 import sk.nixone.ds.core.ui.SwingEmitter;
 
+@SuppressWarnings("serial")
 public class SimulationPanel extends JPanel {
 
-	private JLabel capacityLabel = new JLabel("Capacity:");
-	private JTextField capacityField = new JTextField("5300");
+	private JLabel capacityLabel = new JLabel("People/d:");
+	private JTextField capacityField = new JTextField("4700-5900");
+	private JLabel capacityNumber = new JLabel("N/A");
 	private JLabel capacityBeforeLabel = new JLabel("Capacity before RTG:");
 	private JTextField capacityBeforeField = new JTextField("4");
 	private JLabel capacityAfterLabel = new JLabel("Capacity after RTG:");
@@ -39,6 +39,8 @@ public class SimulationPanel extends JPanel {
 	}
 	
 	private void createComponents() {
+		capacityNumber.setFont(capacityNumber.getFont().deriveFont(Font.BOLD));
+		
 		final DocumentListener listener = new DocumentListener() {
 			@Override
 			public void removeUpdate(DocumentEvent e) {
@@ -57,7 +59,16 @@ public class SimulationPanel extends JPanel {
 			
 			private void anyChange() {
 				try {
-					simulation.setEstimatedCapacity(NumberUtil.readBig(capacityField.getText()));
+					String[] parts = capacityField.getText().split(Pattern.quote("-"));
+					if(parts.length == 1) {
+						int n = NumberUtil.readBig(parts[0]);
+						simulation.setPeopleDimens(n, n);
+					} else {
+						int l = NumberUtil.readBig(parts[0]);
+						int h = NumberUtil.readBig(parts[1]);
+						simulation.setPeopleDimens(l, h);
+					}
+					
 					simulation.setBeforeLimit(NumberUtil.readBig(capacityBeforeField.getText()));
 					simulation.setAfterLimit(NumberUtil.readBig(capacityAfterField.getText()));
 				} catch(Throwable anyCause) {
@@ -81,6 +92,7 @@ public class SimulationPanel extends JPanel {
 			
 			@Override
 			public void emit(Object value) {
+				capacityNumber.setText(String.valueOf(simulation.people));
 				capacityField.setEnabled(false);
 				capacityBeforeField.setEnabled(false);
 				capacityAfterField.setEnabled(false);
@@ -112,6 +124,7 @@ public class SimulationPanel extends JPanel {
 				.addGroup(layout.createParallelGroup(Alignment.CENTER)
 						.addComponent(capacityLabel)
 						.addComponent(capacityField)
+						.addComponent(capacityNumber)
 						.addComponent(capacityBeforeLabel)
 						.addComponent(capacityBeforeField)
 						.addComponent(capacityAfterLabel)
@@ -124,6 +137,7 @@ public class SimulationPanel extends JPanel {
 				.addGroup(layout.createSequentialGroup()
 						.addComponent(capacityLabel)
 						.addComponent(capacityField)
+						.addComponent(capacityNumber)
 						.addComponent(capacityBeforeLabel)
 						.addComponent(capacityBeforeField)
 						.addComponent(capacityAfterLabel)
