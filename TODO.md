@@ -1,3 +1,3 @@
 # ToDo list
 
-* Intervaly spolahlivosti
+* Dokumentacia
