@@ -1,3 +1,5 @@
 # ToDo list
 
-* Nespravne handlovanie ukoncenia, ak traveler nema luggage
+* Sledovanie dlzky frontov
+* Intervaly spolahlivosti
+* Zobrazenie +-10%???

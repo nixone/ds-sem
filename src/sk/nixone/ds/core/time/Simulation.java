@@ -41,7 +41,7 @@ public abstract class Simulation {
 		dispatchSimulationStarted();
 		onStarted();
 		currentSimulationRun = null;
-		for(currentReplicationNumber=0; currentReplicationNumber<config.getReplications(); currentReplicationNumber++) {
+		for(currentReplicationNumber=0; running==true && currentReplicationNumber<config.getReplications(); currentReplicationNumber++) {
 			SimulationRun newSimulationRun = new SimulationRun(this);
 			replan(currentSimulationRun, newSimulationRun);
 			currentSimulationRun = newSimulationRun;
@@ -72,6 +72,14 @@ public abstract class Simulation {
 		running = false;
 	}
 	
+	public void stop() {
+		running = false;
+		SimulationRun run = currentSimulationRun;
+		if(run != null) {
+			run.stop();
+		}
+	}
+	
 	public int getCurrentReplicationNumber() {
 		return currentReplicationNumber;
 	}
@@ -84,6 +92,7 @@ public abstract class Simulation {
 		startedEmitters.reset();
 		endedEmitters.reset();
 		replicationStartedEmitters.reset();
+		replicationEndedEmitters.reset();
 		simulationUpdatedEmitters.reset();
 		startedEmitters.emit(null);
 	}

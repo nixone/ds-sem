@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -26,10 +27,10 @@ public class SimulationController extends JPanel {
 	
 	private JLabel replicationsLabel = new JLabel("Replications:");
 	private JTextField replicationsCount = new JTextField("100");
-	private JLabel typeLabel = new JLabel("Speed:");
-	private JComboBox typeBox = new JComboBox(new String[]{ "Controlled", "Fast", "Super fast" });
+	private JCheckBox observeBox = new JCheckBox("I want to observe");
 	private TimeJumperController jumperController = new TimeJumperController(controlledTimeJumper);
 	private JButton startButton = new JButton("Start");
+	private JButton stopButton = new JButton("Stop");
 	
 	private Simulation simulation;
 	
@@ -43,30 +44,41 @@ public class SimulationController extends JPanel {
 	
 	private SimulationConfig createSelectedConfig() {
 		TimeJumper jumper = null;
-		if (typeBox.getSelectedIndex() == 0) {
+		if (observeBox.isSelected()) {
 			jumper = controlledTimeJumper;
 		} else {
 			jumper = simpleTimeJumper;
 		}
 		
 		SimulationConfig config = new SimulationConfig(jumper, NumberUtil.readBig(replicationsCount.getText()));
-		config.setIgnoreRunImmediateEmitters(typeBox.getSelectedIndex() >= 1);
-		config.setIgnoreImmediateEmitters(typeBox.getSelectedIndex() >= 2);
+		config.setIgnoreRunImmediateEmitters(!observeBox.isSelected());
+		config.setIgnoreImmediateEmitters(!observeBox.isSelected());
 		
 		return config;
 	}
 	
 	private void createComponents() {
+		observeBox.setSelected(true);
+		stopButton.setEnabled(false);
+		
 		startButton.addActionListener(new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				tryToStart();
 			}
 		});
 		
-		typeBox.addActionListener(new ActionListener() {
-			
+		stopButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Simulation simulation = SimulationController.this.simulation;
+				if(simulation != null) {
+					simulation.stop();
+				}
+			}
+		});
+		
+		observeBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				jumperController.setVisible(createSelectedConfig().getJumper() == controlledTimeJumper);
@@ -85,12 +97,10 @@ public class SimulationController extends JPanel {
 						.addComponent(replicationsLabel)
 						.addComponent(replicationsCount)
 						)
-				.addGroup(layout.createParallelGroup(Alignment.CENTER)
-						.addComponent(typeLabel)
-						.addComponent(typeBox)
-						)
+				.addComponent(observeBox)
 				.addComponent(jumperController)
 				.addComponent(startButton)
+				.addComponent(stopButton)
 				);
 		
 		layout.setVerticalGroup(layout.createParallelGroup(Alignment.CENTER)
@@ -98,12 +108,10 @@ public class SimulationController extends JPanel {
 						.addComponent(replicationsLabel)
 						.addComponent(replicationsCount)
 						)
-				.addGroup(layout.createSequentialGroup()
-						.addComponent(typeLabel)
-						.addComponent(typeBox)
-						)
+				.addComponent(observeBox)
 				.addComponent(jumperController)
 				.addComponent(startButton)
+				.addComponent(stopButton)
 				);
 	}
 	
@@ -121,10 +129,12 @@ public class SimulationController extends JPanel {
 						simulationThread = null;
 					}
 					startButton.setEnabled(true);
+					stopButton.setEnabled(false);
 				}
 			});
 			simulationThread.start();
 			startButton.setEnabled(false);
+			stopButton.setEnabled(true);
 		}
 	}
 }
