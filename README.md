@@ -4,7 +4,10 @@
 
 ## Udalosti
 
-
-
 ![Diagram udalostí]
 (https://github.com/nixone/ds-sem/blob/master/img/EventDiagram.png)
+
+## Užívateľské rozhranie
+
+![Užívateľské rozhranie]
+(https://github.com/nixone/ds-sem/blob/master/img/ui.png)
