@@ -51,7 +51,29 @@ Pre potreby konkrétneho modelu sme potrebovali navrhnúť udalosti, ktorými bu
 
 Medzi replikáciami nie je v simulačnom modeli inicializovaný stav modelu nanovo. Takýmto spôsobom sme schopní simulovať kontinuálny chod po sebe idúceho veľkého množstva replikácií bez zbytočnej potreby zahrievať celý model pred každou replikáciou na novo. Zahrievanie prvej replikácie prebieha ignoráciou a vykonaním *"nultej"* replikácie.
 
-## Užívateľské rozhranie
+### Užívateľské rozhranie
 
 ![Užívateľské rozhranie]
 (https://github.com/nixone/ds-sem/blob/master/img/ui.png)
+
+## Simulačná štúdia
+
+Na základe vykonaných replikácií a experimentovania som odhadol nasledujúci graf závislosti priemerného stráveného času na základe počtu cestujúcich, ktorí by v priebehu 24 hodín prichádzali:
+
+![Graf korelácie]
+(https://github.com/nixone/ds-sem/blob/master/img/corelation.png)
+
+*Graf je vykonávaný z automatického experimentovania, pri každom nastavení simulácie so 100 replikáciami*
+
+Na základe grafu a experimentovania som stanovil ako veľmi bezpečnú, ale takisto čo najvyššiu kapacitu bezpečnostnej kontroly letového terminálu na *5700 osôb za deň*.
+
+Po vykonaní podrobnej simulácie *(1000 replikácií)* som získali nasledovné údaje zo simulácie:
+
+Sledovaný aspekt | Priemerná hodnota | Spodná hranica int. spoľ. | Horná hranica int. spoľ.
+--- | --- | --- | ---
+Čas cestujúceho strávený bezpečnostnou kontrolou | 7:15.960 | 7:03.548 | 7:28:371
+Počet čakajúcich cestujúcich na vykonanie kontroly | 20.691 | 19.863 | 21.518
+
+## Záver
+
+Ako je už z výsledkov simulačnej štúdie zrejmé, podmienky zákazníka som splnil, a preto zákazníkovi (letiskovému terminálu) oznamujem môj výsledok: **Letiskový terminál má v priebehu 24 hodín kapacitu 5700 cestujúcich**.

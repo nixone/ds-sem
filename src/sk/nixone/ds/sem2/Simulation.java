@@ -19,8 +19,6 @@ public class Simulation extends sk.nixone.ds.core.time.Simulation {
 
 	static public final double MODEL_DURATION = 86400;
 	
-	static public final int CAPACITY = 5300;
-	
 	Generator<Double> travelerArrivalGenerator;
 	Generator<Boolean> hasLuggageGenerator;
 	Generator<Boolean> needsPersonalCheckupGenerator;
