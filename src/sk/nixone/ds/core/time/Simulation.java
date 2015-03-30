@@ -49,9 +49,6 @@ public abstract class Simulation {
 			onReplicationStart(currentReplicationNumber);
 			dispatchReplicationStarted(currentReplicationNumber);
 			currentSimulationRun.run(config);
-			if (config.isIgnoreImmediateEmitters()) {
-				dispatchSimulationUpdated();
-			}
 			
 			onReplicationEnd(currentReplicationNumber);
 			dispatchReplicationEnded(currentReplicationNumber);

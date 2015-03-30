@@ -17,6 +17,10 @@ public class Application {
 		SimulationFrame frame = new SimulationFrame(simulation);
 		frame.addTab("Display & settings", new SimulationPanel(simulation));
 		
+		CapacityCorelationPanel corelationPanel = new CapacityCorelationPanel(simulation);
+		simulation.getEnded().add(corelationPanel);
+		frame.addTab("Corelation", corelationPanel);
+		
 		StatisticPanel panel = new StatisticPanel(simulation, simulation.servedPeople, "Served people");
 		simulation.getReplicationEnded().add(panel);
 		frame.addTab("Served count", panel);

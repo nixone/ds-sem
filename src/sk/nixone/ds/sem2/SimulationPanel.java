@@ -19,7 +19,7 @@ import sk.nixone.ds.core.ui.SwingEmitter;
 public class SimulationPanel extends JPanel {
 
 	private JLabel capacityLabel = new JLabel("People/d:");
-	private JTextField capacityField = new JTextField("4700-5900");
+	private JTextField capacityField = new JTextField("5000-5700");
 	private JLabel capacityNumber = new JLabel("N/A");
 	private JLabel capacityBeforeLabel = new JLabel("Capacity before RTG:");
 	private JTextField capacityBeforeField = new JTextField("4");
