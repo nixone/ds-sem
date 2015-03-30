@@ -2,9 +2,13 @@ package sk.nixone.ds.sem2;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -30,24 +34,43 @@ public class SimulationPanel extends JPanel {
 		canvas = new SimulationCanvas(simulation);
 		this.simulation = simulation;
 		
+		createComponents();
 		createLayout();
 	}
 	
 	private void createComponents() {
-		final ActionListener listener = new ActionListener() {
+		final DocumentListener listener = new DocumentListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				simulation.setEstimatedCapacity(NumberUtil.readBig(capacityField.getText()));
-				simulation.setBeforeLimit(NumberUtil.readBig(capacityBeforeField.getText()));
-				simulation.setAfterLimit(NumberUtil.readBig(capacityAfterField.getText()));
+			public void removeUpdate(DocumentEvent e) {
+				anyChange();
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				anyChange();
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				anyChange();
+			}
+			
+			private void anyChange() {
+				try {
+					simulation.setEstimatedCapacity(NumberUtil.readBig(capacityField.getText()));
+					simulation.setBeforeLimit(NumberUtil.readBig(capacityBeforeField.getText()));
+					simulation.setAfterLimit(NumberUtil.readBig(capacityAfterField.getText()));
+				} catch(Throwable anyCause) {
+					// do nothing
+				}
 			}
 		};
 		
-		capacityField.addActionListener(listener);
-		capacityBeforeField.addActionListener(listener);
-		capacityAfterField.addActionListener(listener);
+		capacityField.getDocument().addDocumentListener(listener);
+		capacityBeforeField.getDocument().addDocumentListener(listener);
+		capacityAfterField.getDocument().addDocumentListener(listener);
 		
-		listener.actionPerformed(null);
+		listener.removeUpdate(null);
 		
 		simulation.getStarted().add(new SwingEmitter<Object>(new Emitter<Object>() {
 			

@@ -10,14 +10,20 @@ public class ProcessMarker {
 		if(started) {
 			throw new IllegalStateException("started==true");
 		}
+		run.ongoingMarkers.add(this);
 		started = true;
 		startTime = run.getCurrentSimulationTime();
+	}
+	
+	protected void moveStartTime(double offset) {
+		startTime += offset;
 	}
 	
 	public void ended(SimulationRun run) {
 		if(ended) {
 			throw new IllegalStateException("ended==true");
 		}
+		run.ongoingMarkers.remove(this);
 		ended = true;
 		endTime = run.getCurrentSimulationTime();
 	}

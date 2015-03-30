@@ -15,7 +15,7 @@ import sk.nixone.ds.core.time.SimulationRun;
 
 public class Simulation extends sk.nixone.ds.core.time.Simulation {
 
-	double modelDuration = 86400;
+	static public final double MODEL_DURATION = 86400;
 	
 	Generator<Double> travelerArrivalGenerator;
 	Generator<Boolean> hasLuggageGenerator;
@@ -37,7 +37,6 @@ public class Simulation extends sk.nixone.ds.core.time.Simulation {
 	PlannedEvent arrivalEvent = null;
 	
 	int finishedTravelers = 0;
-	int finishedTravelersInTime = 0;
 	
 	Randoms randoms;
 	
@@ -63,10 +62,6 @@ public class Simulation extends sk.nixone.ds.core.time.Simulation {
 			beforeCheckupQueues.add(new BeforeCheckupQueue(this, i));
 			checkingTravelers[i] = null;
 		}
-		
-		setBeforeLimit(4);
-		setAfterLimit(5);
-		setEstimatedCapacity(5000);
 	}
 	
 	public void setEstimatedCapacity(int people) {
@@ -83,11 +78,6 @@ public class Simulation extends sk.nixone.ds.core.time.Simulation {
 		afterLuggageQueues.get(1).setMaximum(limit);
 	}
 	
-	@Override
-	public void initializeRun(SimulationRun run) {
-		arrivalEvent = run.plan(travelerArrivalGenerator.next(), new TravelerArrived(this));
-	}
-	
 	public int getShorterLineIndex() {
 		if (travellersWithLuggage.get(0).size() <= travellersWithLuggage.get(1).size()) {
 			return 0;
@@ -97,9 +87,6 @@ public class Simulation extends sk.nixone.ds.core.time.Simulation {
 	
 	public void finish(Traveler traveler) {
 		finishedTravelers++;
-		if(traveler.stayInSystem.getStartTime() >= 0 && traveler.stayInSystem.getEndTime() < modelDuration) {
-			finishedTravelersInTime++;
-		}
 		localStayInSystem.add(traveler.stayInSystem.getDuration());
 	}
 
@@ -107,7 +94,22 @@ public class Simulation extends sk.nixone.ds.core.time.Simulation {
 	public void onReplicationStart(int replicationIndex) {
 		localStayInSystem.clear();
 		finishedTravelers = 0;
-		finishedTravelersInTime = 0;
+	}
+
+	@Override
+	public void onReplicationEnd(int replicationIndex) {
+		if(replicationIndex > 0) {
+			servedPeople.add(finishedTravelers);
+			globalStayInSystem.add(localStayInSystem.getMean());
+		}
+
+	}
+
+	@Override
+	public void onStarted() {
+		globalStayInSystem.clear();
+		localStayInSystem.clear();
+		finishedTravelers = 0;
 		for(int i=0; i<2; i++) {
 			travellersWithLuggage.get(i).clear();
 			beforeLuggageQueues.get(i).clear();
@@ -124,9 +126,15 @@ public class Simulation extends sk.nixone.ds.core.time.Simulation {
 	}
 
 	@Override
-	public void onReplicationEnd(int replicationIndex) {
-		//servedPeople.add(finishedTravelersInTime);
-		servedPeople.add(finishedTravelers);
-		globalStayInSystem.add(localStayInSystem.getMean());
+	public void onEnded() {}
+
+	@Override
+	public void replan(SimulationRun original, SimulationRun newOne) {
+		if(original == null) {
+			newOne.plan(travelerArrivalGenerator.next(), new TravelerArrived(this));
+		} else {
+			original.replanInto(newOne, MODEL_DURATION);
+		}
+		newOne.setMaximumSimulationTime(MODEL_DURATION);
 	}
 }

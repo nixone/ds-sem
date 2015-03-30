@@ -1,6 +1,8 @@
 package sk.nixone.util;
 
 public class TimeUtil {
+	
+	
 	public static String toString(long total) {
 		long seconds = total % 60; total /= 60;
 		long minutes = total % 60; total /= 60;
@@ -19,5 +21,12 @@ public class TimeUtil {
 		}
 		
 		return output;
+	}
+	
+	public static String toString(double total) {
+		long decimal = (long)total;
+		double fractional = total-decimal;
+		
+		return toString(decimal)+String.format("%.3f", fractional).substring(1);
 	}
 }

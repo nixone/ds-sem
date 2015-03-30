@@ -22,6 +22,6 @@ public class TimeLabelEmitter extends LabelEmitter<Double> {
 
 	@Override
 	public void setToLabel(JLabel label, Double value) {
-		label.setText(TimeUtil.toString(Math.round(value)));
+		label.setText(TimeUtil.toString(value));
 	}
 }

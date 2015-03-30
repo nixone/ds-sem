@@ -1,11 +1,13 @@
 package sk.nixone.ds.core.time;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.PriorityQueue;
 
 public class SimulationRun {
 
+	protected HashSet<ProcessMarker> ongoingMarkers = new HashSet<ProcessMarker>();
+	
 	private double currentSimulationTime = 0f;
 
 	private PriorityQueue<PlannedEvent> eventCalendar;
@@ -81,18 +83,14 @@ public class SimulationRun {
 		running = false;
 	}
 	
-	/**
-	 * Casovo narocna operacia! Vrati zoradene prvky v kalendari udalosti.
-	 * @return
-	 */
-	public List<PlannedEvent> getPlannedEvents() {
-		PriorityQueue<PlannedEvent> calendarCopy = new PriorityQueue<>(10, PlannedEvent.TIME_COMPARATOR);
-		calendarCopy.addAll(eventCalendar);
-		
-		ArrayList<PlannedEvent> orderedList = new ArrayList<PlannedEvent>(calendarCopy.size());
-		while(!calendarCopy.isEmpty()) {
-			orderedList.add(calendarCopy.poll());
+	public void replanInto(SimulationRun newRun, double modelDuration) {
+		Iterator<PlannedEvent> it = eventCalendar.iterator();
+		while(it.hasNext()) {
+			PlannedEvent event = it.next();
+			newRun.plan(event.getExecutionTime()-modelDuration, event.getEvent());
 		}
-		return orderedList;
+		for(ProcessMarker marker : ongoingMarkers) {
+			marker.moveStartTime(-modelDuration);
+		}
 	}
 }

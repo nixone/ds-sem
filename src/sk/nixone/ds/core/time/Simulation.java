@@ -36,15 +36,17 @@ public abstract class Simulation {
 		return simulationUpdatedEmitters;
 	}
 	
-	public abstract void initializeRun(SimulationRun run);
-	
 	public void run(SimulationConfig config) {
 		running = true;
 		dispatchSimulationStarted();
+		onStarted();
+		currentSimulationRun = null;
 		for(currentReplicationNumber=0; currentReplicationNumber<config.getReplications(); currentReplicationNumber++) {
-			currentSimulationRun = new SimulationRun(this);
+			SimulationRun newSimulationRun = new SimulationRun(this);
+			replan(currentSimulationRun, newSimulationRun);
+			currentSimulationRun = newSimulationRun;
+			
 			onReplicationStart(currentReplicationNumber);
-			initializeRun(currentSimulationRun);
 			
 			if (!config.isIgnoreImmediateEmitters()) {
 				dispatchReplicationStarted(currentReplicationNumber);
@@ -56,7 +58,6 @@ public abstract class Simulation {
 			if (!config.isIgnoreImmediateEmitters()) {
 				dispatchReplicationEnded(currentReplicationNumber);
 			}
-			currentSimulationRun = null;
 		}
 		if (config.isIgnoreImmediateEmitters()) {
 			dispatchReplicationStarted(currentReplicationNumber);
@@ -65,6 +66,8 @@ public abstract class Simulation {
 			}
 			dispatchReplicationEnded(currentReplicationNumber);
 		}
+		currentSimulationRun = null;
+		onEnded();
 		dispatchSimulationEnded();
 		running = false;
 	}
@@ -101,6 +104,12 @@ public abstract class Simulation {
 	private void dispatchSimulationEnded() {
 		endedEmitters.emit(null);
 	}
+	
+	public abstract void replan(SimulationRun original, SimulationRun newOne);
+	
+	public abstract void onStarted();
+	
+	public abstract void onEnded();
 	
 	public abstract void onReplicationStart(int replicationIndex);
 	

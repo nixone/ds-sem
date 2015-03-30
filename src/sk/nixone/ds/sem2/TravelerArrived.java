@@ -18,12 +18,9 @@ public class TravelerArrived extends Event {
 		traveler.stayInSystem.started(run);
 		
 		// plan new arrival
-		double delta = simulation.travelerArrivalGenerator.next();
-		double total = run.getCurrentSimulationTime()+delta;
-		if (total <= simulation.modelDuration) {
-			simulation.arrivalEvent = run.plan(delta, new TravelerArrived(simulation));
-		} else {
-			simulation.arrivalEvent = null;
-		}
+		simulation.arrivalEvent = run.plan(
+				simulation.travelerArrivalGenerator.next(), 
+				new TravelerArrived(simulation)
+		);
 	}
 }
