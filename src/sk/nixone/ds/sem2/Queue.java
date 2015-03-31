@@ -61,7 +61,7 @@ public class Queue<T> {
 		if (isEmpty()) {
 			throw new RuntimeException("isEmpty");
 		}
-		T item = internal.removeFirst();
+		final T item = internal.removeFirst();
 		run.planImmediately(new Event() {
 			@Override
 			public void execute(SimulationRun run) {

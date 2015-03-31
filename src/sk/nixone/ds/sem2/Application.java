@@ -25,25 +25,21 @@ public class Application {
 		simulation.getReplicationEnded().add(panel);
 		frame.addTab("Served count", panel);
 		
+		panel = new StatisticPanel(simulation, simulation.globalQueueLength, "Queue length");
+		simulation.getReplicationEnded().add(panel);
+		frame.addTab("Q length", panel);
+		
 		panel = new TimeStatisticPanel(simulation, simulation.globalStayInSystem, "Global stay in system");
 		simulation.getReplicationEnded().add(panel);
 		frame.addTab("T. in system", panel);
 		
-		panel = new StatisticPanel(simulation, simulation.globalQueueLength, "Global queue length");
+		panel = new StatisticPanel(simulation, simulation.globalWaitingPeople, "Global people waiting");
 		simulation.getReplicationEnded().add(panel);
 		frame.addTab("Q length", panel);
 		
-		panel = new StatisticPanel(simulation, simulation.globalDetectorQueueLength, "Global detector queue length");
-		simulation.getReplicationEnded().add(panel);
-		frame.addTab("Detector Q length", panel);
-		
-		panel = new StatisticPanel(simulation, simulation.localQueueLength, "Local queue length");
+		panel = new StatisticPanel(simulation, simulation.localWaitingPeople, "Local people waiting");
 		simulation.getSimulationUpdated().add(panel);
 		frame.addTab("Q length (R)", panel);
-		
-		panel = new StatisticPanel(simulation, simulation.localDetectorQueueLength, "Local detector queue length");
-		simulation.getSimulationUpdated().add(panel);
-		frame.addTab("Detector Q length (R)", panel);
 		
 		panel = new TimeStatisticPanel(simulation, simulation.localStayInSystem, "Local stay in system");
 		simulation.getSimulationUpdated().add(panel);

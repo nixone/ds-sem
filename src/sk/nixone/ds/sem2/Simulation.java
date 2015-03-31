@@ -45,11 +45,12 @@ public class Simulation extends sk.nixone.ds.core.time.Simulation {
 	SequenceStatistic localStayInSystem = new SequenceStatistic();
 	SequenceStatistic globalStayInSystem = new SequenceStatistic();
 	SequenceStatistic servedPeople = new SequenceStatistic();
-	
 	SequenceStatistic globalQueueLength = new SequenceStatistic();
-	SequenceStatistic globalDetectorQueueLength = new SequenceStatistic();
-	TimeStatistic localQueueLength = new TimeStatistic();
-	TimeStatistic localDetectorQueueLength = new TimeStatistic();
+	
+	SequenceStatistic globalWaitingPeople = new SequenceStatistic();
+	TimeStatistic localWaitingPeople = new TimeStatistic();
+	TimeStatistic localFirstQueue = new TimeStatistic();
+	TimeStatistic localSecondQueue = new TimeStatistic();
 	
 	int lowPeople = 0;
 	int highPeople = 0;
@@ -136,8 +137,9 @@ public class Simulation extends sk.nixone.ds.core.time.Simulation {
 	@Override
 	public void onReplicationStart(int replicationIndex) {
 		localStayInSystem.clear();
-		localQueueLength.clear();
-		localDetectorQueueLength.clear();
+		localWaitingPeople.clear();
+		localFirstQueue.clear();
+		localSecondQueue.clear();
 		finishedTravelers = 0;
 	}
 
@@ -146,8 +148,9 @@ public class Simulation extends sk.nixone.ds.core.time.Simulation {
 		if(replicationIndex > 0) {
 			servedPeople.add(finishedTravelers);
 			globalStayInSystem.add(localStayInSystem.getMean());
-			globalQueueLength.add(localQueueLength.getMean());
-			globalDetectorQueueLength.add(localDetectorQueueLength.getMean());
+			globalWaitingPeople.add(localWaitingPeople.getMean());
+			globalQueueLength.add(localFirstQueue.getMean());
+			globalQueueLength.add(localSecondQueue.getMean());
 		}
 	}
 
@@ -155,10 +158,9 @@ public class Simulation extends sk.nixone.ds.core.time.Simulation {
 	public void onStarted() {
 		globalStayInSystem.clear();
 		localStayInSystem.clear();
-		localQueueLength.clear();
-		localDetectorQueueLength.clear();
+		localWaitingPeople.clear();
+		globalWaitingPeople.clear();
 		globalQueueLength.clear();
-		globalDetectorQueueLength.clear();
 		finishedTravelers = 0;
 		for(int i=0; i<2; i++) {
 			travellersWithLuggage.get(i).clear();
@@ -190,10 +192,14 @@ public class Simulation extends sk.nixone.ds.core.time.Simulation {
 
 	@Override
 	public void onUpdated(SimulationRun run) {
+		double simTime = run.getCurrentSimulationTime();
+		
+		localFirstQueue.add(simTime, travellersWithLuggage.get(0).size());
+		localSecondQueue.add(simTime, travellersWithLuggage.get(1).size());		
+		
 		int det = beforeCheckupQueues.get(0).size()+beforeCheckupQueues.get(1).size();
 		int wait = travellersWithLuggage.get(0).size()+travellersWithLuggage.get(1).size();
 		
-		localQueueLength.add(run.getCurrentSimulationTime(), det+wait);
-		localDetectorQueueLength.add(run.getCurrentSimulationTime(), det);
+		localWaitingPeople.add(simTime, det+wait);;
 	}
 }
