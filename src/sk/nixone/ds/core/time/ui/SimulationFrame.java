@@ -32,7 +32,7 @@ public class SimulationFrame extends JFrame {
 	
 	private JTabbedPane tabs = new JTabbedPane();
 	
-	public SimulationFrame(Simulation simulation) {
+	public SimulationFrame(final Simulation simulation) {
 		super("Simulation");
 		
 		controller = new SimulationController(simulation);
