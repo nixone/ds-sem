@@ -8,23 +8,27 @@ import sk.nixone.ds.core.Emitter;
 import sk.nixone.ds.core.Pair;
 
 /**
- * Pozorovatel priebehu urcitej hodnoty pocas simulacie simulacneho modelu.
+ * Observer of simulation run.
  * 
  * @author nixone
  *
- * @param <T> typ hodnoty, ktora je sledovana a dalej prezentovana
+ * @param <T> type of observed value
+ * @deprecated should be replaced by emitters
  */
+// TODO should be replaced by emitters
 public abstract class Observer<T> {
 	
 	/**
-	 * Aktualizuje pozorovatela, v tejto metode je potrebne implementovat zakladnu funkcionalitu, nakolko
-	 * tato metoda je zarucene volana po kazdej replikacii simulacie
+	 * Refreshes thje observer. This method should implement basic functionality since it
+	 * is called after each simulation replication
 	 * 
-	 * @param replicationIndex index replikacie, inak povedane, poradove cislo replikacie - 1
+	 * @param replicationIndex index of replication, otherwise said, number of replication - 1
 	 */
 	public abstract void update(int replicationIndex);
 	
 	/**
+	 * Indicates the observer, that he should update the user interface
+	 * 
 	 * Indikuje pozorovatelovi, ze ma aktualizovat uzivatelske rozhranie.
 	 * V tejto metode je obycajne vytvoreny prezentovatelny medzivysledok pre uzivatela a prezentovany
 	 * vsetkym objektom zodpovednym za jeho zobrazenie pomocou metody <code>emitUI(...)</code>

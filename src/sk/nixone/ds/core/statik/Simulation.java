@@ -9,8 +9,9 @@ import java.util.HashSet;
  * aktualizovany podla momentalneho priebehu simulacie.
  * 
  * @author nixone
- *
+ * @deprecated should be totally reworked to coincide with how time simulation is written and should be used as a base for it
  */
+// TODO should be totally reworked to coincide with how time simulation is written and should be used as a base for it
 public abstract class Simulation {
 	
 	private Collection<Observer<?>> observers = new HashSet<Observer<?>>();
