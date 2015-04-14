@@ -18,3 +18,4 @@ hs_err_pid*
 manifest.mf
 build.xml
 /build/
+/dist/
