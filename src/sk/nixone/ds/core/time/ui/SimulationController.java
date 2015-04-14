@@ -12,12 +12,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import sk.nixone.ds.core.NumberUtil;
 import sk.nixone.ds.core.time.ControllableTimeJumper;
 import sk.nixone.ds.core.time.SimpleTimeJumper;
 import sk.nixone.ds.core.time.Simulation;
 import sk.nixone.ds.core.time.SimulationConfig;
 import sk.nixone.ds.core.time.TimeJumper;
+import sk.nixone.util.NumberUtil;
 
 public class SimulationController extends JPanel {
 	

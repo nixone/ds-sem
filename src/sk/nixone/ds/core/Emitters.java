@@ -2,6 +2,14 @@ package sk.nixone.ds.core;
 
 import java.util.HashSet;
 
+/**
+ * Collection of many emitters, which are represented as one big emitter.
+ * The emits and resets are just redistributed to all of them, no magic.
+ * 
+ * @author nixone
+ *
+ * @param <T> type of objects
+ */
 public class Emitters<T> implements Emitter<T> {
 
 	private HashSet<Emitter<T>> emitters = new HashSet<Emitter<T>>();
@@ -24,6 +32,11 @@ public class Emitters<T> implements Emitter<T> {
 		}
 	}
 	
+	/**
+	 * Adds new emitter to this collection.
+	 * 
+	 * @param emitter to be added
+	 */
 	public void add(Emitter<T> emitter) {
 		emitters.add(emitter);
 	}

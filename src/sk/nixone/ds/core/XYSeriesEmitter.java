@@ -5,8 +5,9 @@ import javax.swing.SwingUtilities;
 import org.jfree.data.xy.XYSeries;
 
 /**
- * Objekt pre sledovanie priebehu simulacie ktory medzivysledky typu <code>double</code> zobrazuje
- * do triedy <code>XYSeries</code>, ktora sa obycajne pouziva na zobrazovanie pozadovanych dat do grafu.
+ * Emitter designed to percieve key value pairs of data and add them to XY series that is
+ * usually used to display data on a graph. This emitter already ensures safety of modifying data
+ * in UI thread.
  * 
  * @author nixone
  *
@@ -15,6 +16,11 @@ public class XYSeriesEmitter implements Emitter<Pair<Double, Double>> {
 
 	private XYSeries series;
 	
+	/**
+	 * Creates an emitter on a specific series
+	 * 
+	 * @param series series of data
+	 */
 	public XYSeriesEmitter(XYSeries series) {
 		this.series = series;
 	}
@@ -24,7 +30,7 @@ public class XYSeriesEmitter implements Emitter<Pair<Double, Double>> {
 		SwingUtilities.invokeLater(new Runnable(){
 			@Override
 			public void run() {
-				series.add(pair.key, pair.value);
+				series.add(pair.getKey(), pair.getValue());
 			}
 		});
 	}

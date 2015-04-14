@@ -4,6 +4,14 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Emitter layer that is able to collect 0..n emmited values and emmit only last one of them. The amount
+ * is decided by the time they are perceived and the set delay. 
+ * 
+ * @author nixone
+ *
+ * @param <T> type of objects
+ */
 public class DelayedEmitter<T> implements Emitter<T> {
 	
 	private static ScheduledExecutorService schedulingService = null;
@@ -22,6 +30,12 @@ public class DelayedEmitter<T> implements Emitter<T> {
 	
 	private boolean hasValue = false;
 	
+	/**
+	 * Creates this layer emitter
+	 * 
+	 * @param emitter emitter to send the last value to
+	 * @param delay time in which there should be not more than 1 emit to the emitter
+	 */
 	public DelayedEmitter(Emitter<T> emitter, long delay) {
 		this.emitter = emitter;
 		this.delay = delay;

@@ -147,8 +147,8 @@ public class StatisticPanel extends JPanel implements Emitter<Object> {
 		seriesEmitter.emit(new Pair<Double, Double>((double)key++, statistic.getMean()));
 		if(statistic instanceof ConfidenceStatistic) {
 			ConfidenceInterval interval = ConfidenceInterval.count(ConfidenceInterval.ALPHA_95, (ConfidenceStatistic)statistic);
-			bottomCIEmitter.emit(interval.getBottomBound());
-			topCIEmitter.emit(interval.getTopBound());
+			bottomCIEmitter.emit(interval.getLowerBound());
+			topCIEmitter.emit(interval.getUpperBound());
 		}
 	}
 	

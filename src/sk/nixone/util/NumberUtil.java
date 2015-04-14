@@ -1,4 +1,4 @@
-package sk.nixone.ds.core;
+package sk.nixone.util;
 
 /**
  * Pomocne nastroje pre pracu s cislami.

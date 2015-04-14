@@ -1,22 +1,22 @@
 package sk.nixone.ds.core;
 
 /**
- * Rozhranie popisujuce cokolvek, co je schopne prijmat akekolvek hodnoty
+ * Interface describing anything that is able to percieve a sequence of objects
  * 
  * @author nixone
  *
- * @param <T> typ obejktu
+ * @param <T> type of perceived objects
  */
 public interface Emitter<T> {
 	/**
-	 * Indikuje novu mnozinu prichadzajucich parov.
+	 * Indicates that the emitter should reset its internal state, if any. It indicates new independable set of objects being emitted.
 	 */
 	public void reset();
 	
 	/**
-	 * Indikuje novy objekt.
+	 * Indicates new object on the sequence
 	 * 
-	 * @param value objekt
+	 * @param value object
 	 */
 	public void emit(T value);
 }
