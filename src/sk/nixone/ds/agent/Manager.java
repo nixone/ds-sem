@@ -3,7 +3,7 @@ package sk.nixone.ds.agent;
 import sk.nixone.ds.agent.annotation.HandleMessage;
 import OSPABA.MessageForm;
 
-public class Manager<A extends Agent<?>> extends OSPABA.Manager {
+public class Manager<S extends SimulationRun, A extends Agent<?>> extends OSPABA.Manager {
 
 	private HandleMessage.Processor messageProcessor;
 	
@@ -22,5 +22,9 @@ public class Manager<A extends Agent<?>> extends OSPABA.Manager {
 	
 	public A getAgent() {
 		return (A)myAgent();
+	}
+	
+	public S getSimulation() {
+		return (S)mySim();
 	}
 }

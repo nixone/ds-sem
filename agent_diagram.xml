@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ABAsim>
+  <Agents>
+    <Agent>
+      <simId>3</simId>
+      <internalId>3</internalId>
+      <name>Surrounding Agent</name>
+      <bounds>60,72,180,180</bounds>
+      <reasoner>Surrounding Manager</reasoner>
+      <reasonerBounds>15,75,32,25</reasonerBounds>
+      <usePetriNet>false</usePetriNet>
+      <Components>
+        <Scheduler>
+          <simId>1001</simId>
+          <internalId>36</internalId>
+          <name>Arrival Scheduler</name>
+          <bounds>125,84,32,11</bounds>
+        </Scheduler>
+      </Components>
+    </Agent>
+    <Agent>
+      <simId>5</simId>
+      <internalId>5</internalId>
+      <name>Boarding Agent</name>
+      <bounds>195,594,180,180</bounds>
+      <reasoner>Boarding Manager</reasoner>
+      <reasonerBounds>18,77,32,25</reasonerBounds>
+      <usePetriNet>false</usePetriNet>
+      <Components>
+        <Process>
+          <simId>1004</simId>
+          <internalId>58</internalId>
+          <name>Traveler Boarding</name>
+          <bounds>112,82,32,15</bounds>
+        </Process>
+      </Components>
+    </Agent>
+    <Agent>
+      <simId>2</simId>
+      <internalId>2</internalId>
+      <name>Bus Movement Agent</name>
+      <bounds>987,560,180,180</bounds>
+      <reasoner>Bus Movement Manager</reasoner>
+      <reasonerBounds>31,79,32,25</reasonerBounds>
+      <usePetriNet>false</usePetriNet>
+      <Components>
+        <Process>
+          <simId>1006</simId>
+          <internalId>69</internalId>
+          <name>Move Bus to Next Station</name>
+          <bounds>108,84,32,15</bounds>
+        </Process>
+      </Components>
+    </Agent>
+    <Agent>
+      <simId>1</simId>
+      <internalId>1</internalId>
+      <name>Model Agent</name>
+      <bounds>573,77,180,180</bounds>
+      <reasoner>Model Manager</reasoner>
+      <reasonerBounds>71,76,32,25</reasonerBounds>
+      <usePetriNet>false</usePetriNet>
+    </Agent>
+  </Agents>
+  <Messages>
+    <Message>
+      <simId>1011</simId>
+      <internalId>32</internalId>
+      <name>Bus Free To Board</name>
+      <type>Notice</type>
+      <source>1</source>
+      <destination>5</destination>
+    </Message>
+    <Message>
+      <internalId>34</internalId>
+      <type>Parent</type>
+      <source>5</source>
+      <destination>1</destination>
+    </Message>
+    <Message>
+      <internalId>35</internalId>
+      <type>Parent</type>
+      <source>2</source>
+      <destination>1</destination>
+    </Message>
+    <Message>
+      <internalId>70</internalId>
+      <type>StartFinish</type>
+      <source>2</source>
+      <destination>69</destination>
+    </Message>
+    <Message>
+      <simId>1002</simId>
+      <internalId>7</internalId>
+      <name>init</name>
+      <type>Notice</type>
+      <source>1</source>
+      <destination>3</destination>
+    </Message>
+    <Message>
+      <simId>1005</simId>
+      <internalId>10</internalId>
+      <name>Traveler Arrived</name>
+      <type>Notice</type>
+      <source>3</source>
+      <destination>1</destination>
+    </Message>
+    <Message>
+      <simId>1013</simId>
+      <internalId>52</internalId>
+      <name>Schedule Arrival</name>
+      <type>Notice</type>
+      <source>3</source>
+      <destination>36</destination>
+    </Message>
+    <Message>
+      <internalId>21</internalId>
+      <type>Parent</type>
+      <source>3</source>
+      <destination>1</destination>
+    </Message>
+    <Message>
+      <simId>1006</simId>
+      <internalId>22</internalId>
+      <name>init</name>
+      <type>Notice</type>
+      <source>1</source>
+      <destination>2</destination>
+    </Message>
+    <Message>
+      <simId>1014</simId>
+      <internalId>54</internalId>
+      <name>Traveler Arrived</name>
+      <type>Notice</type>
+      <source>36</source>
+      <destination>3</destination>
+    </Message>
+    <Message>
+      <simId>1007</simId>
+      <internalId>25</internalId>
+      <name>init</name>
+      <type>Notice</type>
+      <source>1</source>
+      <destination>5</destination>
+    </Message>
+    <Message>
+      <simId>1008</simId>
+      <internalId>27</internalId>
+      <name>Bus Boarding Finished</name>
+      <type>Notice</type>
+      <source>5</source>
+      <destination>1</destination>
+    </Message>
+    <Message>
+      <internalId>59</internalId>
+      <type>StartFinish</type>
+      <source>5</source>
+      <destination>58</destination>
+    </Message>
+    <Message>
+      <simId>1009</simId>
+      <internalId>29</internalId>
+      <name>Bus Free To Move</name>
+      <type>Notice</type>
+      <source>1</source>
+      <destination>2</destination>
+    </Message>
+    <Message>
+      <simId>1010</simId>
+      <internalId>31</internalId>
+      <name>Bus Moved To Station</name>
+      <type>Notice</type>
+      <source>2</source>
+      <destination>1</destination>
+    </Message>
+  </Messages>
+</ABAsim>

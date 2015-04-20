@@ -1,8 +1,19 @@
 package sk.nixone.ds.agent.sem3;
 
-import sk.nixone.ds.agent.SimulationRun;
+import sk.nixone.ds.agent.Agent;
+import sk.nixone.ds.core.Randoms;
 
 public class Simulation extends sk.nixone.ds.agent.Simulation {
+	
+	private ModelInput input;
+	
+	private Randoms randoms;
+	
+	public Simulation(Randoms randoms, ModelInput input) {
+		super();
+		this.randoms = randoms;
+		this.input = input;
+	}
 	
 	@Override
 	public void onStarted() {
@@ -25,7 +36,12 @@ public class Simulation extends sk.nixone.ds.agent.Simulation {
 	}
 	
 	protected SimulationRun createSimulationRun() {
-		SimulationRun run = new SimulationRun();
+		SimulationRun run = new SimulationRun(randoms, input);
+		Message message = new Message(run);
+		message.setCode(Messages.INIT);
+		Agent<?> modelAgent = (Agent<?>)run.findAgent(Components.A_MODEL);
+		message.setAddressee(modelAgent);
+		modelAgent.manager().notice(message);
 		return run;
 	}
 }
