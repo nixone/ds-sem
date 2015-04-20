@@ -7,7 +7,7 @@ public class Manager<A extends Agent<?>> extends OSPABA.Manager {
 
 	private HandleMessage.Processor messageProcessor;
 	
-	public Manager(int id, Simulation simulation, A agent) {
+	public Manager(int id, SimulationRun simulation, A agent) {
 		super(id, simulation, agent);
 		messageProcessor = new HandleMessage.Processor(this);
 		for(int message : messageProcessor.getCodes()) {

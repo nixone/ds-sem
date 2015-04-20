@@ -8,7 +8,7 @@ public abstract class Message extends MessageForm {
 		super(original);
 	}
 
-	public Message(Simulation simulation) {
+	public Message(SimulationRun simulation) {
 		super(simulation);
 	}
 }

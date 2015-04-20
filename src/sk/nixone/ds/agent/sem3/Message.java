@@ -1,10 +1,10 @@
 package sk.nixone.ds.agent.sem3;
 
 import OSPABA.MessageForm;
-import sk.nixone.ds.agent.Simulation;
+import sk.nixone.ds.agent.SimulationRun;
 
 public class Message extends MessageForm {
-	public Message(Simulation sim)
+	public Message(SimulationRun sim)
 	{
 		super(sim);
 	}

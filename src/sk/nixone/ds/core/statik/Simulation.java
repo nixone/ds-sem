@@ -1,7 +1,7 @@
 package sk.nixone.ds.core.statik;
 
-import java.util.Collection;
-import java.util.HashSet;
+
+import sk.nixone.ds.core.Emitters;
 
 /**
  * Zaklad statickej simulacie, ktora sa od ostatnych odlisuje hlavne absenciou casu pocas priebehu simulacie.
@@ -9,71 +9,137 @@ import java.util.HashSet;
  * aktualizovany podla momentalneho priebehu simulacie.
  * 
  * @author nixone
- * @deprecated should be totally reworked to coincide with how time simulation is written and should be used as a base for it
  */
-// TODO should be totally reworked to coincide with how time simulation is written and should be used as a base for it
 public abstract class Simulation {
+
+	private Emitters<Object> startedEmitters = new Emitters<Object>();
+	private Emitters<Object> endedEmitters = new Emitters<Object>();
+	private Emitters<Object> replicationStartedEmitters = new Emitters<Object>();
+	private Emitters<Object> replicationEndedEmitters = new Emitters<Object>();
 	
-	private Collection<Observer<?>> observers = new HashSet<Observer<?>>();
+	private boolean running = false;
+	
+	private int currentReplicationNumber = -1;
+
+	/**
+	 * Emitters for event of simulation start
+	 * @return emitters for event of simulation start
+	 */
+	public Emitters<Object> getStarted() {
+		return startedEmitters;
+	}
 	
 	/**
-	 * Indikuje zaciatok novej simulacie, a teda resetuje vsetkych pozorovatelov simulacie 
+	 * Emitters for event of simulation end
+	 * @return emitters for event of simulation end
 	 */
-	private void reset() {
-		for(Observer<?> observer : observers) {
-			observer.reset();
+	public Emitters<Object> getEnded() {
+		return endedEmitters;
+	}
+	
+	/**
+	 * Emitters for event of replication started
+	 * @return emitters for event of replication started
+	 */
+	public Emitters<Object> getReplicationStarted() {
+		return replicationStartedEmitters;
+	}
+	
+	/**
+	 * Emitters for event of replication ended
+	 * @return emitters for event of replication ended
+	 */
+	public Emitters<Object> getReplicationEnded() {
+		return replicationEndedEmitters;
+	}
+	
+	/**
+	 * Runs a simulation with a specified configuration
+	 * @param config configuration
+	 */
+	public void run(int replications) {
+		running = true;
+		dispatchSimulationStarted();
+		onStarted();
+		for(currentReplicationNumber=0; running==true && currentReplicationNumber<replications; currentReplicationNumber++) {
+			onReplicationStart(currentReplicationNumber);
+			dispatchReplicationStarted(currentReplicationNumber);
+			runReplication();
+			onReplicationEnd(currentReplicationNumber);
+			dispatchReplicationEnded(currentReplicationNumber);
 		}
+		onEnded();
+		dispatchSimulationEnded();
+		running = false;
+	}
+	
+	/**
+	 * Stops the simulation as soon as possible
+	 */
+	public void stop() {
+		running = false;
+	}
+	
+	/**
+	 * Returns the current replication number that is being processed.
+	 * @return current replication number that is being processed
+	 */
+	public int getCurrentReplicationNumber() {
+		return currentReplicationNumber;
+	}
+	
+	protected void dispatchSimulationStarted() {
+		startedEmitters.reset();
+		endedEmitters.reset();
+		replicationStartedEmitters.reset();
+		replicationEndedEmitters.reset();
+		startedEmitters.emit(null);
+	}
+	
+	protected void dispatchReplicationStarted(int replicationIndex) {
+		replicationStartedEmitters.emit(replicationIndex);
+	}
+	
+	protected void dispatchReplicationEnded(int replicationIndex) {
+		replicationEndedEmitters.emit(replicationIndex);
+	}
+	
+	protected void dispatchSimulationEnded() {
+		endedEmitters.emit(null);
+	}
+	
+	/**
+	 * This will be called when the whole simulation is started.
+	 */
+	public abstract void onStarted();
+	
+	/**
+	 * This will be called when the simulation ends 
+	 */
+	public abstract void onEnded();
+	
+	/**
+	 * This will be called before each replication, but after <code>onStarted()</code>
+	 * @param replicationIndex index of replication being started
+	 */
+	public abstract void onReplicationStart(int replicationIndex);
+	
+	/**
+	 * This will be called after each replication, but before <code>onEnded()</code>
+	 * @param replicationIndex index of replication which did finish
+	 */
+	public abstract void onReplicationEnd(int replicationIndex);
+	
+	/**
+	 * Determines, whether the simulation is running or not.
+	 * @return whether the simulation is running or not
+	 */
+	public boolean isRunning() {
+		return running;
 	}
 	
 	/**
 	 * Metoda zodpovedna za vykonanie jednej konkretnej replikacie simulacneho modelu
 	 */
 	public abstract void runReplication();
-	
-	/**
-	 * Prida do systemu pozorovatela priebehu
-	 * 
-	 * @param observer
-	 */
-	public void addObserver(Observer<?> observer) {
-		observers.add(observer);
-	}
-	
-	/**
-	 * Vymaze zo systemu pozorovatela priebehu
-	 * @param observer
-	 */
-	public void removeObserver(Observer<?> observer) {
-		observers.remove(observer);
-	}
-	
-	/**
-	 * Vykona jeden priebeh simulacie
-	 * 
-	 * @param replications pocet replikacii simulacneho modelu, ktore sa maju spracovat
-	 * @param updateUIEvery perioda replikacii, po ktorych sa periodicky aktualizuje uzivatleske rozhranie
-	 * @param cropReplications pocet replikacii, ktore nie su od zaciatku simulacie uzivatelskemu rozhraniu prezentovane
-	 */
-	public void run(int replications, int updateUIEvery, int cropReplications) {
-		reset();
-		for(int replication=0; replication<replications; replication++) {
-			runReplication();
-			updateObservers(replication);
-			if(replication % updateUIEvery == 0 && replication >= cropReplications) {
-				updateObserversUI(replication);
-			}
-		}
-	}
-	
-	private void updateObservers(int r) {
-		for(Observer<?> observer : observers) {
-			observer.update(r);
-		}
-	}
-	
-	private void updateObserversUI(int r) {
-		for(Observer<?> o : observers) {
-			o.updateUI(r);
-		}
-	}
 }
