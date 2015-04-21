@@ -1,31 +1,28 @@
 package sk.nixone.ds.agent.poc;
 
-import OSPABA.CommonAgent;
-import OSPABA.ContinualAssistant;
-import OSPABA.MessageForm;
-import OSPABA.Simulation;
+import sk.nixone.ds.agent.ContinualAssistant;
+import sk.nixone.ds.agent.SimulationRun;
+import sk.nixone.ds.agent.annotation.HandleMessage;
 
-public class Assistant extends ContinualAssistant {
+public class Assistant extends ContinualAssistant<SimulationRun, Agent> {
 
-	public Assistant(Simulation mySim, CommonAgent myAgent) {
+	public Assistant(SimulationRun mySim, Agent myAgent) {
 		super(Components.ASSISTANT, mySim, myAgent);
 	}
 
-	@Override
-	public void processMessage(MessageForm message) {
-		switch(message.code()) {
-		case Messages.start:
-			hold(10, createMessage());
-			hold(30, createMessage());
-			hold(20, createMessage());
-			hold(15, createMessage());
-			break;
-		case Messages.WORK:
-			System.out.println(mySim().currentTime());
-			break;
-		}
+	@HandleMessage(code=Messages.start)
+	public void onStart(Message message) {
+		hold(10, createMessage());
+		hold(30, createMessage());
+		hold(20, createMessage());
+		hold(15, createMessage());
 	}
-
+	
+	@HandleMessage(code=Messages.WORK)
+	public void onWork(Message message) {
+		System.out.println(mySim().currentTime());
+	}
+	
 	private Message createMessage() {
 		Message message = new Message(mySim());
 		message.setCode(Messages.WORK);

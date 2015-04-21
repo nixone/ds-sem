@@ -1,6 +1,5 @@
 package sk.nixone.ds.agent.sem3.managers;
 
-import OSPABA.MessageForm;
 import sk.nixone.ds.agent.Manager;
 import sk.nixone.ds.agent.SimulationRun;
 import sk.nixone.ds.agent.annotation.HandleMessage;

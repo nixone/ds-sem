@@ -1,10 +1,10 @@
 package sk.nixone.ds.agent.poc;
 
-import OSPABA.Simulation;
+import sk.nixone.ds.agent.SimulationRun;
 
 public class Application {
 	public static void main(String[] args) {
-		Simulation simulation = new Simulation();
+		SimulationRun simulation = new SimulationRun();
 		Agent agent = new Agent(simulation);
 		
 		Message message = new Message(simulation);

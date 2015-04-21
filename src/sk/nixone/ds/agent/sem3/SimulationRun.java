@@ -26,12 +26,12 @@ public class SimulationRun extends sk.nixone.ds.agent.SimulationRun {
 	
 	public SimulationRun(Randoms randoms, ModelInput input) {
 		super();
-		this.input = input;
-		this.randoms = randoms;
+		/*this.input = input;
+		this.randoms = randoms;*/
 		modelAgent = new ModelAgent(this);
 		busMovementAgent = new BusMovementAgent(this, modelAgent);
 		surroundingAgent = new SurroundingAgent(this, modelAgent);
-		
+		/*
 		HashMap<String, ModelInput.Station> stationDescriptions = input.getStations();
 		HashMap<String, ModelInput.Line> lineDescriptions = input.getLines();
 		
@@ -41,7 +41,7 @@ public class SimulationRun extends sk.nixone.ds.agent.SimulationRun {
 		for(String lineName : lineDescriptions.keySet()) {
 			ModelInput.Line lineDescription = lineDescriptions.get(lineName);
 			buses.add(new Bus(lineName, getStation(lineDescription.getStationNames().get(0))));
-		}
+		}*/
 	}
 	
 	public Randoms getRandoms() {

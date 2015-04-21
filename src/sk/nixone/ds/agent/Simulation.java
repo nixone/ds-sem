@@ -10,6 +10,7 @@ public abstract class Simulation extends sk.nixone.ds.core.statik.Simulation {
 	private Emitters<Object> refreshInvoked = new Emitters<Object>();
 	private SimulationRun currentSimulationRun = null;
 	private double timeFactor = Double.NaN;
+	private boolean slowed = false;
 	
 	private ISimDelegate delegate = new ISimDelegate() {
 		@Override
@@ -43,6 +44,12 @@ public abstract class Simulation extends sk.nixone.ds.core.statik.Simulation {
 	
 	public void setTimeFactor(double timeFactor) {
 		this.timeFactor = timeFactor;
+		slowed = true;
+		refreshSimulationSpeed();
+	}
+	
+	public void setFast() {
+		slowed = false;
 		refreshSimulationSpeed();
 	}
 	
@@ -71,7 +78,7 @@ public abstract class Simulation extends sk.nixone.ds.core.statik.Simulation {
 	private void refreshSimulationSpeed() {
 		SimulationRun run = currentSimulationRun;
 		if (run != null) {
-			if (timeFactor != Double.NaN) {
+			if (slowed) {
 				run.setSimSpeed((1./timeFactor)/25, 1./25);
 			} else {
 				run.setMaxSimSpeed();

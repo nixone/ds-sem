@@ -1,10 +1,10 @@
 package sk.nixone.ds.agent.poc;
 
-import OSPABA.Simulation;
+import sk.nixone.ds.agent.SimulationRun;
 
-public class Agent extends OSPABA.Agent {
+public class Agent extends sk.nixone.ds.agent.Agent<SimulationRun> {
 
-	public Agent(Simulation mySim) {
+	public Agent(SimulationRun mySim) {
 		super(Components.AGENT, mySim, null);
 		
 		new Manager(mySim, this);

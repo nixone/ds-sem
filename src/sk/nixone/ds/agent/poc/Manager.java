@@ -1,23 +1,19 @@
 package sk.nixone.ds.agent.poc;
 
-import OSPABA.Agent;
+import sk.nixone.ds.agent.SimulationRun;
+import sk.nixone.ds.agent.annotation.HandleMessage;
 import OSPABA.MessageForm;
-import OSPABA.Simulation;
 
-public class Manager extends OSPABA.Manager {
+public class Manager extends sk.nixone.ds.agent.Manager<SimulationRun, Agent> {
 
-	public Manager(Simulation mySim, Agent myAgent) {
+	public Manager(SimulationRun mySim, Agent myAgent) {
 		super(Components.MANAGER, mySim, myAgent);
 	}
 
-	@Override
-	public void processMessage(MessageForm message) {
-		switch(message.code()) {
-		case Messages.INIT:
-			MessageForm msg = new Message(mySim());
-			msg.setAddressee(myAgent().findAssistant(Components.ASSISTANT));
-			startContinualAssistant(msg);
-			break;
-		}
+	@HandleMessage(code=Messages.INIT)
+	public void onInit(Message message) {
+		MessageForm msg = new Message(mySim());
+		msg.setAddressee(myAgent().findAssistant(Components.ASSISTANT));
+		startContinualAssistant(msg);
 	}
 }
