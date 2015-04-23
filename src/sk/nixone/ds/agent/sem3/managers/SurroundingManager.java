@@ -20,4 +20,9 @@ public class SurroundingManager extends Manager<SimulationRun, SurroundingAgent>
 		message.setAddressee(getAgent().findAssistant(Components.ARRIVAL_PLANNER));
 		startContinualAssistant(message);
 	}
+	
+	@HandleMessage(code=Messages.finish)
+	public void onContinualAssistantFinished(Message message) {
+		
+	}
 }

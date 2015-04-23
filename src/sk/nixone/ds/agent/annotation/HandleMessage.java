@@ -38,7 +38,7 @@ public @interface HandleMessage {
 			Method method = methodMap.get(message.code());
 			Class<? extends MessageForm> newClass = classMap.get(message.code());
 			if(method == null || newClass == null) {
-				System.err.println("@HandleMessage: method == null || newClass == null");
+				System.err.println("@HandleMessage: "+object+" can't process message "+message.code());
 			}
 			if (!newClass.isInstance(message)) {
 				throw new IllegalArgumentException("@HandleMessage: "+method+" can't accept "+message.getClass()+" messages.");

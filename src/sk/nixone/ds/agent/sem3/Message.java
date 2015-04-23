@@ -2,10 +2,13 @@ package sk.nixone.ds.agent.sem3;
 
 import OSPABA.MessageForm;
 import sk.nixone.ds.agent.SimulationRun;
+import sk.nixone.ds.agent.sem3.model.Person;
+import sk.nixone.ds.agent.sem3.model.Station;
+import sk.nixone.ds.agent.sem3.model.Vehicle;
 
 public class Message extends MessageForm {
 	
-	private Bus bus;
+	private Vehicle vehicle;
 	
 	private Person person;
 	
@@ -18,7 +21,7 @@ public class Message extends MessageForm {
 	protected Message(Message original) {
 		super(original);
 		station = original.station;
-		bus = original.bus;
+		vehicle = original.vehicle;
 		person = original.person;
 	}
 	
@@ -35,12 +38,12 @@ public class Message extends MessageForm {
 		this.station = station;
 	}
 	
-	public Bus getBus() {
-		return bus;
+	public Vehicle getVehicle() {
+		return vehicle;
 	}
 	
-	public void setBus(Bus bus) {
-		this.bus = bus;
+	public void setVehicle(Vehicle vehicle) {
+		this.vehicle = vehicle;
 	}
 	
 	public Person getPerson() {

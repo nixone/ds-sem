@@ -1,15 +1,16 @@
 package sk.nixone.ds.agent.sem3;
 
 import sk.nixone.ds.agent.Agent;
+import sk.nixone.ds.agent.sem3.model.Model;
 import sk.nixone.ds.core.Randoms;
 
 public class Simulation extends sk.nixone.ds.agent.Simulation {
 	
-	private ModelInput input;
+	private Model input;
 	
 	private Randoms randoms;
 	
-	public Simulation(Randoms randoms, ModelInput input) {
+	public Simulation(Randoms randoms, Model input) {
 		super();
 		this.randoms = randoms;
 		this.input = input;
