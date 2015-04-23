@@ -1,5 +1,6 @@
 package sk.nixone.ds.agent.sem3.model;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import sk.nixone.ds.core.generators.Generator;
@@ -49,6 +50,14 @@ public class Station {
 		latestArrival = latest;
 	}
 	
+	public int getCurrentPeopleCount() {
+		return people.size();
+	}
+	
+	public ArrayList<Person> getCurrentPeople() {
+		return new ArrayList<Person>(people);
+	}
+	
 	public void addPerson(Person person) {
 		peopleArrivedCount++;
 		this.people.add(person);
@@ -75,5 +84,10 @@ public class Station {
 	
 	public double getLatestArrival() {
 		return latestArrival;
+	}
+	
+	public void reset() {
+		people.clear();
+		peopleArrivedCount = 0;
 	}
 }

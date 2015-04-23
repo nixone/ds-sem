@@ -23,4 +23,8 @@ public class Lines extends HashMap<String, Line> implements Iterable<Line> {
 			line.updateTimesToLastStation();
 		}
 	}
+	
+	public void reset() {
+		// nothing to do
+	}
 }

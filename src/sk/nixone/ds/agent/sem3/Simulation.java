@@ -6,14 +6,14 @@ import sk.nixone.ds.core.Randoms;
 
 public class Simulation extends sk.nixone.ds.agent.Simulation {
 	
-	private Model input;
+	private Model model;
 	
 	private Randoms randoms;
 	
-	public Simulation(Randoms randoms, Model input) {
+	public Simulation(Randoms randoms, Model model) {
 		super();
 		this.randoms = randoms;
-		this.input = input;
+		this.model = model;
 	}
 	
 	@Override
@@ -37,12 +37,18 @@ public class Simulation extends sk.nixone.ds.agent.Simulation {
 	}
 	
 	protected SimulationRun createSimulationRun() {
-		SimulationRun run = new SimulationRun(randoms, input);
+		model.reset();
+		
+		SimulationRun run = new SimulationRun(randoms, model);
+		
+		run.stopSimulation(model.getMatchStartTime());
+		
 		Message message = new Message(run);
 		message.setCode(Messages.INIT);
 		Agent<?> modelAgent = (Agent<?>)run.findAgent(Components.A_MODEL);
 		message.setAddressee(modelAgent);
 		modelAgent.manager().notice(message);
+		
 		return run;
 	}
 }

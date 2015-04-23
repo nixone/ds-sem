@@ -1,8 +1,29 @@
 package sk.nixone.ds.agent.sem3.model;
 
 import java.util.HashMap;
+import java.util.Iterator;
 
-public class Line {
+public class Line implements Iterable<Station> {
+	public class LineIterator implements Iterator<Station> {
+
+		private boolean first = true;
+		private Station current = null;
+		
+		@Override
+		public boolean hasNext() {
+			return (first && firstStation != null) || nextStations.containsKey(current);
+		}
+
+		@Override
+		public Station next() {
+			if(first) {
+				first = false;
+				return current = firstStation;
+			}
+			return current = nextStations.get(current);
+		}
+	}
+	
 	private String name;
 	
 	private HashMap<Station, Station> nextStations = new HashMap<Station, Station>();
@@ -47,11 +68,18 @@ public class Line {
 			if(previousStations.containsKey(current)) {
 				time += timeToPreviousStation.get(current);
 				current = previousStations.get(current);
+			} else {
+				break;
 			}
 		}
 	}
 	
 	public String getName() {
 		return name;
+	}
+
+	@Override
+	public Iterator<Station> iterator() {
+		return new LineIterator();
 	}
 }

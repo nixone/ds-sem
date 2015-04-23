@@ -15,7 +15,7 @@ import sk.nixone.ds.agent.sem3.Simulation;
 public class ProgressController extends JPanel {
 
 	private JLabel timeFactorLabel = new JLabel("Time factor:");
-	private JComboBox timeFactorBox = new JComboBox(new String[]{ "1", "10^-1", "10^-2", "10^-3", "10^-4", "10^-5", "10^-7", "10^-10" });
+	private JComboBox timeFactorBox = new JComboBox(new String[]{ "1", "10^-1", "10^-2", "10^-3", "10^-4", "10^-5", "10^-7", "10^-10", "10^-12" });
 	private JButton pauseButton = new JButton("Pause");
 	private boolean paused = false;
 	
@@ -23,6 +23,8 @@ public class ProgressController extends JPanel {
 	
 	public ProgressController(Simulation simulation) {
 		super();
+		
+		this.simulation = simulation;
 		
 		createComponents();
 		createLayout();
@@ -40,6 +42,7 @@ public class ProgressController extends JPanel {
 		case 5: return 0.00001;
 		case 6: return 0.0000001;
 		case 7: return 0.0000000001;
+		case 8: return 0.000000000001;
 		}
 		return 1;
 	}

@@ -21,10 +21,16 @@ public class Stations extends HashMap<String, Station> implements Iterable<Stati
 	public Station getStationWithLongestTravel() {
 		Station result = null;
 		for(Station station : this) {
-			if(result == null || result.getTimeToLastStation() > station.getTimeToLastStation()) {
+			if(result == null || result.getTimeToLastStation() < station.getTimeToLastStation()) {
 				result = station;
 			}
 		}
 		return result;
+	}
+	
+	public void reset() {
+		for(Station station : this) {
+			station.reset();
+		}
 	}
 }

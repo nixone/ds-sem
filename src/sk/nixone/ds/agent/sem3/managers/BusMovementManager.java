@@ -16,6 +16,5 @@ public class BusMovementManager extends Manager<SimulationRun, BusMovementAgent>
 
 	@HandleMessage(code=Messages.INIT)
 	public void onInit(Message message) {
-		System.out.println("Bus movement INIT");
 	}
 }

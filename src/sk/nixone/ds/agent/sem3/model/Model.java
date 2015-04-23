@@ -24,8 +24,9 @@ public class Model {
 	
 	private Lines lines = new Lines();
 	private Stations stations = new Stations();
+	private double matchStartTime;
 	
-	public Model(File path) throws IOException {
+	public Model(File path, Randoms randoms) throws IOException {
 		try(BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(path)))) {
 			String ln = null;
 			while((ln = reader.readLine()) != null) {
@@ -45,15 +46,15 @@ public class Model {
 				lines.put(lineName, line);
 			}
 		}
-	}
-	
-	public void prepare(Randoms randoms) {
+		
+		lines.updateTimesToLastStation();		
+		
 		Station furthestStation = stations.getStationWithLongestTravel();
-		double matchStartTime = furthestStation.getTimeToLastStation()+ARRIVAL_TIME_OFFSET_START;
+		matchStartTime = furthestStation.getTimeToLastStation()+ARRIVAL_TIME_OFFSET_START;
 		
 		for(Station station : stations) {
-			double start = matchStartTime-ARRIVAL_TIME_OFFSET_START;
-			double stop = matchStartTime-ARRIVAL_TIME_OFFSET_STOP;
+			double start = matchStartTime-ARRIVAL_TIME_OFFSET_START-station.getTimeToLastStation();
+			double stop = matchStartTime-ARRIVAL_TIME_OFFSET_STOP-station.getTimeToLastStation();
 			double duration = stop-start;
 			
 			station.setArrivalInterval(start, stop);
@@ -67,5 +68,14 @@ public class Model {
 	
 	public Stations getStations() {
 		return stations;
+	}
+	
+	public double getMatchStartTime() {
+		return matchStartTime;
+	}
+	
+	public void reset() {
+		lines.reset();
+		stations.reset();
 	}
 }
