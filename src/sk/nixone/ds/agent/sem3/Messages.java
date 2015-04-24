@@ -5,4 +5,6 @@ import OSPABA.IdList;
 public class Messages extends IdList {
 	public static final int INIT = 1;
 	public static final int NEW_TRAVELER = 2;
+	public static final int VEHICLE_AT_STATION = 3;
+	public static final int VEHICLE_FROM_STATION = 4;
 }

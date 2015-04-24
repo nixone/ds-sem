@@ -14,4 +14,5 @@ public class Components extends IdList {
 	public static final int M_BOARDING = 104;
 	
 	public static final int ARRIVAL_PLANNER = 201;
+	public static final int MOVEMENT_PLANNER = 202;
 }

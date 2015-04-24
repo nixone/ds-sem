@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.font.LineMetrics;
 
 import javax.swing.JPanel;
 
@@ -110,5 +111,23 @@ public abstract class HelperCanvas extends JPanel {
 		int height = g.getFontMetrics().getHeight();
 		g.setColor(Color.BLACK);
 		g.drawString(text, tx(x)-width/2, ty(y)+height/2);
+	}
+	
+	public void strB(String text, double x, double y) {
+		int width = g.getFontMetrics().stringWidth(text);
+		int height = g.getFontMetrics().getAscent()+g.getFontMetrics().getDescent();
+		
+		g.setColor(new Color(255, 255, 255, 200));
+		g.fillRoundRect(tx(x)-width/2 - 2, ty(y)-height/2 - 2, width + 4, height + 4, 3, 3);
+		
+		g.setColor(Color.BLACK);
+		g.drawString(text, tx(x)-width/2, ty(y)+height/2);
+	}
+	
+	public Position i(Position from, Position to, double progress) {
+		return new Position(
+			from.x*(1-progress) + (progress)*to.x,
+			from.y*(1-progress) + (progress)*to.y
+		);
 	}
 }

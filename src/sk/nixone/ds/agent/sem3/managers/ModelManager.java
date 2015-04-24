@@ -1,6 +1,5 @@
 package sk.nixone.ds.agent.sem3.managers;
 
-import OSPABA.MessageForm;
 import sk.nixone.ds.agent.Manager;
 import sk.nixone.ds.agent.SimulationRun;
 import sk.nixone.ds.agent.annotation.HandleMessage;
@@ -21,10 +20,23 @@ public class ModelManager extends Manager<SimulationRun, ModelAgent> {
 		message.setAddressee(getSimulation().findAgent(Components.A_BUS_MOVEMENT));
 		notice(message);
 		
-		MessageForm copy = message.createCopy();
-		
 		// notify surrounding
-		copy.setAddressee(getSimulation().findAgent(Components.A_SURROUNDING));
-		notice(copy);
+		message = message.createCopy();
+		message.setAddressee(getSimulation().findAgent(Components.A_SURROUNDING));
+		notice(message);
+	}
+	
+	@HandleMessage(code=Messages.VEHICLE_AT_STATION)
+	public void onVehicleAtStation(Message message) {
+		message = message.createCopy();
+		message.setAddressee(getSimulation().findAgent(Components.A_BOARDING));
+		notice(message);
+	}
+	
+	@HandleMessage(code=Messages.VEHICLE_FROM_STATION)
+	public void onVehicleFromStation(Message message) {
+		message = message.createCopy();
+		message.setAddressee(getSimulation().findAgent(Components.A_BUS_MOVEMENT));
+		notice(message);
 	}
 }

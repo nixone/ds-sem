@@ -7,7 +7,7 @@ import OSPABA.SimState;
 public abstract class Simulation extends sk.nixone.ds.core.statik.Simulation {
 	
 	private Emitters<SimState> simulationStateChanged = new Emitters<SimState>();
-	private Emitters<Object> refreshInvoked = new Emitters<Object>();
+	private Emitters<Double> refreshInvoked = new Emitters<Double>();
 	private SimulationRun currentSimulationRun = null;
 	private double timeFactor = Double.NaN;
 	private boolean slowed = false;
@@ -20,7 +20,7 @@ public abstract class Simulation extends sk.nixone.ds.core.statik.Simulation {
 		
 		@Override
 		public void refresh(OSPABA.Simulation sim) {
-			refreshInvoked.emit(null);
+			refreshInvoked.emit(sim.currentTime());
 		}
 	};
 	
@@ -30,7 +30,7 @@ public abstract class Simulation extends sk.nixone.ds.core.statik.Simulation {
 		return simulationStateChanged;
 	}
 	
-	public Emitters<Object> getRefreshInvoked() {
+	public Emitters<Double> getRefreshInvoked() {
 		return refreshInvoked;
 	}
 	

@@ -22,7 +22,7 @@ public class SurroundingManager extends Manager<SimulationRun, SurroundingAgent>
 	}
 	
 	@HandleMessage(code=Messages.finish)
-	public void onContinualAssistantFinished(Message message) {
-		
+	public void onAssistantFinished(Message message) {
+		// nothing to do actually
 	}
 }

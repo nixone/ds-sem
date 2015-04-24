@@ -38,6 +38,18 @@ public class Line implements Iterable<Station> {
 		this.name = name;
 	}
 	
+	public Station getNextStation(Station current, boolean circle) {
+		Station realNext = nextStations.get(current);
+		if(realNext == null && circle) {
+			return firstStation;
+		}
+		return realNext;
+	}
+	
+	public double getNextStationTime(Station current) {
+		return timeToNextStation.get(current);
+	}
+	
 	public void addLeg(Station station, double time) {
 		if(lastStation == null) {
 			firstStation = lastStation = station;

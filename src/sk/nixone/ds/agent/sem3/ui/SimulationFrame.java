@@ -12,7 +12,7 @@ public class SimulationFrame extends SimulationFrameBase {
 		super(simulation);
 
 		stationsCanvas = new StationsCanvas(model, stationLayout);
-		simulation.getRefreshInvoked().add(stationsCanvas);
+		simulation.getRefreshInvoked().add(stationsCanvas.getRepainter());
 		addTab("Town", stationsCanvas);
 	}
 

@@ -39,7 +39,7 @@ public abstract class SimulationFrameBase extends JFrame {
 		setUpComponents();
 		createLayout();
 		
-		Emitter<Object> updater = new Emitter<Object>() {
+		Emitter<Double> updater = new Emitter<Double>() {
 			
 			@Override
 			public void reset() {
@@ -48,7 +48,7 @@ public abstract class SimulationFrameBase extends JFrame {
 			}
 			
 			@Override
-			public void emit(Object value) {
+			public void emit(Double value) {
 				timeEmitter.emit(simulation.getSimulationTime());
 				replicationEmitter.emit((double)simulation.getCurrentReplicationNumber());
 			}

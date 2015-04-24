@@ -5,12 +5,13 @@ import java.awt.Color;
 import sk.nixone.ds.agent.sem3.model.Line;
 import sk.nixone.ds.agent.sem3.model.Model;
 import sk.nixone.ds.agent.sem3.model.Station;
+import sk.nixone.ds.agent.sem3.model.Vehicle;
 import sk.nixone.ds.core.DelayedEmitter;
 import sk.nixone.ds.core.Emitter;
 
-public class StationsCanvas extends HelperCanvas implements Emitter<Object> {
+public class StationsCanvas extends HelperCanvas {
 
-	private DelayedEmitter<Object> repainter = new DelayedEmitter<Object>(new Emitter<Object>() {
+	private Emitter<Double> repainter = new DelayedEmitter<Double>(new Emitter<Double>() {
 
 		@Override
 		public void reset() {
@@ -18,8 +19,9 @@ public class StationsCanvas extends HelperCanvas implements Emitter<Object> {
 		}
 
 		@Override
-		public void emit(Object value) {
+		public void emit(Double value) {
 			displaying = true;
+			simulationTime = value;
 			repaint();
 		}
 	
@@ -27,6 +29,7 @@ public class StationsCanvas extends HelperCanvas implements Emitter<Object> {
 	
 	private StationsLayout layout;
 	private	Model model;
+	private double simulationTime;
 	
 	public StationsCanvas(Model model, StationsLayout layout) {
 		this.model = model;
@@ -40,6 +43,7 @@ public class StationsCanvas extends HelperCanvas implements Emitter<Object> {
 		
 		paintLines();
 		paintStations();
+		paintVehicles();
 	}
 	
 	private void paintLines() {
@@ -69,19 +73,28 @@ public class StationsCanvas extends HelperCanvas implements Emitter<Object> {
 			paintCount(p.x, p.y, station.getCurrentPeopleCount());		
 			resetDrawPosition();
 			moveDraw(0, -10);
-			str(station.getName(), p.x, p.y);
+			strB(station.getName(), p.x, p.y);
 		}
 		resetDrawPosition();
 	}
-
-	@Override
-	public void reset() {
-		displaying = false;
+	
+	private void paintVehicles() {
+		g.setColor(Color.magenta);
+		for(Vehicle vehicle : model.getVehicles()) {
+			Station fromStation = vehicle.getStationGoingFrom();
+			Station toStation = vehicle.getStationGoingTo();
+			
+			if(fromStation != null && toStation != null) {
+				Position from = layout.getPosition(fromStation);
+				Position to = layout.getPosition(toStation);
+				Position position = i(from, to, vehicle.PROCESS_STATION_TRANSITION.getProgress(simulationTime));
+				
+				point(position.x, position.y, 5);
+			}
+		}
 	}
 
-	@Override
-	public void emit(Object value) {
-		displaying = true;
-		repaint();
+	public Emitter<Double> getRepainter() {
+		return repainter;
 	}
 }

@@ -24,6 +24,7 @@ public class Model {
 	
 	private Lines lines = new Lines();
 	private Stations stations = new Stations();
+	private Vehicles vehicles = new Vehicles();
 	private double matchStartTime;
 	
 	public Model(File path, Randoms randoms) throws IOException {
@@ -74,8 +75,19 @@ public class Model {
 		return matchStartTime;
 	}
 	
+	public Vehicles getVehicles() {
+		return vehicles;
+	}
+	
 	public void reset() {
 		lines.reset();
 		stations.reset();
+		vehicles.reset();
+		
+		for(Line line : lines) {
+			Vehicle vehicle = new Vehicle(VehicleType.MICROBUS);
+			vehicle.setLine(line);
+			vehicles.add(vehicle);
+		}
 	}
 }
