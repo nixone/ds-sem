@@ -1,13 +1,13 @@
 package sk.nixone.ds.agent.sem3.model;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 import sk.nixone.ds.agent.ProcessMarker;
 
 public class Vehicle {
 	
 	public class Door {
-		public final ProcessMarker PROCESS_GETTING_IN = new ProcessMarker();
+		public final ProcessMarker OCCUPATION = new ProcessMarker();
 		
 		private Person occupiedBy = null;
 		
@@ -16,12 +16,19 @@ public class Vehicle {
 		}
 		
 		public void getIn() {
-			people.add(occupiedBy);
+			people.addLast(occupiedBy);
+			occupiedBy = null;
+		}
+		
+		public void leaveBus() {
+			people.removeFirstOccurrence(occupiedBy);
 			occupiedBy = null;
 		}
 	}
 	
-	public final ProcessMarker PROCESS_STATION_TRANSITION = new ProcessMarker();
+	public final ProcessMarker STATION_TRANSITION = new ProcessMarker();
+	
+	public final ProcessMarker WAITING_FOR_ARRIVALS = new ProcessMarker();
 	
 	private VehicleType type;
 	
@@ -35,7 +42,7 @@ public class Vehicle {
 	
 	private Door[] doors;
 	
-	private ArrayList<Person> people = null;
+	private LinkedList<Person> people = new LinkedList<Person>();
 	
 	public Vehicle(VehicleType type) {
 		this.type = type;
@@ -43,7 +50,7 @@ public class Vehicle {
 		for(int i=0; i<type.getDoorCount(); i++) {
 			doors[i] = new Door();
 		}
-		people = new ArrayList<Person>();
+		people = new LinkedList<Person>();
 	}
 	
 	public boolean hasAvailableDoors() {
@@ -96,5 +103,13 @@ public class Vehicle {
 	
 	public Station getStationGoingTo() {
 		return goingTo;
+	}
+	
+	public boolean isFull() {
+		return people.size() >= getType().getCapacity();
+	}
+	
+	public boolean isEmpty() {
+		return people.size() == 0;
 	}
 }

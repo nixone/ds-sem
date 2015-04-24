@@ -27,9 +27,9 @@ public class MovementPlanner extends ContinualAssistant<SimulationRun, BusMoveme
 		double arrivalTime = getSimulation().currentTime()+travelTime;
 		
 		vehicle.setStationTransition(from, to);
-		vehicle.PROCESS_STATION_TRANSITION.reset();
-		vehicle.PROCESS_STATION_TRANSITION.started(getSimulation());
-		vehicle.PROCESS_STATION_TRANSITION.scheduledEnd(arrivalTime);
+		vehicle.STATION_TRANSITION.reset();
+		vehicle.STATION_TRANSITION.started(getSimulation());
+		vehicle.STATION_TRANSITION.scheduledEnd(arrivalTime);
 		
 		message = message.createCopy();
 		message.setCode(Messages.VEHICLE_AT_STATION);
@@ -41,7 +41,7 @@ public class MovementPlanner extends ContinualAssistant<SimulationRun, BusMoveme
 	public void onVehicleAtStation(Message message) {
 		Vehicle vehicle = message.getVehicle();
 		vehicle.setCurrentStation(message.getStation());
-		vehicle.PROCESS_STATION_TRANSITION.ended(getSimulation());
+		vehicle.STATION_TRANSITION.ended(getSimulation());
 		
 		assistantFinished(message);
 	}

@@ -86,7 +86,7 @@ public class StationsCanvas extends HelperCanvas {
 			if(fromStation != null && toStation != null) {
 				Position from = layout.getPosition(fromStation);
 				Position to = layout.getPosition(toStation);
-				Position position = i(from, to, vehicle.PROCESS_STATION_TRANSITION.getProgress(simulationTime));
+				Position position = i(from, to, vehicle.STATION_TRANSITION.getProgress(simulationTime));
 				
 				g.setColor(Color.BLACK);
 				point(position.x, position.y, 5);

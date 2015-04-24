@@ -1,7 +1,11 @@
 package sk.nixone.ds.agent.sem3.model;
 
+import sk.nixone.ds.agent.ProcessMarker;
+
 public class Person {
 
+	public final ProcessMarker WAITING_FOR_BUS = new ProcessMarker();
+	
 	private Station station;
 	
 	private Vehicle vehicle;
