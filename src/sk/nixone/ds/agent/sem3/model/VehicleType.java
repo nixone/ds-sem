@@ -1,21 +1,31 @@
 package sk.nixone.ds.agent.sem3.model;
 
-public enum VehicleType {
-	
-	BUS_1(186, 4, 17780000, 0),
-	BUS_2(107, 3, 6450000, 0),
-	MICROBUS(8, 1, 0, 30);
+import sk.nixone.ds.core.generators.Generator;
+
+public class VehicleType {
 	
 	private int capacity;
 	private int doors;
 	private int price;
 	private int gainPerPerson;
+	private Generator<Double> entranceGenerator;
+	private Generator<Double> exitGenerator;
+	private double neededWaitingTime;
 	
-	VehicleType(int capacity, int doors, int price, int gainPerPerson) {
+	public VehicleType(int capacity, int doors, int price, int gainPerPerson, double neededWaitingTime, Generator<Double> entranceGenerator, Generator<Double> exitGenerator) {
 		this.capacity = capacity;
 		this.doors = doors;
 		this.price = price;
 		this.gainPerPerson = gainPerPerson;
+		this.neededWaitingTime = neededWaitingTime;
+	}
+	
+	public Generator<Double> getEntranceGenerator() {
+		return entranceGenerator;
+	}
+	
+	public Generator<Double> getExitGenerator() {
+		return exitGenerator;
 	}
 	
 	public int getCapacity() {
@@ -32,5 +42,9 @@ public enum VehicleType {
 	
 	public int getGainPerPerson() {
 		return gainPerPerson;
+	}
+	
+	public double getNeededWaitingTime() {
+		return neededWaitingTime;
 	}
 }

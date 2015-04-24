@@ -7,13 +7,12 @@ import sk.nixone.ds.agent.sem3.assistants.ArrivalPlanner;
 import sk.nixone.ds.agent.sem3.managers.SurroundingManager;
 import sk.nixone.ds.agent.sem3.model.Model;
 import sk.nixone.ds.agent.sem3.model.Stations;
-import sk.nixone.ds.core.Randoms;
 
 public class SurroundingAgent extends Agent<SimulationRun> {
 	
 	private Stations stations;
 	
-	public SurroundingAgent(Randoms randoms, Model model, SimulationRun simulation, Agent<SimulationRun> parent) {
+	public SurroundingAgent(Model model, SimulationRun simulation, Agent<SimulationRun> parent) {
 		super(Components.A_SURROUNDING, simulation, parent);
 		
 		this.stations = model.getStations();

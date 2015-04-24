@@ -1,8 +1,25 @@
 package sk.nixone.ds.agent.sem3.model;
 
+import java.util.ArrayList;
+
 import sk.nixone.ds.agent.ProcessMarker;
 
 public class Vehicle {
+	
+	public class Door {
+		public final ProcessMarker PROCESS_GETTING_IN = new ProcessMarker();
+		
+		private Person occupiedBy = null;
+		
+		public void occupy(Person person) {
+			occupiedBy = person;
+		}
+		
+		public void getIn() {
+			people.add(occupiedBy);
+			occupiedBy = null;
+		}
+	}
 	
 	public final ProcessMarker PROCESS_STATION_TRANSITION = new ProcessMarker();
 	
@@ -16,8 +33,34 @@ public class Vehicle {
 	
 	private Station goingTo;
 	
+	private Door[] doors;
+	
+	private ArrayList<Person> people = null;
+	
 	public Vehicle(VehicleType type) {
 		this.type = type;
+		doors = new Door[type.getDoorCount()];
+		for(int i=0; i<type.getDoorCount(); i++) {
+			doors[i] = new Door();
+		}
+		people = new ArrayList<Person>();
+	}
+	
+	public boolean hasAvailableDoors() {
+		return getAvailableDoor() == null;
+	}
+	
+	public Door getAvailableDoor() {
+		for(int i=0; i<doors.length; i++) {
+			if(doors[i].occupiedBy == null) {
+				return doors[i];
+			}
+		}
+		return null;
+	}
+	
+	public Door[] getDoors() {
+		return doors;
 	}
 	
 	public void setLine(Line line) {

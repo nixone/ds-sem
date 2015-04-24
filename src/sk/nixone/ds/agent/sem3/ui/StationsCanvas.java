@@ -25,7 +25,7 @@ public class StationsCanvas extends HelperCanvas {
 			repaint();
 		}
 	
-	}, 50);
+	}, 15);
 	
 	private StationsLayout layout;
 	private	Model model;
@@ -79,7 +79,6 @@ public class StationsCanvas extends HelperCanvas {
 	}
 	
 	private void paintVehicles() {
-		g.setColor(Color.magenta);
 		for(Vehicle vehicle : model.getVehicles()) {
 			Station fromStation = vehicle.getStationGoingFrom();
 			Station toStation = vehicle.getStationGoingTo();
@@ -89,7 +88,9 @@ public class StationsCanvas extends HelperCanvas {
 				Position to = layout.getPosition(toStation);
 				Position position = i(from, to, vehicle.PROCESS_STATION_TRANSITION.getProgress(simulationTime));
 				
+				g.setColor(Color.BLACK);
 				point(position.x, position.y, 5);
+				paintProgressSmall(position.x, position.y, 0.5);
 			}
 		}
 	}

@@ -79,7 +79,7 @@ public abstract class Simulation extends sk.nixone.ds.core.statik.Simulation {
 		SimulationRun run = currentSimulationRun;
 		if (run != null) {
 			if (slowed) {
-				run.setSimSpeed((1./timeFactor)/25, 1./25);
+				run.setSimSpeed((1./timeFactor)/60, 1./60);
 			} else {
 				run.setMaxSimSpeed();
 			}

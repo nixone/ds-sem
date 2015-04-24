@@ -33,6 +33,14 @@ public class Station {
 		return peopleArrivalCount;
 	}
 	
+	public Person peekFirstPerson() {
+		return people.peekFirst();
+	}
+	
+	public Person getFirstPerson() {
+		return people.pollFirst();
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -60,7 +68,7 @@ public class Station {
 	
 	public void addPerson(Person person) {
 		peopleArrivedCount++;
-		this.people.add(person);
+		people.addLast(person);
 	}
 	
 	public void setArrivalDistanceGenerator(Generator<Double> generator) {

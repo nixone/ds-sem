@@ -20,10 +20,10 @@ public class SimulationRun extends sk.nixone.ds.agent.SimulationRun {
 	public SimulationRun(Randoms randoms, Model model) {
 		super();
 		
-		modelAgent = new ModelAgent(randoms, model, this);
-		busMovementAgent = new BusMovementAgent(randoms, model, this, modelAgent);
-		surroundingAgent = new SurroundingAgent(randoms, model, this, modelAgent);
-		boardingAgent = new BoardingAgent(randoms, model, this, modelAgent);
+		modelAgent = new ModelAgent(model, this);
+		busMovementAgent = new BusMovementAgent(model, this, modelAgent);
+		surroundingAgent = new SurroundingAgent(model, this, modelAgent);
+		boardingAgent = new BoardingAgent(model, this, modelAgent);
 	}
 	
 	public ModelAgent getModelAgent() {

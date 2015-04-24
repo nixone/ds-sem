@@ -7,13 +7,12 @@ import sk.nixone.ds.agent.sem3.assistants.MovementPlanner;
 import sk.nixone.ds.agent.sem3.managers.BusMovementManager;
 import sk.nixone.ds.agent.sem3.model.Model;
 import sk.nixone.ds.agent.sem3.model.Vehicles;
-import sk.nixone.ds.core.Randoms;
 
 public class BusMovementAgent extends Agent<SimulationRun> {
 
 	private Vehicles vehicles;
 	
-	public BusMovementAgent(Randoms randoms, Model model, SimulationRun simulation, Agent<SimulationRun> parent) {
+	public BusMovementAgent(Model model, SimulationRun simulation, Agent<SimulationRun> parent) {
 		super(Components.A_BUS_MOVEMENT, simulation, parent);
 		
 		vehicles = model.getVehicles();

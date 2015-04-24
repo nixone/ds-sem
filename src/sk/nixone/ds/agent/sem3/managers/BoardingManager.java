@@ -16,7 +16,12 @@ public class BoardingManager extends Manager<SimulationRun, BoardingAgent>{
 	
 	@HandleMessage(code=Messages.VEHICLE_AT_STATION)
 	public void onVehicleAtStation(Message message) {
-		message = message.createCopy();
+		message.setAddressee(getAgent().findAssistant(Components.BOARDING_PLANNER));
+		startContinualAssistant(message);
+	}
+	
+	@HandleMessage(code=Messages.finish)
+	public void onBoardingFinished(Message message) {
 		message.setCode(Messages.VEHICLE_FROM_STATION);
 		message.setAddressee(getSimulation().findAgent(Components.A_MODEL));
 		notice(message);

@@ -91,6 +91,17 @@ public abstract class HelperCanvas extends JPanel {
 		str(String.valueOf(count), x, y);
 	}
 	
+	public void paintProgressSmall(double x, double y, double progress) {
+		int width = 10;
+		int height = 4;
+		g.setColor(Color.WHITE);
+		g.fillRect(tx(x)-width/2, ty(y)-height/2, width, height);
+		g.setColor(Color.BLACK);
+		g.drawRect(tx(x)-width/2, ty(y)-height/2, width, height);
+		g.setColor(Color.GREEN);
+		g.fillRect(tx(x)+1-width/2, ty(y)+1-height/2, (int)((width-1)*progress), height-1);
+	}
+	
 	public void paintProgress(double x, double y, double progress, String description) {
 		int width = 140;
 		int height = 30;
