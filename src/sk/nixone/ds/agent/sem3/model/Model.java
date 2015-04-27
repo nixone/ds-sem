@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.List;
 
 import sk.nixone.ds.core.Randoms;
 import sk.nixone.ds.core.generators.DummyDoubleGenerator;
@@ -12,6 +14,7 @@ import sk.nixone.ds.core.generators.ExponentialDelayGenerator;
 import sk.nixone.ds.core.generators.Generator;
 import sk.nixone.ds.core.generators.TriangleGenerator;
 import sk.nixone.ds.core.generators.UniformGenerator;
+import sk.nixone.ds.core.ui.property.Property;
 
 public class Model {
 
@@ -32,22 +35,26 @@ public class Model {
 	private VehicleTypes vehicleTypes;
 	private double matchStartTime;
 	
+	private LinkedList<Property> properties = new LinkedList<Property>();
+	
 	public Model(File path, Randoms randoms) throws IOException {
 		Generator<Double> busGenerator = new TriangleGenerator(randoms.getNextRandom(), 0.6, 1.2, 3.2);
 		Generator<Double> microBusEntranceGenerator = new UniformGenerator(randoms.getNextRandom(), 6, 10);
 		Generator<Double> microBusExitGenerator = new DummyDoubleGenerator(4);
 		
 		vehicleTypes = new VehicleTypes(
-			new VehicleType(186, 4, 17780000, 0, 0, 0, busGenerator, busGenerator),
-			new VehicleType(107, 3, 6450000, 0, 0, 0, busGenerator, busGenerator),
-			new VehicleType(8, 1, 0, 30, 360, 0, microBusEntranceGenerator, microBusExitGenerator)
+			new VehicleType("Bus 1", 186, 4, 17780000, 0, 0, 0, busGenerator, busGenerator),
+			new VehicleType("Bus 2", 107, 3, 6450000, 0, 0, 0, busGenerator, busGenerator),
+			new VehicleType("Microbus", 8, 1, 0, 30, 360, 0, microBusEntranceGenerator, microBusExitGenerator)
 		);
 
 		try(BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(path)))) {
 			String ln = null;
 			while((ln = reader.readLine()) != null) {
 				String lineName = ln;
-				Line line = new Line(lineName);
+				Line line = new Line(lineName, vehicleTypes);
+				properties.addAll(line.getCountsOfTypes().values());
+				properties.add(line.INIT_WAIT_TIME);
 				while(((ln = reader.readLine()) != null) && !ln.contentEquals("")) {
 					String stationName = ln;
 					double duration = parse(reader.readLine());
@@ -78,9 +85,12 @@ public class Model {
 		}
 		
 		for(Line line : lines) {
-			line.setInitWaitingTime(60*10);
 			line.getLastStation().setExitingStation();
 		}
+	}
+	
+	public List<Property> getProperties() {
+		return properties;
 	}
 	
 	public Lines getLines() {
@@ -109,10 +119,13 @@ public class Model {
 		vehicles.reset();
 		
 		for(Line line : lines) {
-			for(int i=0; i<5; i++) {
-				Vehicle vehicle = new Vehicle(vehicleTypes.BUS_1);
-				vehicle.setLine(line);
-				vehicles.add(vehicle);
+			for(VehicleType vehicleType : vehicleTypes) {
+				int count = line.getCountsOfTypes().get(vehicleType).getValue();
+				for(int i=0; i<count; i++) {
+					Vehicle vehicle = new Vehicle(vehicleType);
+					vehicle.setLine(line);
+					vehicles.add(vehicle);
+				}
 			}
 		}
 	}

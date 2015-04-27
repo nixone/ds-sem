@@ -1,6 +1,7 @@
 package sk.nixone.ds.agent.sem3.ui;
 
 import java.awt.Color;
+import java.util.HashSet;
 
 import sk.nixone.ds.agent.sem3.model.Line;
 import sk.nixone.ds.agent.sem3.model.Model;
@@ -68,18 +69,24 @@ public class StationsCanvas extends HelperCanvas {
 			resetDrawPosition();
 			Position p = layout.getPosition(station);
 			
-			point(p.x, p.y);
-			moveDraw(17, 0);
-			paintCount(p.x, p.y, station.getCurrentPeopleCount());		
-			resetDrawPosition();
-			moveDraw(0, -10);
-			strB(station.getName(), p.x, p.y);
+			if(station.isBoardingStation()) {
+				point(p.x, p.y);
+				moveDraw(17, 0);
+				paintCount(p.x, p.y, station.getCurrentPeopleCount());		
+				resetDrawPosition();
+				moveDraw(0, -10);
+				strB(station.getName(), p.x, p.y);
+			} else {
+				point(p.x, p.y);
+				strB(station.getName(), p.x, p.y);
+			}
+
 		}
 		resetDrawPosition();
 	}
 	
 	private void paintVehicles() {
-		for(Vehicle vehicle : model.getVehicles()) {
+		for(Vehicle vehicle : new HashSet<Vehicle>(model.getVehicles())) {
 			Station fromStation = vehicle.getStationGoingFrom();
 			Station toStation = vehicle.getStationGoingTo();
 			

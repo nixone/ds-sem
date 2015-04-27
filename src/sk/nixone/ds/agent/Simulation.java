@@ -42,6 +42,15 @@ public abstract class Simulation extends sk.nixone.ds.core.statik.Simulation {
 		currentSimulationRun = null;
 	}
 	
+	@Override
+	public void stop() {
+		super.stop();
+		SimulationRun run = currentSimulationRun;
+		if (run != null) {
+			run.stopSimulation();
+		}
+	}
+	
 	public void setTimeFactor(double timeFactor) {
 		this.timeFactor = timeFactor;
 		slowed = true;

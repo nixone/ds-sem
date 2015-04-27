@@ -12,8 +12,10 @@ public class VehicleType {
 	private Generator<Double> exitGenerator;
 	private double neededWaitingTime;
 	private double waitingTimeForArrivals;
+	private String name;
 	
-	public VehicleType(int capacity, int doors, int price, int gainPerPerson, double neededWaitingTime, double waitingTimeForArrivals, Generator<Double> entranceGenerator, Generator<Double> exitGenerator) {
+	public VehicleType(String name, int capacity, int doors, int price, int gainPerPerson, double neededWaitingTime, double waitingTimeForArrivals, Generator<Double> entranceGenerator, Generator<Double> exitGenerator) {
+		this.name = name;
 		this.capacity = capacity;
 		this.doors = doors;
 		this.price = price;
@@ -22,6 +24,10 @@ public class VehicleType {
 		this.waitingTimeForArrivals = waitingTimeForArrivals;
 		this.entranceGenerator = entranceGenerator;
 		this.exitGenerator = exitGenerator;
+	}
+	
+	public String getName() {
+		return name;
 	}
 	
 	public Generator<Double> getEntranceGenerator() {

@@ -20,7 +20,7 @@ public class VehicleInitPlanner extends ContinualAssistant<SimulationRun, BusMov
 	public void onStart(Message message) {
 		message = message.createCopy();
 		message.setCode(Messages.VEHICLE_INIT_FINISHED);
-		hold(message.getVehicle().getLine().getInitWaitingTime(), message);
+		hold(message.getVehicle().getLine().INIT_WAIT_TIME.getValue(), message);
 	}
 	
 	@HandleMessage(code=Messages.VEHICLE_INIT_FINISHED)

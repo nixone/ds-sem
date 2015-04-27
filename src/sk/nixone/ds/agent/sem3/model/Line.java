@@ -3,7 +3,10 @@ package sk.nixone.ds.agent.sem3.model;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class Line implements Iterable<Station> {
+import sk.nixone.ds.core.ui.property.DoubleProperty;
+import sk.nixone.ds.core.ui.property.IntegerProperty;
+
+public class Line implements Iterable<Station> {	
 	public class LineIterator implements Iterator<Station> {
 
 		private boolean first = true;
@@ -24,6 +27,8 @@ public class Line implements Iterable<Station> {
 		}
 	}
 	
+	public final DoubleProperty INIT_WAIT_TIME;
+	
 	private String name;
 	
 	private HashMap<Station, Station> nextStations = new HashMap<Station, Station>();
@@ -34,10 +39,18 @@ public class Line implements Iterable<Station> {
 	private Station firstStation = null;
 	private Station lastStation = null;
 	
-	private double initWaitingTime = 0;
+	private HashMap<VehicleType, IntegerProperty> numberOfVehicles = new HashMap<VehicleType, IntegerProperty>();
 	
-	public Line(String name) {
+	public Line(String name, VehicleTypes vehicleTypes) {
 		this.name = name;
+		INIT_WAIT_TIME = new DoubleProperty(name+" init wait time (s)", 60*5);
+		for(VehicleType type : vehicleTypes) {
+			numberOfVehicles.put(type, new IntegerProperty(type.getName()+" on "+name, 1));
+		}
+	}
+	
+	public HashMap<VehicleType, IntegerProperty> getCountsOfTypes() {
+		return numberOfVehicles;
 	}
 	
 	public Station getNextStation(Station current, boolean circle) {
@@ -95,13 +108,5 @@ public class Line implements Iterable<Station> {
 	@Override
 	public Iterator<Station> iterator() {
 		return new LineIterator();
-	}
-	
-	public void setInitWaitingTime(double initWaitingTime) {
-		this.initWaitingTime = initWaitingTime;
-	}
-	
-	public double getInitWaitingTime() {
-		return initWaitingTime;
 	}
 }
