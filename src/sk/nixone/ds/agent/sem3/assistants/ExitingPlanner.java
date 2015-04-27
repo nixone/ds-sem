@@ -31,12 +31,16 @@ public class ExitingPlanner extends ContinualAssistant<SimulationRun, ExitingAge
 			Vehicle.Door door = vehicle.getAvailableDoor();
 			Person person = vehicle.getFirstPerson();
 			door.occupy(person);
+			double usageTime = vehicle.getType().getExitGenerator().next();
+			door.USAGE.started(getSimulation(), usageTime);
 			
-			message = message.createCopy();
-			message.setPerson(person);
-			message.setDoor(door);
-			message.setCode(Messages.EXITING_FINISHED);
-			hold(vehicle.getType().getExitGenerator().next(), message);
+			Message msg = message.createCopy();
+			msg.setPerson(person);
+			msg.setDoor(door);
+			msg.setCode(Messages.EXITING_FINISHED);
+			hold(usageTime, msg);
+			
+			//recheck(message);
 		}
 		// or if we are done, done...
 		else if(vehicle.isEmpty() && !vehicle.hasOccupiedDoor()) {
@@ -47,6 +51,8 @@ public class ExitingPlanner extends ContinualAssistant<SimulationRun, ExitingAge
 	@HandleMessage(code=Messages.EXITING_FINISHED)
 	public void onEnteringFinished(Message message) {
 		message.getDoor().leaveBus();
+		message.getDoor().USAGE.ended(getSimulation());
+		message.getDoor().USAGE.reset();
 		recheck(message);
 	}
 }

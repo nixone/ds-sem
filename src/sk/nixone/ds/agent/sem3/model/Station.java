@@ -111,6 +111,7 @@ public class Station {
 	}
 	
 	public void reset() {
+		vehicles.clear();
 		people.clear();
 		peopleArrivedCount = 0;
 	}

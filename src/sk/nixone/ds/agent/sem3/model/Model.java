@@ -1,5 +1,6 @@
 package sk.nixone.ds.agent.sem3.model;
 
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -43,9 +44,9 @@ public class Model {
 		Generator<Double> microBusExitGenerator = new DummyDoubleGenerator(4);
 		
 		vehicleTypes = new VehicleTypes(
-			new VehicleType("Bus 1", 186, 4, 17780000, 0, 0, 0, busGenerator, busGenerator),
-			new VehicleType("Bus 2", 107, 3, 6450000, 0, 0, 0, busGenerator, busGenerator),
-			new VehicleType("Microbus", 8, 1, 0, 30, 360, 0, microBusEntranceGenerator, microBusExitGenerator)
+			new VehicleType(Color.GREEN, "Bus 1", 186, 4, 17780000, 0, 0, 0, busGenerator, busGenerator),
+			new VehicleType(Color.BLUE, "Bus 2", 107, 3, 6450000, 0, 0, 0, busGenerator, busGenerator),
+			new VehicleType(Color.RED, "Microbus", 8, 1, 0, 30, 360, 0, microBusEntranceGenerator, microBusExitGenerator)
 		);
 
 		try(BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(path)))) {

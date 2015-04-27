@@ -7,6 +7,7 @@ import sk.nixone.ds.agent.sem3.model.Line;
 import sk.nixone.ds.agent.sem3.model.Model;
 import sk.nixone.ds.agent.sem3.model.Station;
 import sk.nixone.ds.agent.sem3.model.Vehicle;
+import sk.nixone.ds.agent.sem3.model.VehicleType;
 import sk.nixone.ds.core.DelayedEmitter;
 import sk.nixone.ds.core.Emitter;
 
@@ -47,9 +48,22 @@ public class StationsCanvas extends HelperCanvas {
 		resetPosition();
 		resetDrawPosition();
 		
+		paintLegend();
 		paintLines();
 		paintStations();
 		paintVehicles();
+	}
+	
+	private void paintLegend() {
+		moveDraw(16, 16);
+		for(VehicleType type : model.getVehicleTypes()) {
+			g.setColor(type.getColor());
+			point(0, 0, 6);
+			moveDraw(16, 0);
+			strToRight(type.getName(), 0, 0);
+			moveDraw(-16, 16);
+		}
+		resetDrawPosition();
 	}
 	
 	private void paintLines() {
@@ -98,8 +112,8 @@ public class StationsCanvas extends HelperCanvas {
 				Position to = layout.getPosition(toStation);
 				Position position = i(from, to, vehicle.STATION_TRANSITION.getProgress(simulationTime));
 				
-				g.setColor(Color.BLACK);
-				point(position.x, position.y, 5);
+				g.setColor(vehicle.getType().getColor());
+				point(position.x, position.y, 6);
 				progress(position.x, position.y, 10, 4, vehicle.getFullness());
 			}
 		}

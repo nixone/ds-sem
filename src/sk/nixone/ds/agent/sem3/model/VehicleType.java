@@ -1,5 +1,7 @@
 package sk.nixone.ds.agent.sem3.model;
 
+import java.awt.Color;
+
 import sk.nixone.ds.core.generators.Generator;
 
 public class VehicleType {
@@ -13,9 +15,11 @@ public class VehicleType {
 	private double neededWaitingTime;
 	private double waitingTimeForArrivals;
 	private String name;
+	private Color color;
 	
-	public VehicleType(String name, int capacity, int doors, int price, int gainPerPerson, double neededWaitingTime, double waitingTimeForArrivals, Generator<Double> entranceGenerator, Generator<Double> exitGenerator) {
+	public VehicleType(Color color, String name, int capacity, int doors, int price, int gainPerPerson, double neededWaitingTime, double waitingTimeForArrivals, Generator<Double> entranceGenerator, Generator<Double> exitGenerator) {
 		this.name = name;
+		this.color = color;
 		this.capacity = capacity;
 		this.doors = doors;
 		this.price = price;
@@ -24,6 +28,10 @@ public class VehicleType {
 		this.waitingTimeForArrivals = waitingTimeForArrivals;
 		this.entranceGenerator = entranceGenerator;
 		this.exitGenerator = exitGenerator;
+	}
+	
+	public Color getColor() {
+		return color;
 	}
 	
 	public String getName() {

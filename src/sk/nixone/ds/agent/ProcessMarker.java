@@ -10,6 +10,11 @@ public class ProcessMarker extends sk.nixone.ds.core.ProcessMarker {
 		super.started(run.currentTime());
 	}
 	
+	public void started(SimulationRun run, double duration) {
+		started(run);
+		scheduledEnd(run.currentTime()+duration);
+	}
+	
 	public void ended(SimulationRun run) {
 		super.ended(run.currentTime());
 	}

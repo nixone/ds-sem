@@ -8,6 +8,8 @@ public class Vehicle {
 	
 	public class Door {
 		
+		public final ProcessMarker USAGE = new ProcessMarker();
+		
 		private Person occupiedBy = null;
 		
 		public void occupy(Person person) {

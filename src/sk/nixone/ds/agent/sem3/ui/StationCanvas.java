@@ -3,6 +3,7 @@ package sk.nixone.ds.agent.sem3.ui;
 import sk.nixone.ds.agent.sem3.model.Person;
 import sk.nixone.ds.agent.sem3.model.Station;
 import sk.nixone.ds.agent.sem3.model.Vehicle;
+import sk.nixone.ds.agent.sem3.model.Vehicle.Door;
 import sk.nixone.ds.core.DelayedEmitter;
 import sk.nixone.ds.core.Emitter;
 import sk.nixone.util.TimeUtil;
@@ -27,7 +28,7 @@ public class StationCanvas extends HelperCanvas {
 	}, 15);
 	
 	private Station station = null;
-	private double currentTime = 0;
+	private double currentTime = 0;	
 	
 	@Override
 	public void paintDisplay() {
@@ -48,15 +49,22 @@ public class StationCanvas extends HelperCanvas {
 	}
 	
 	private void paintVehicles() {
+		resetPosition();
 		strBig("Vehicles", 0.2, 0.1);
 		move(0.2, 0.2);
 		
 		for(Vehicle vehicle : station.getVehicles()) {
-			progress(0, 0, 80, 30, vehicle.getFullness());
+			g.setColor(vehicle.getType().getColor());
+			point(0, 0, 20);
+			progress(0, 0, 100, 30, vehicle.getFullness());
 			str(vehicle.getType().getName()+" ("+vehicle.getPeopleCount()+" / "+vehicle.getType().getCapacity()+")", 0, 0);
-			moveDraw(0, 30);
 			
-			
+			resetDrawPosition();
+			moveDraw(70, 0);
+			for(Door door : vehicle.getDoors()) {
+				progress(0, 0, 20, 30, door.USAGE.getProgress(currentTime));
+				moveDraw(30, 0);
+			}
 			
 			move(0, 0.2);
 		}

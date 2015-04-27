@@ -68,6 +68,7 @@ public abstract class HelperCanvas extends JPanel {
 		
 		g.setFont(g.getFont().deriveFont(12f));
 		this.g.setRenderingHint( RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB );
+		this.g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, w, h);
@@ -177,6 +178,12 @@ public abstract class HelperCanvas extends JPanel {
 		
 		g.setColor(Color.BLACK);
 		g.drawString(text, tx(x)-width/2, ty(y)+height/2);
+	}
+	
+	public void strToRight(String text, double x, double y) {
+		int height = g.getFontMetrics().getHeight();
+		g.setColor(Color.BLACK);
+		g.drawString(text, tx(x), ty(y)+height/2);
 	}
 	
 	public Position i(Position from, Position to, double progress) {

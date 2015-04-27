@@ -7,6 +7,7 @@ public class Messages extends IdList {
 	public static final int NEW_TRAVELER = 2;
 	public static final int VEHICLE_AT_STATION = 3;
 	public static final int VEHICLE_FROM_STATION = 4;
+	public static final int ENTERING_STARTED = 9;
 	public static final int ENTERING_FINISHED = 5;
 	public static final int WAITING_FINISHED = 6;
 	public static final int VEHICLE_INIT_FINISHED = 7;

@@ -34,20 +34,24 @@ public class BoardingPlanner extends ContinualAssistant<SimulationRun, BoardingA
 		// if person can board, board him
 		if(vehicle.hasAvailableDoors() && !vehicle.isFull() && person != null && person.WAITING_FOR_BUS.getStartTime() <= acceptableWaitingStartTime) {
 			Vehicle.Door door = vehicle.getAvailableDoor();
+			double usageDuration = vehicle.getType().getEntranceGenerator().next();
 			door.occupy(station.getFirstPerson());
+			door.USAGE.started(getSimulation(), usageDuration);
 			
-			message = message.createCopy();
-			message.setPerson(person);
-			message.setDoor(door);
-			message.setCode(Messages.ENTERING_FINISHED);
-			hold(vehicle.getType().getEntranceGenerator().next(), message);
+			Message msg = message.createCopy();
+			msg.setPerson(person);
+			msg.setDoor(door);
+			msg.setCode(Messages.ENTERING_FINISHED);
+			hold(usageDuration, msg);
+			
+			recheck(message);
 		}
 		// or if it's just full or was waiting but finished already, leave and quit
-		else if(vehicle.isFull() || vehicle.WAITING_FOR_ARRIVALS.didFinish()) {
+		else if(!vehicle.hasOccupiedDoor() && (vehicle.isFull() || vehicle.WAITING_FOR_ARRIVALS.didFinish())) {
 			assistantFinished(message);
 		}
 		// or there is space but none are waiting
-		else if(true) {
+		else if(!vehicle.hasOccupiedDoor() && !vehicle.isFull()) {
 			vehicle.WAITING_FOR_ARRIVALS.started(getSimulation());
 			
 			message = message.createCopy();
@@ -59,6 +63,8 @@ public class BoardingPlanner extends ContinualAssistant<SimulationRun, BoardingA
 	@HandleMessage(code=Messages.ENTERING_FINISHED)
 	public void onEnteringFinished(Message message) {
 		message.getDoor().getIn();
+		message.getDoor().USAGE.ended(getSimulation());
+		message.getDoor().USAGE.reset();
 		recheck(message);
 	}
 	
