@@ -76,9 +76,7 @@ public class StationsCanvas extends HelperCanvas {
 			
 			if(station.isBoardingStation()) {
 				point(p.x, p.y);
-				moveDraw(17, 0);
-				count(p.x, p.y, station.getCurrentPeopleCount());		
-				resetDrawPosition();
+				count(p.x, p.y, station.getCurrentPeopleCount());
 				moveDraw(0, -10);
 				strBox(station.getName(), p.x, p.y);
 			} else {
@@ -110,6 +108,9 @@ public class StationsCanvas extends HelperCanvas {
 	@Override
 	public void onClick(double x, double y) {
 		for(Station station : model.getStations()) {
+			if(!station.isBoardingStation()) {
+				continue;
+			}
 			Position p = layout.getPosition(station);
 			if(p != null) {
 				if(isAt(x, y, p.x, p.y)) {

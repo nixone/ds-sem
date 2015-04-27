@@ -37,12 +37,12 @@ public class ProgressController extends JPanel {
 			relative += e.getWheelRotation();
 			
 			while(relative >= sensitivity) {
-				up();
+				down();
 				relative -= sensitivity;
 			}
 			
 			while(relative <= -sensitivity) {
-				down();
+				up();
 				relative += sensitivity;
 			}
 		}

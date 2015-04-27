@@ -35,13 +35,13 @@ public class StationCanvas extends HelperCanvas {
 			return;
 		}
 		strBig("Station: "+station.getName(), 0.5, 0.05);
-		str("People waiting:", 0.75, 0.3);
-		strBig(String.valueOf(station.getCurrentPeopleCount()), 0.9, 0.3);
+		str("People waiting:", 0.85, 0.3);
+		strBig(String.valueOf(station.getCurrentPeopleCount()), 0.85, 0.35);
 		
 		Person firstPerson = station.peekFirstPerson();
 		if(firstPerson != null) {
-			str("First waiting for:", 0.75, 0.35);
-			strBig(TimeUtil.toString((int)(currentTime - firstPerson.WAITING_FOR_BUS.getStartTime())), 0.9, 0.35);
+			str("First waiting for:", 0.85, 0.45);
+			strBig(TimeUtil.toString((int)(currentTime - firstPerson.WAITING_FOR_BUS.getStartTime())), 0.85, 0.5);
 		}
 		
 		paintVehicles();
@@ -49,10 +49,10 @@ public class StationCanvas extends HelperCanvas {
 	
 	private void paintVehicles() {
 		strBig("Vehicles", 0.2, 0.1);
-		move(0.1, 0.2);
+		move(0.2, 0.2);
 		
 		for(Vehicle vehicle : station.getVehicles()) {
-			progress(0, 0, 100, 40, vehicle.getFullness());
+			progress(0, 0, 80, 30, vehicle.getFullness());
 			str(vehicle.getType().getName()+" ("+vehicle.getPeopleCount()+" / "+vehicle.getType().getCapacity()+")", 0, 0);
 			moveDraw(0, 30);
 			

@@ -23,6 +23,7 @@ public class Application {
 		
 		SimulationFrame frame = new SimulationFrame(simulation, model, stationsLayout);
 		frame.setDefaultCloseOperation(SimulationFrame.EXIT_ON_CLOSE);
+		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 	}
 }
