@@ -79,6 +79,7 @@ public class Model {
 		
 		for(Line line : lines) {
 			line.setInitWaitingTime(60*10);
+			line.getLastStation().setExitingStation();
 		}
 	}
 	
@@ -108,9 +109,11 @@ public class Model {
 		vehicles.reset();
 		
 		for(Line line : lines) {
-			Vehicle vehicle = new Vehicle(vehicleTypes.BUS_1);
-			vehicle.setLine(line);
-			vehicles.add(vehicle);
+			for(int i=0; i<5; i++) {
+				Vehicle vehicle = new Vehicle(vehicleTypes.BUS_1);
+				vehicle.setLine(line);
+				vehicles.add(vehicle);
+			}
 		}
 	}
 }

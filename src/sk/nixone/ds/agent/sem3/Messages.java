@@ -10,4 +10,5 @@ public class Messages extends IdList {
 	public static final int ENTERING_FINISHED = 5;
 	public static final int WAITING_FINISHED = 6;
 	public static final int VEHICLE_INIT_FINISHED = 7;
+	public static final int EXITING_FINISHED = 8;
 }

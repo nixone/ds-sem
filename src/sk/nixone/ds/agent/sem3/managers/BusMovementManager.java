@@ -1,5 +1,8 @@
 package sk.nixone.ds.agent.sem3.managers;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+
 import sk.nixone.ds.agent.Manager;
 import sk.nixone.ds.agent.SimulationRun;
 import sk.nixone.ds.agent.annotation.HandleMessage;
@@ -12,6 +15,8 @@ import sk.nixone.ds.agent.sem3.model.Vehicle;
 
 public class BusMovementManager extends Manager<SimulationRun, BusMovementAgent> {
 
+	private HashMap<Line, LinkedList<Vehicle>> vehiclesByLines = new HashMap<Line, LinkedList<Vehicle>>();
+	
 	public BusMovementManager(SimulationRun simulation, BusMovementAgent agent) {
 		super(Components.M_VEHICLE_MOVEMENT, simulation, agent);
 	}
@@ -19,12 +24,17 @@ public class BusMovementManager extends Manager<SimulationRun, BusMovementAgent>
 	@HandleMessage(code=Messages.INIT)
 	public void onInit(Message message) {
 		for(Vehicle vehicle : getAgent().getVehicles()) {
-			Line line = vehicle.getLine();
-			if(line == null) {
-				throw new IllegalStateException("Vehicle is not bound to any line!");
+			LinkedList<Vehicle> vehicles = vehiclesByLines.get(vehicle.getLine());
+			if(vehicles == null) {
+				vehicles = new LinkedList<Vehicle>();
+				vehiclesByLines.put(vehicle.getLine(), vehicles);
 			}
+			vehicles.add(vehicle);
+		}
+		
+		for(Line line : vehiclesByLines.keySet()) {
 			message = new Message(getSimulation());
-			message.setVehicle(vehicle);
+			message.setVehicle(vehiclesByLines.get(line).removeFirst());
 			message.setStation(line.getFirstStation());
 			message.setAddressee(getAgent().findAssistant(Components.VEHICLE_INIT_PLANNER));
 			startContinualAssistant(message);
@@ -53,6 +63,14 @@ public class BusMovementManager extends Manager<SimulationRun, BusMovementAgent>
 			message.setAddressee(getSimulation().findAgent(Components.A_MODEL));
 			notice(message);
 			
+			Vehicle nextVehicle = vehiclesByLines.get(message.getVehicle().getLine()).pollFirst();
+			if(nextVehicle != null) {
+				message = new Message(getSimulation());
+				message.setVehicle(nextVehicle);
+				message.setStation(nextVehicle.getLine().getFirstStation());
+				message.setAddressee(getAgent().findAssistant(Components.VEHICLE_INIT_PLANNER));
+				startContinualAssistant(message);
+			}
 		}
 	}
 }

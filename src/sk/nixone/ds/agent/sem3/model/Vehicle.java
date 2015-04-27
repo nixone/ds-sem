@@ -22,7 +22,6 @@ public class Vehicle {
 		}
 		
 		public void leaveBus() {
-			people.removeFirstOccurrence(occupiedBy);
 			occupiedBy = null;
 			freeDoorCount++;
 		}
@@ -114,6 +113,10 @@ public class Vehicle {
 	
 	public Station getStationGoingTo() {
 		return goingTo;
+	}
+	
+	public Person getFirstPerson() {
+		return people.removeFirst();
 	}
 	
 	public boolean isFull() {

@@ -27,9 +27,15 @@ public class ModelManager extends Manager<SimulationRun, ModelAgent> {
 	}
 	
 	@HandleMessage(code=Messages.VEHICLE_AT_STATION)
-	public void onVehicleAtStation(Message message) {
+	public void onVehicleAtStation(Message message) {		
 		message = message.createCopy();
-		message.setAddressee(getSimulation().findAgent(Components.A_BOARDING));
+		
+		if(message.getStation().isBoardingStation()) {
+			message.setAddressee(getSimulation().findAgent(Components.A_BOARDING));
+		} else if(message.getStation().isExitingStation()) {
+			message.setAddressee(getSimulation().findAgent(Components.A_EXITING));
+		}
+		
 		notice(message);
 	}
 	

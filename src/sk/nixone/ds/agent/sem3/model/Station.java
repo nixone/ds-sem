@@ -8,6 +8,7 @@ import sk.nixone.ds.core.generators.Generator;
 public class Station {
 	private String name;
 	private double timeToLastStation;
+	private boolean exitingStation = false;
 	
 	private LinkedList<Person> people = new LinkedList<Person>();
 	private int peopleArrivedCount = 0;
@@ -23,6 +24,14 @@ public class Station {
 	public Station(String name, int capacity) {
 		this.name = name;
 		peopleArrivalCount = capacity;
+	}
+	
+	public boolean isBoardingStation() {
+		return !exitingStation;
+	}
+	
+	public boolean isExitingStation() {
+		return exitingStation;
 	}
 	
 	public void setPeopleArrivalCount(int count) {
@@ -97,5 +106,9 @@ public class Station {
 	public void reset() {
 		people.clear();
 		peopleArrivedCount = 0;
+	}
+	
+	public void setExitingStation() {
+		exitingStation = true;
 	}
 }
