@@ -31,10 +31,15 @@ public class StationsCanvas extends HelperCanvas {
 	private StationsLayout layout;
 	private	Model model;
 	private double simulationTime;
+	private StationCanvas stationCanvas;
 	
 	public StationsCanvas(Model model, StationsLayout layout) {
 		this.model = model;
 		this.layout = layout;
+	}
+	
+	public void setStationCanvas(StationCanvas stationCanvas) {
+		this.stationCanvas = stationCanvas;
 	}
 
 	@Override
@@ -72,13 +77,13 @@ public class StationsCanvas extends HelperCanvas {
 			if(station.isBoardingStation()) {
 				point(p.x, p.y);
 				moveDraw(17, 0);
-				paintCount(p.x, p.y, station.getCurrentPeopleCount());		
+				count(p.x, p.y, station.getCurrentPeopleCount());		
 				resetDrawPosition();
 				moveDraw(0, -10);
-				strB(station.getName(), p.x, p.y);
+				strBox(station.getName(), p.x, p.y);
 			} else {
 				point(p.x, p.y);
-				strB(station.getName(), p.x, p.y);
+				strBox(station.getName(), p.x, p.y);
 			}
 
 		}
@@ -97,7 +102,19 @@ public class StationsCanvas extends HelperCanvas {
 				
 				g.setColor(Color.BLACK);
 				point(position.x, position.y, 5);
-				paintProgressSmall(position.x, position.y, vehicle.getFullness());
+				progress(position.x, position.y, 10, 4, vehicle.getFullness());
+			}
+		}
+	}
+	
+	@Override
+	public void onClick(double x, double y) {
+		for(Station station : model.getStations()) {
+			Position p = layout.getPosition(station);
+			if(p != null) {
+				if(isAt(x, y, p.x, p.y)) {
+					stationCanvas.setStation(station);
+				}
 			}
 		}
 	}

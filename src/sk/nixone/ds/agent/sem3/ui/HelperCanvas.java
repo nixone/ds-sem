@@ -1,12 +1,16 @@
 package sk.nixone.ds.agent.sem3.ui;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.font.LineMetrics;
 
 import javax.swing.JPanel;
+import javax.swing.text.StyledEditorKit.BoldAction;
 
 public abstract class HelperCanvas extends JPanel {
 
@@ -18,6 +22,44 @@ public abstract class HelperCanvas extends JPanel {
 	int doy = 0;
 	protected Graphics2D g;
 	protected boolean displaying = false;
+	
+	public HelperCanvas() {
+		addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				double x = ix(e.getX());
+				double y = iy(e.getY());
+				onClick(x, y);
+			}
+		});
+	}
+	
+	public boolean isAt(double x, double y, double px, double py) {
+		double dx = x-px;
+		double dy = y-py;
+		return Math.sqrt(dx*dx + dy*dy) <= 0.025;
+	}
+	
+	public void onClick(double x, double y) {
+		
+	}
 	
 	@Override
 	public void paintComponent(Graphics g) {
@@ -63,6 +105,14 @@ public abstract class HelperCanvas extends JPanel {
 		dox = doy = 0;
 	}
 	
+	public double ix(int x) {
+		return ((double)(x-dox)/w)-ox;
+	}
+	
+	public double iy(int y) {
+		return ((double)(y-doy)/h)-oy;
+	}
+	
 	public int tx(double x) {
 		return (int)((ox+x)*w)+dox;
 	}
@@ -79,7 +129,19 @@ public abstract class HelperCanvas extends JPanel {
 		g.fillOval(tx(x)-radius, ty(y)-radius, radius*2, radius*2);
 	}
 	
-	public void paintCount(double x, double y, int count) {
+	public void progress(double x, double y, int w, int h, double progress) {
+		int tx = tx(x);
+		int ty = ty(y);
+		
+		g.setColor(Color.WHITE);
+		g.fillRect(tx-w/2, ty-h/2, w, h);
+		g.setColor(Color.BLACK);
+		g.drawRect(tx-w/2, ty-h/2, w, h);
+		g.setColor(Color.GREEN);
+		g.fillRect(tx+1-w/2, ty+1-h/2, (int)((w-1)*progress), h-1);
+	}
+	
+	public void count(double x, double y, int count) {
 		int width = 30;
 		int height = 17;
 		
@@ -91,32 +153,6 @@ public abstract class HelperCanvas extends JPanel {
 		str(String.valueOf(count), x, y);
 	}
 	
-	public void paintProgressSmall(double x, double y, double progress) {
-		int width = 10;
-		int height = 4;
-		g.setColor(Color.WHITE);
-		g.fillRect(tx(x)-width/2, ty(y)-height/2, width, height);
-		g.setColor(Color.BLACK);
-		g.drawRect(tx(x)-width/2, ty(y)-height/2, width, height);
-		g.setColor(Color.GREEN);
-		g.fillRect(tx(x)+1-width/2, ty(y)+1-height/2, (int)((width-1)*progress), height-1);
-	}
-	
-	public void paintProgress(double x, double y, double progress, String description) {
-		int width = 140;
-		int height = 30;
-		g.setColor(Color.WHITE);
-		g.fillRect(tx(x)-width/2, ty(y)-height/2, width, height);
-		g.setColor(Color.BLACK);
-		g.drawRect(tx(x)-width/2, ty(y)-height/2, width, height);
-		g.setColor(Color.GREEN);
-		g.fillRect(tx(x)+1-width/2, ty(y)+1-height/2, (int)((width-1)*progress), height-1);
-		
-		if(description != null) {
-			str(description, x, y);
-		}
-	}
-	
 	public void str(String text, double x, double y) {
 		int width = g.getFontMetrics().stringWidth(text);
 		int height = g.getFontMetrics().getHeight();
@@ -124,7 +160,15 @@ public abstract class HelperCanvas extends JPanel {
 		g.drawString(text, tx(x)-width/2, ty(y)+height/2);
 	}
 	
-	public void strB(String text, double x, double y) {
+	public void strBig(String text, double x, double y) {
+		Font originalFont = g.getFont();
+		Font newFont = originalFont.deriveFont(20f);
+		g.setFont(newFont);
+		str(text, x, y);
+		g.setFont(originalFont);
+	}
+	
+	public void strBox(String text, double x, double y) {
 		int width = g.getFontMetrics().stringWidth(text);
 		int height = g.getFontMetrics().getAscent()+g.getFontMetrics().getDescent();
 		

@@ -59,6 +59,10 @@ public class Vehicle {
 		people = new LinkedList<Person>();
 	}
 	
+	public int getPeopleCount() {
+		return people.size();
+	}
+	
 	public boolean hasAvailableDoors() {
 		return freeDoorCount > 0;
 	}
@@ -87,12 +91,16 @@ public class Vehicle {
 	public void setStationTransition(Station from, Station to) {
 		goingFrom = from;
 		goingTo = to;
-		currentStation = null;
+		if(currentStation != null) {
+			currentStation.getVehicles().remove(this);
+			currentStation = null;
+		}
 	}
 	
 	public void setCurrentStation(Station station) {
 		currentStation = station;
 		goingFrom = goingTo = null;
+		currentStation.getVehicles().add(this);
 	}
 	
 	public Line getLine() {

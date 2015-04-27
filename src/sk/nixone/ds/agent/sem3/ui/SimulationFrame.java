@@ -10,13 +10,12 @@ public class SimulationFrame extends SimulationFrameBase {
 	public SimulationFrame(Simulation simulation, Model model, StationsLayout stationLayout) {
 		super(simulation);
 
-		StationsCanvas stationsCanvas = new StationsCanvas(model, stationLayout);
-		simulation.getRefreshInvoked().add(stationsCanvas.getRepainter());
-		addTab("Town", stationsCanvas);
-		
 		PropertyPanel configPanel = new PropertyPanel(model.getProperties());
 		addTab("Config", configPanel);
 		
+		VisualisationPanel visualPanel = new VisualisationPanel(model, stationLayout);
+		simulation.getRefreshInvoked().add(visualPanel.getRefresher());
+		addTab("Visual", visualPanel);
 	}
 
 }

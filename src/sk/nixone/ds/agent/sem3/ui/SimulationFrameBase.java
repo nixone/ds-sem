@@ -99,6 +99,7 @@ public abstract class SimulationFrameBase extends JFrame {
 	}
 	
 	private void setUpComponents() {
+		addMouseWheelListener(controller.getMouseWheelListener());
 		replicationNumber.setFont(replicationNumber.getFont().deriveFont(Font.BOLD));
 		timeDataNumber.setFont(timeDataNumber.getFont().deriveFont(Font.BOLD));
 	}

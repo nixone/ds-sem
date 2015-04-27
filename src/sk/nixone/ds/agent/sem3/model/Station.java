@@ -1,6 +1,7 @@
 package sk.nixone.ds.agent.sem3.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 
 import sk.nixone.ds.core.generators.Generator;
@@ -21,9 +22,15 @@ public class Station {
 	
 	private double latestArrival;
 	
+	private HashSet<Vehicle> vehicles = new HashSet<Vehicle>();
+	
 	public Station(String name, int capacity) {
 		this.name = name;
 		peopleArrivalCount = capacity;
+	}
+	
+	public HashSet<Vehicle> getVehicles() {
+		return vehicles;
 	}
 	
 	public boolean isBoardingStation() {
