@@ -91,6 +91,14 @@ public class Station {
 		arrivalDistanceGenerator = generator;
 	}
 	
+	public int getLineCount() {
+		return 1; // TODO Dummy
+	}
+	
+	public double getAveragePeopleArrivalPerSecond() {
+		return peopleArrivalCount / (double)(latestArrival - earliestArrival);
+	}
+	
 	public double nextArrival() {
 		if(arrivalDistanceGenerator == null) {
 			throw new NullPointerException("Generator is not set for this station yet.");

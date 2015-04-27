@@ -84,7 +84,6 @@ public abstract class HelperCanvas extends JPanel {
 	public abstract void paintDisplay();
 	
 	public void ln(double fx, double fy, double tx, double ty) {
-		g.setColor(Color.GRAY);
 		g.drawLine(tx(fx), ty(fy), tx(tx), ty(ty));
 	}
 	

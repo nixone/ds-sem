@@ -71,7 +71,7 @@ public class Model {
 			}
 		}
 		
-		lines.updateTimesToLastStation();		
+		lines.updateTimesToLastStation();
 		
 		Station furthestStation = stations.getStationWithLongestTravel();
 		matchStartTime = furthestStation.getTimeToLastStation()+ARRIVAL_TIME_OFFSET_START;
@@ -129,5 +129,9 @@ public class Model {
 				}
 			}
 		}
+	}
+	
+	public double getTotalDepartingTime(Line line) {
+		return matchStartTime - line.getTimeToLastStation();
 	}
 }

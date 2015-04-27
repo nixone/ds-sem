@@ -2,6 +2,7 @@ package sk.nixone.ds.agent.sem3;
 
 import OSPABA.MessageForm;
 import sk.nixone.ds.agent.SimulationRun;
+import sk.nixone.ds.agent.sem3.model.Line;
 import sk.nixone.ds.agent.sem3.model.Person;
 import sk.nixone.ds.agent.sem3.model.Station;
 import sk.nixone.ds.agent.sem3.model.Vehicle;
@@ -17,6 +18,8 @@ public class Message extends MessageForm {
 	
 	private Door door;
 	
+	private Line line;
+	
 	public Message(SimulationRun sim) {
 		super(sim);
 	}
@@ -27,11 +30,20 @@ public class Message extends MessageForm {
 		vehicle = original.vehicle;
 		person = original.person;
 		door = original.door;
+		line = original.line;
 	}
 	
 	@Override
 	public Message createCopy() {
 		return new Message(this);
+	}
+	
+	public Line getLine() {
+		return line;
+	}
+	
+	public void setLine(Line line) {
+		this.line = line;
 	}
 	
 	public Station getStation() {

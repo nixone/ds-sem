@@ -109,4 +109,8 @@ public class Line implements Iterable<Station> {
 	public Iterator<Station> iterator() {
 		return new LineIterator();
 	}
+	
+	public double getTimeToLastStation() {
+		return getFirstStation().getTimeToLastStation();
+	}
 }

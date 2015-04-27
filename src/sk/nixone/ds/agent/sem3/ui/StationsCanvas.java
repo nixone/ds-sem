@@ -49,6 +49,7 @@ public class StationsCanvas extends HelperCanvas {
 		resetDrawPosition();
 		
 		paintLegend();
+		paintDummyLines();
 		paintLines();
 		paintStations();
 		paintVehicles();
@@ -78,6 +79,22 @@ public class StationsCanvas extends HelperCanvas {
 					ln(p1.x, p1.y, p2.x, p2.y);
 				}
 				previous = current;
+			}
+		}
+	}
+	
+	private void paintDummyLines() {
+		g.setColor(new Color(220, 220, 220));
+		for(Station lastStation : model.getStations()) {
+			if(!lastStation.isExitingStation()) {
+				continue;
+			}
+			for(Line line : model.getLines()) {
+				Station firstStation = line.getFirstStation();
+				Position from = layout.getPosition(firstStation);
+				Position to = layout.getPosition(lastStation);
+				
+				ln(from.x, from.y, to.x, to.y);
 			}
 		}
 	}

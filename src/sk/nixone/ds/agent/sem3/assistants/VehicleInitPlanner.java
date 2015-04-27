@@ -10,8 +10,8 @@ import sk.nixone.ds.agent.sem3.Messages;
 import sk.nixone.ds.agent.sem3.SimulationRun;
 import sk.nixone.ds.agent.sem3.agents.BusMovementAgent;
 
-public class VehicleInitPlanner extends ContinualAssistant<SimulationRun, BusMovementAgent>{
-
+public class VehicleInitPlanner extends ContinualAssistant<SimulationRun, BusMovementAgent> {
+	
 	public VehicleInitPlanner(Simulation mySim, CommonAgent myAgent) {
 		super(Components.VEHICLE_INIT_PLANNER, mySim, myAgent);
 	}
