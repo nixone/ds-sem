@@ -38,9 +38,9 @@ public class Model {
 		Generator<Double> microBusExitGenerator = new DummyDoubleGenerator(4);
 		
 		vehicleTypes = new VehicleTypes(
-			new VehicleType(186, 4, 17780000, 0, 0, busGenerator, busGenerator),
-			new VehicleType(107, 3, 6450000, 0, 0, busGenerator, busGenerator),
-			new VehicleType(8, 1, 0, 30, 360, microBusEntranceGenerator, microBusExitGenerator)
+			new VehicleType(186, 4, 17780000, 0, 0, 0, busGenerator, busGenerator),
+			new VehicleType(107, 3, 6450000, 0, 0, 0, busGenerator, busGenerator),
+			new VehicleType(8, 1, 0, 30, 360, 0, microBusEntranceGenerator, microBusExitGenerator)
 		);
 
 		try(BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(path)))) {
@@ -76,6 +76,10 @@ public class Model {
 			station.setArrivalInterval(start, stop);
 			station.setArrivalDistanceGenerator(new ExponentialDelayGenerator(randoms.getNextRandom(), station.getPeopleCapacity() / duration));
 		}
+		
+		for(Line line : lines) {
+			line.setInitWaitingTime(60*10);
+		}
 	}
 	
 	public Lines getLines() {
@@ -104,7 +108,7 @@ public class Model {
 		vehicles.reset();
 		
 		for(Line line : lines) {
-			Vehicle vehicle = new Vehicle(vehicleTypes.MICROBUS);
+			Vehicle vehicle = new Vehicle(vehicleTypes.BUS_1);
 			vehicle.setLine(line);
 			vehicles.add(vehicle);
 		}

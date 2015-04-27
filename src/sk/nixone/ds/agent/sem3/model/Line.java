@@ -34,6 +34,8 @@ public class Line implements Iterable<Station> {
 	private Station firstStation = null;
 	private Station lastStation = null;
 	
+	private double initWaitingTime = 0;
+	
 	public Line(String name) {
 		this.name = name;
 	}
@@ -93,5 +95,13 @@ public class Line implements Iterable<Station> {
 	@Override
 	public Iterator<Station> iterator() {
 		return new LineIterator();
+	}
+	
+	public void setInitWaitingTime(double initWaitingTime) {
+		this.initWaitingTime = initWaitingTime;
+	}
+	
+	public double getInitWaitingTime() {
+		return initWaitingTime;
 	}
 }

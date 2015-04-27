@@ -17,7 +17,7 @@ public class ModelManager extends Manager<SimulationRun, ModelAgent> {
 	@HandleMessage(code=Messages.INIT)
 	public void onStart(Message message) {
 		// notify bus movement
-		message.setAddressee(getSimulation().findAgent(Components.A_BUS_MOVEMENT));
+		message.setAddressee(getSimulation().findAgent(Components.A_VEHICLE_MOVEMENT));
 		notice(message);
 		
 		// notify surrounding
@@ -36,7 +36,7 @@ public class ModelManager extends Manager<SimulationRun, ModelAgent> {
 	@HandleMessage(code=Messages.VEHICLE_FROM_STATION)
 	public void onVehicleFromStation(Message message) {
 		message = message.createCopy();
-		message.setAddressee(getSimulation().findAgent(Components.A_BUS_MOVEMENT));
+		message.setAddressee(getSimulation().findAgent(Components.A_VEHICLE_MOVEMENT));
 		notice(message);
 	}
 }

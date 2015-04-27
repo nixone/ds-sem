@@ -7,22 +7,24 @@ import sk.nixone.ds.agent.ProcessMarker;
 public class Vehicle {
 	
 	public class Door {
-		public final ProcessMarker OCCUPATION = new ProcessMarker();
 		
 		private Person occupiedBy = null;
 		
 		public void occupy(Person person) {
 			occupiedBy = person;
+			freeDoorCount--;
 		}
 		
 		public void getIn() {
 			people.addLast(occupiedBy);
 			occupiedBy = null;
+			freeDoorCount++;
 		}
 		
 		public void leaveBus() {
 			people.removeFirstOccurrence(occupiedBy);
 			occupiedBy = null;
+			freeDoorCount++;
 		}
 	}
 	
@@ -44,9 +46,14 @@ public class Vehicle {
 	
 	private LinkedList<Person> people = new LinkedList<Person>();
 	
+	private int freeDoorCount;
+	
+	private int totalDoorCount;
+	
 	public Vehicle(VehicleType type) {
 		this.type = type;
-		doors = new Door[type.getDoorCount()];
+		freeDoorCount = totalDoorCount = type.getDoorCount();
+		doors = new Door[totalDoorCount];
 		for(int i=0; i<type.getDoorCount(); i++) {
 			doors[i] = new Door();
 		}
@@ -54,7 +61,11 @@ public class Vehicle {
 	}
 	
 	public boolean hasAvailableDoors() {
-		return getAvailableDoor() == null;
+		return freeDoorCount > 0;
+	}
+	
+	public boolean hasOccupiedDoor() {
+		return freeDoorCount != totalDoorCount;
 	}
 	
 	public Door getAvailableDoor() {
@@ -111,5 +122,15 @@ public class Vehicle {
 	
 	public boolean isEmpty() {
 		return people.size() == 0;
+	}
+	
+	public double getFullness() {
+		if(isFull()) {
+			return 1;
+		}
+		if(isEmpty()) {
+			return 0;
+		}
+		return (double)people.size() / getType().getCapacity();
 	}
 }

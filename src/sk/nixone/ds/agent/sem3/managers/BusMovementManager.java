@@ -8,13 +8,12 @@ import sk.nixone.ds.agent.sem3.Message;
 import sk.nixone.ds.agent.sem3.Messages;
 import sk.nixone.ds.agent.sem3.agents.BusMovementAgent;
 import sk.nixone.ds.agent.sem3.model.Line;
-import sk.nixone.ds.agent.sem3.model.Station;
 import sk.nixone.ds.agent.sem3.model.Vehicle;
 
 public class BusMovementManager extends Manager<SimulationRun, BusMovementAgent> {
 
 	public BusMovementManager(SimulationRun simulation, BusMovementAgent agent) {
-		super(Components.M_BUS_MOVEMENT, simulation, agent);
+		super(Components.M_VEHICLE_MOVEMENT, simulation, agent);
 	}
 
 	@HandleMessage(code=Messages.INIT)
@@ -24,15 +23,11 @@ public class BusMovementManager extends Manager<SimulationRun, BusMovementAgent>
 			if(line == null) {
 				throw new IllegalStateException("Vehicle is not bound to any line!");
 			}
-			Station station = line.getFirstStation();
-			vehicle.setCurrentStation(station);
-			
 			message = new Message(getSimulation());
 			message.setVehicle(vehicle);
-			message.setStation(station);
-			message.setAddressee(getSimulation().findAgent(Components.A_MODEL));
-			message.setCode(Messages.VEHICLE_AT_STATION);
-			notice(message);
+			message.setStation(line.getFirstStation());
+			message.setAddressee(getAgent().findAssistant(Components.VEHICLE_INIT_PLANNER));
+			startContinualAssistant(message);
 		}
 	}
 	
@@ -44,8 +39,20 @@ public class BusMovementManager extends Manager<SimulationRun, BusMovementAgent>
 	
 	@HandleMessage(code=Messages.finish)
 	public void onAssistantFinished(Message message) {
-		message.setCode(Messages.VEHICLE_AT_STATION);
-		message.setAddressee(getSimulation().findAgent(Components.A_MODEL));
-		notice(message);
+		if(message.sender().id() == Components.MOVEMENT_PLANNER) {
+			
+			message.setCode(Messages.VEHICLE_AT_STATION);
+			message.setAddressee(getSimulation().findAgent(Components.A_MODEL));
+			notice(message);
+			
+		} else if(message.sender().id() == Components.VEHICLE_INIT_PLANNER) {
+			
+			message = message.createCopy();
+			message.setCode(Messages.VEHICLE_AT_STATION);
+			message.getVehicle().setCurrentStation(message.getStation());
+			message.setAddressee(getSimulation().findAgent(Components.A_MODEL));
+			notice(message);
+			
+		}
 	}
 }

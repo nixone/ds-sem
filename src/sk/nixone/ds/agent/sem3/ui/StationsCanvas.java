@@ -90,7 +90,7 @@ public class StationsCanvas extends HelperCanvas {
 				
 				g.setColor(Color.BLACK);
 				point(position.x, position.y, 5);
-				paintProgressSmall(position.x, position.y, 0.5);
+				paintProgressSmall(position.x, position.y, vehicle.getFullness());
 			}
 		}
 	}

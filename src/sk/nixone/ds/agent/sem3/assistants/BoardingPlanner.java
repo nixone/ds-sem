@@ -10,6 +10,7 @@ import sk.nixone.ds.agent.sem3.Messages;
 import sk.nixone.ds.agent.sem3.SimulationRun;
 import sk.nixone.ds.agent.sem3.agents.BoardingAgent;
 import sk.nixone.ds.agent.sem3.model.Person;
+import sk.nixone.ds.agent.sem3.model.Station;
 import sk.nixone.ds.agent.sem3.model.Vehicle;
 
 public class BoardingPlanner extends ContinualAssistant<SimulationRun, BoardingAgent>{
@@ -20,21 +21,20 @@ public class BoardingPlanner extends ContinualAssistant<SimulationRun, BoardingA
 
 	@HandleMessage(code=Messages.start)
 	public void onVehicleArrival(Message message) {
+		message.getVehicle().WAITING_FOR_ARRIVALS.reset();
 		recheck(message);
-		
-		/*message.setCode(Messages.WAITING_FINISHED);
-		notice(message);*/
 	}
 	
 	private void recheck(Message message) {
-		Person person = message.getStation().peekFirstPerson();
+		Station station = message.getStation();
+		Person person = station.peekFirstPerson();
 		Vehicle vehicle = message.getVehicle();
 		double acceptableWaitingStartTime = getSimulation().currentTime() - vehicle.getType().getNeededWaitingTime();
 		
 		// if person can board, board him
-		if(!vehicle.isFull() && person != null && person.WAITING_FOR_BUS.getStartTime() <= acceptableWaitingStartTime) {
+		if(vehicle.hasAvailableDoors() && !vehicle.isFull() && person != null && person.WAITING_FOR_BUS.getStartTime() <= acceptableWaitingStartTime) {
 			Vehicle.Door door = vehicle.getAvailableDoor();
-			door.occupy(person);
+			door.occupy(station.getFirstPerson());
 			
 			message = message.createCopy();
 			message.setPerson(person);
@@ -42,24 +42,29 @@ public class BoardingPlanner extends ContinualAssistant<SimulationRun, BoardingA
 			message.setCode(Messages.ENTERING_FINISHED);
 			hold(vehicle.getType().getEntranceGenerator().next(), message);
 		}
-		// or if it's just full, leave and quit
-		else if(vehicle.isFull()) {
+		// or if it's just full or was waiting but finished already, leave and quit
+		else if(vehicle.isFull() || vehicle.WAITING_FOR_ARRIVALS.didFinish()) {
 			assistantFinished(message);
 		}
 		// or there is space but none are waiting
-		else {
-			message = message.createCopy();
+		else if(true) {
+			vehicle.WAITING_FOR_ARRIVALS.started(getSimulation());
 			
+			message = message.createCopy();
+			message.setCode(Messages.WAITING_FINISHED);
+			hold(vehicle.getType().getWaitingTimeForArrivals(), message);
 		}
 	}
 	
 	@HandleMessage(code=Messages.ENTERING_FINISHED)
 	public void onEnteringFinished(Message message) {
-		
+		message.getDoor().getIn();
+		recheck(message);
 	}
 	
 	@HandleMessage(code=Messages.WAITING_FINISHED)
 	public void onWaitingFinished(Message message) {
-		assistantFinished(message);
+		message.getVehicle().WAITING_FOR_ARRIVALS.ended(getSimulation());
+		recheck(message);
 	}
 }

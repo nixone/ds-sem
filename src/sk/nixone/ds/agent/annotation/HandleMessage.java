@@ -15,7 +15,7 @@ import OSPABA.MessageForm;
 @Target(value = ElementType.METHOD)
 public @interface HandleMessage {
 	
-	public static class Processor {
+	public static class Processor {		
 		private Object object;
 		private HashMap<Integer, Method> methodMap = new HashMap<Integer, Method>();
 		private HashMap<Integer, Class<? extends MessageForm>> classMap = new HashMap<Integer, Class<? extends MessageForm>>();
