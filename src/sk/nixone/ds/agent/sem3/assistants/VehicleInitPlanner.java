@@ -9,6 +9,10 @@ import sk.nixone.ds.agent.sem3.Message;
 import sk.nixone.ds.agent.sem3.Messages;
 import sk.nixone.ds.agent.sem3.SimulationRun;
 import sk.nixone.ds.agent.sem3.agents.BusMovementAgent;
+import sk.nixone.ds.agent.sem3.model.Line;
+import sk.nixone.ds.agent.sem3.model.Schedule;
+import sk.nixone.ds.agent.sem3.model.Vehicle;
+import sk.nixone.ds.agent.sem3.model.VehicleType;
 
 public class VehicleInitPlanner extends ContinualAssistant<SimulationRun, BusMovementAgent> {
 	
@@ -18,9 +22,21 @@ public class VehicleInitPlanner extends ContinualAssistant<SimulationRun, BusMov
 	
 	@HandleMessage(code=Messages.start)
 	public void onStart(Message message) {
-		message = message.createCopy();
-		message.setCode(Messages.VEHICLE_INIT_FINISHED);
-		hold(message.getVehicle().getLine().INIT_WAIT_TIME.getValue(), message);
+		Line line = message.getLine();
+		for(VehicleType vehicleType : getAgent().getModel().getVehicleTypes()) {
+			Schedule schedule = getAgent().getModel().findSchedule(line, vehicleType);
+			for(double time : schedule) {
+				Vehicle vehicle = new Vehicle(vehicleType);
+				vehicle.setLine(line);
+				getAgent().getModel().getVehicles().add(vehicle);
+				
+				message = message.createCopy();
+				message.setVehicle(vehicle);
+				message.setStation(line.getFirstStation());
+				message.setCode(Messages.VEHICLE_INIT_FINISHED);
+				hold(time, message);
+			}
+		}
 	}
 	
 	@HandleMessage(code=Messages.VEHICLE_INIT_FINISHED)

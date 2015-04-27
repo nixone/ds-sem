@@ -27,8 +27,6 @@ public class Line implements Iterable<Station> {
 		}
 	}
 	
-	public final DoubleProperty INIT_WAIT_TIME;
-	
 	private String name;
 	
 	private HashMap<Station, Station> nextStations = new HashMap<Station, Station>();
@@ -39,18 +37,8 @@ public class Line implements Iterable<Station> {
 	private Station firstStation = null;
 	private Station lastStation = null;
 	
-	private HashMap<VehicleType, IntegerProperty> numberOfVehicles = new HashMap<VehicleType, IntegerProperty>();
-	
 	public Line(String name, VehicleTypes vehicleTypes) {
 		this.name = name;
-		INIT_WAIT_TIME = new DoubleProperty(name+" init wait time (s)", 60*5);
-		for(VehicleType type : vehicleTypes) {
-			numberOfVehicles.put(type, new IntegerProperty(type.getName()+" on "+name, 1));
-		}
-	}
-	
-	public HashMap<VehicleType, IntegerProperty> getCountsOfTypes() {
-		return numberOfVehicles;
 	}
 	
 	public Station getNextStation(Station current, boolean circle) {

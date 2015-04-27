@@ -11,19 +11,19 @@ import sk.nixone.ds.agent.sem3.model.Vehicles;
 
 public class BusMovementAgent extends Agent<SimulationRun> {
 
-	private Vehicles vehicles;
+	private Model model;
 	
 	public BusMovementAgent(Model model, SimulationRun simulation, Agent<SimulationRun> parent) {
 		super(Components.A_VEHICLE_MOVEMENT, simulation, parent);
 		
-		vehicles = model.getVehicles();
+		this.model = model;
 		
 		new BusMovementManager(simulation, this);
 		new MovementPlanner(simulation, this);
 		new VehicleInitPlanner(simulation, this);
 	}
 
-	public Vehicles getVehicles() {
-		return vehicles;
+	public Model getModel() {
+		return model;
 	}
 }

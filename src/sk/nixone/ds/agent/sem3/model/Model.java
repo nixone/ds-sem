@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import sk.nixone.ds.core.generators.Generator;
 import sk.nixone.ds.core.generators.TriangleGenerator;
 import sk.nixone.ds.core.generators.UniformGenerator;
 import sk.nixone.ds.core.ui.property.Property;
+import sk.nixone.util.HashablePair;
 
 public class Model {
 
@@ -35,8 +37,7 @@ public class Model {
 	private Vehicles vehicles = new Vehicles();
 	private VehicleTypes vehicleTypes;
 	private double matchStartTime;
-	
-	private LinkedList<Property> properties = new LinkedList<Property>();
+	private HashMap<HashablePair<Line, VehicleType>, Schedule> schedules = new HashMap<HashablePair<Line, VehicleType>, Schedule>();
 	
 	public Model(File path, Randoms randoms) throws IOException {
 		Generator<Double> busGenerator = new TriangleGenerator(randoms.getNextRandom(), 0.6, 1.2, 3.2);
@@ -54,8 +55,6 @@ public class Model {
 			while((ln = reader.readLine()) != null) {
 				String lineName = ln;
 				Line line = new Line(lineName, vehicleTypes);
-				properties.addAll(line.getCountsOfTypes().values());
-				properties.add(line.INIT_WAIT_TIME);
 				while(((ln = reader.readLine()) != null) && !ln.contentEquals("")) {
 					String stationName = ln;
 					double duration = parse(reader.readLine());
@@ -88,10 +87,18 @@ public class Model {
 		for(Line line : lines) {
 			line.getLastStation().setExitingStation();
 		}
-	}
-	
-	public List<Property> getProperties() {
-		return properties;
+		
+		for(Line line : lines) {
+			for(VehicleType vehicleType : vehicleTypes) {
+				schedules.put(new HashablePair<Line, VehicleType>(line, vehicleType), new Schedule(line, vehicleType));
+			}
+		}
+		
+		Line line = lines.iterator().next();
+		findSchedule(line, vehicleTypes.BUS_1).add(900.);
+		findSchedule(line, vehicleTypes.BUS_1).add(1500.);
+		findSchedule(line, vehicleTypes.BUS_1).add(2000.);
+		findSchedule(line, vehicleTypes.BUS_1).add(2600.);
 	}
 	
 	public Lines getLines() {
@@ -114,21 +121,14 @@ public class Model {
 		return vehicleTypes;
 	}
 	
+	public Schedule findSchedule(Line line, VehicleType vehicleType) {
+		return schedules.get(new HashablePair<Line, VehicleType>(line, vehicleType));
+	}
+	
 	public void reset() {
 		lines.reset();
 		stations.reset();
 		vehicles.reset();
-		
-		for(Line line : lines) {
-			for(VehicleType vehicleType : vehicleTypes) {
-				int count = line.getCountsOfTypes().get(vehicleType).getValue();
-				for(int i=0; i<count; i++) {
-					Vehicle vehicle = new Vehicle(vehicleType);
-					vehicle.setLine(line);
-					vehicles.add(vehicle);
-				}
-			}
-		}
 	}
 	
 	public double getTotalDepartingTime(Line line) {

@@ -13,9 +13,6 @@ public class SimulationFrame extends SimulationFrameBase {
 		VisualisationPanel visualPanel = new VisualisationPanel(model, stationLayout);
 		simulation.getRefreshInvoked().add(visualPanel.getRefresher());
 		addTab("Visual", visualPanel);
-		
-		PropertyPanel configPanel = new PropertyPanel(model.getProperties());
-		addTab("Config", configPanel);
 	}
 
 }
