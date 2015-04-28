@@ -1,118 +1,115 @@
-# Diskrétna simulácia - Semestrálna práca č.3
+# Discrete simulation - Semestral work no.3
 
-*Vytvorené ako semestrálna práca na predmet Diskrétna Simulácia. Autor: Martin Olešnaník, akademický rok 2014/2015. Autor sa zrieka zodpovednosti za použitie akejkoľvek časti tejto semestrálnej práce ako základ práce niekoho iného.*
+*Created as a semestral work for Discrete Simulation course, Author: Martin Olešnaník, academic year 2014/2015. Author is revoking any responsibility for using this work or any part of this work as a basis of a work of anybody else.*
 
-# Zadanie
+# Objective
 
-Zadaním tejto semestrálnej práce bolo vytvoriť simulačný program pre zvoz ľudí na hokejový
-štadión pred zápasom a na základe tohto programu vytvoriť simulačnú štúdiu, na základe ktorej odporúčime stratégiu zvozu dopravcovi. Špecifikácia zadania sa nachádza v priloženom dokumente ``zadanie.pdf``.
+Objective of this semestral work was to create a simulation program for transporting people to ice hockey game and using this program to create a simulation study, on basis of which we will suggest a transport strategy to a transport company. Further specification can be found in attached document ``zadanie.pdf`` *(Slovak language only)*.
 
-# Požadovaný výstup
+# Required output
 
-Dopravcovi máme poskytnúť:
+We are required to suggest the transporting company:
 
-*	Voľbu stratégie, a to, či jeho vozidlá (autobusy) majú na zastávkach po nastúpení všetkých ľudí (pokiaľ ešte ostáva miesto) čakať na ďaľších prichádzajúcich, alebo okamžite odchádzajú.
+*	Chosen strategy, which should specify whether his vehicles should wait for travelers after all travelers are picked up from the station, or whether it should leave immediately.
+*	Quantities of vehicle types on certain transporting lines.
 
-*	Počty jednotlivých autobusov prevádzkovaných na jednotlivých linkách.
+# Design
 
-# Vypracovanie
+## Agent diagram
 
-## Agentový diagram
-
-Nakoľko sme používali agentovo orientovanú simuláciu, pre jednoduchosť zostavovania programu sme vytvorili agentový diagram.
+Because we use agent oriented simulation, for simplicity of designing the final program, we created an agent diagram:
 
 ![Agent diagram]
 (https://github.com/nixone/ds-sem/raw/master/img/agent_diagram.png)
 
-*	**Model Agent** - Agent zodpovedný za sprostredkovávanie komunikácie medzi ostatnými agentami
-*	**Surrounding Agent** - Agent okolia zodpovedný za príchody ľudí na zastávky
-*	**Movement Agent** - Agent zodpovedný za výpravu a pohyb vozidiel medzi jednotlivými zastávkami
-*	**Boarding Agent** - Agent zodpovedný za správu nástupu ľudí do vozidiel
-*	**Exiting Agent** - Agent zodpovedný za správu výstupu ľudí z vozidiel
+*	**Model Agent** - Agent responsible for communication between other agents
+*	**Surrounding Agent** - Agent responsible for traveler arrivals to stations
+*	**Movement Agent** - Agent responsible for moving vehicles between stations
+*	**Boarding Agent** - Agent responsible for boarding travelers onto vehicles
+*	**Exiting Agent** - Agent responsible for exiting travelers form vehicles
 
-## Animátor
+## Animator
 
-Súčasťou zostaveného programu je takisto animátor, pomocou ktorého môže zákazník podrobne sledovať priebeh celej simulácie.
+As a part of the assembled program we created an animator, which enables user to closely observe simulation processes.
 
 ![Animator]
 (https://github.com/nixone/ds-sem/raw/master/img/animator.png)
 
-# Štúdia
+# Simulation study
 
-## Rozhodnutia a závery
+## Decisions and conclusions
 
-Pri vypracovaní neboli poskytnuté presné špecifikácie niektorých častí systému, a teda sme mali postupovať pri vypracovávaní logicky, učiniť vlastné ale podložené rozhodnutia.
+During this work we weren't provided with all the specific informations about parts of the modeled system, so we were required to proceed with our own decisions and conclusions, which should be nevertheless thoughtful and logical.
 
-### Iba autobus č. 2!
+### Only bus type 2!
 
-Jedným z takýchto rozhodnutí je **ignorácia prvého typu autobusu**. Je úplne zbytočné, aby sme
-čo i len zvažovali použitie autobusu č. 1 na zvoz ľudí. Nakoľko je možné na zastávke obsluhovať súčasne viacero autobusov, a všetky autobusy majú rovnakú rýchlosť, nastupovanie a vystupovanie, môžeme použitie dvoch autobusov č. 2 porovnať s jedným autobusom č. 1. V takomto prípade prídeme k záveru, že v každom prípade bude pre nás výhodnejšie využiť služby dvoch autobusov č. 2 ako jedného č. 1. Aj cenovo je takéto riešenie priateľnejšie. Je teda zrejmé, že autobus č. 1 nemusíme v riešení ani zvažovať.
+One of these decisions is **to ignore first type of bus**. It is useless to even consider using bus type no.1 for traveler transport. Since there is a possibility for many vehicles to occupy the same station, also all the vehicles have the same traveling, boarding and exiting speeds, we can compare departing 2 buses of type no.2 to departing 1 bus of type no.1. In this case we come with conclusion that in any situation it is more effective for us to use service of 2 buses of type no.2, since it is less expensive and more time and capacity efficient. It is therefore obvious, that we don't even need to consider using a bus of type no.1 in our solutions.
 
-### Kumulatívna predpoveď!
+### Cumulative forecast!
 
-Ďaľším je **časové oneskorenie jednotlivých autobusov na danej linke**. Nakoľko máme veľmi podrobné informácie o príchodoch ľudí na zastávky, je vcelku jednoduché zostaviť tzv. *kumulatívnu predpoveď počtu ľudí na zastávke* pre čas, ktorý ešte nenastal. Toto je funkcia pre danú linku, ktorá nám pre určitý čas vráti predpoveď počtu ľudí, ktorí sa tam v tomto čase budú nachádzať, ak ich nikto nevyzdvihne. Nakoľko presne vieme, aký čas nám trva dostaviť sa na zastávku, a koľko tam v tom čase bude ľudí, je veľmi jednoduché následne zostaviť sekvenciu výprav autobusov tak, aby sme maximalizovali využitie autobusov ale minimalizovali čakanie ľudí na zastávkach.
+Another decision is the **delay of specific buses on specific lines**. Since we have lot of information about people arrivals to stations, it is relatively easy to build so called *cumulative forecast for people count on station* for a certain time, which didn't occur yet. This would be a function of time for a specific line, which would tell us the estimate number of people on the station able to be picked up when we depart the vehicle right in that time. Since we have all the necessary information to build this function, it is relatively easy to schedule vehicles in a way that is trying to maximize their utility over time.
 
-### Kedy vypraviť mikrobusy súkromného dopravcu?
+### When to depart buses of a private transporter?
 
-Výprava mikrobusov dáva zmysel, ak sa vyskytuje časový priestor na zastávkach, počas ktorého nie sú pokryté normálnou dopravou, a musí sa čakať na "druhú otočku" autobusov. Počas normálneho vypravovania autobusov sú tieto vypravované tak, aby sa snažili pokryť potreby všetkých potencionálnych cestujúcich a preto nenehávajú priestor na vypravenie mikrobusov.
+Departing private buses is meaningful if there is a time space on the stations which is not covered by the transporter and people need to wait for "second turn around" of buses. During normal buses operation, these are designed to not occur, since they are minimizing also the wait of people on the stations. 
 
-Mikrobusy teda vypravujeme po skončení "prvej vlny" vypravených autobusov, a to tak, aby boli všetci cestujúci, ktorým sa mikrobusy ponúknu, ochotní nimi cestovať.
+We are therefore trying to depart the private transporter vehicles during a time when normal buses are returning for a second turn around.
 
-## Experimenty
+## Experiments
 
-Experimentami s našim simulačným modelom sme dospeli k dátam, na základe ktorých môžeme jasne rozhodnúť o stanovenej stratégii oboch dopravcov a takisto aj o konkrétnom spôsobe výpravy vozidiel pre zvýšenie úžitku a zachovania spokojnosti cestujúcich.
+By experiments with our simulation model we came to data, on which we can clearly decide our strategy for both transporter and also specific depart schedule to maximize utility, time effectivity and customer satisfaction.
 
-*Časové značky sú udávané od momentu 1h 13 minút pred začiatkom zápasu, nakoľko tento moment značí začiatok prichádzania cestujúcich na zastávky.* 
+*Timestamps are indicated since the moment 1h 13 minutes before the ice hockey game start, since this moment marks the start of people arriving to stations.*
 
-### Stratégia bez čakania
+### Strategy without waiting
 
-Pri stratégii bez čakania sa autobus okamžite po naplnení pasažiermi vypraví na cestu na ďaľšiu zastávku.
+With strategy without waiting, the bus leaves immediately after filling up or getting all people from the station aboard.
 
- Vozidlo | Linka A | Linka B | Linka C
+ Vehicle | Line A | Line B | Line C
  --- | --- | --- | ---
- **Autobus č. 2 x** | **16** | **7** | **7**
- *Výprava* | 3.3m +~3m | 17m +~5.5m | 11.8m +~5m
- **Mikrobus x** | **2** | **1** | **10**
- *Výprava* | 59m +0.5m | 62m +0.5m | 53m +0.5m
+ **Bus no. 2 x** | **16** | **7** | **7**
+ *Departure* | 3.3m +~3m | 17m +~5.5m | 11.8m +~5m
+ **Microbus x** | **2** | **1** | **10**
+ *Departure* | 59m +0.5m | 62m +0.5m | 53m +0.5m
 
- Varianta | % ľudí, ktorí nestihli zápas | Čas čakania na odvezenie | Plnosť autobusov | Zisk súkr. dopravcu
- --- | --- | --- | ---
- Bez súkr. | 7.5% | 6m 29s | 98.5% | -
- So súkr. | 5.0% | 5m 55s | 98.2% | 3118 Kč
+ Variant | % people who missed the game | Wait time for bus | Bus usage | Private gain
+ --- | --- | --- | --- | ---
+ Without private transporter | 7.5% | 6m 29s | 98.5% | -
+ With private transporter | 5.0% | 5m 55s | 98.2% | 3118 Kč
 
-Náklady takto vypravených autobusov: **193 500 000 Kč**.
+Expenses using this bus configuration: **193 500 000 Kč**.
  
-### Stratégia s čakaním 1.5 minúty
+### Strategy with waiting 1.5 minutes
 
-Pri stratégii s čakaním autobus po vyzdvihnutí všetkých čakajúcich (v prípade, že má miesto) čaká ešte na ďaľších prichádzajúcich 1.5 minúty. Až po tomto momente (alebo po naplnení kapacity) zo zastávky odchádza.
+With strategy with waiting the bus is waiting for 1.5 minutes after it picks up everybody at the station (if it can pick up anybody else), and leaves only after that.
 
- Vozidlo | Linka A | Linka B | Linka C
+ Vehicle | Line A | Line B | Line C
  --- | --- | --- | ---
- **Autobus č. 2 x** | **18** | **10** | **10**
- *Výprava* | 0m +~0.3-3.5m | 10m +~3-6m | 6.3m +~4-7m
- **Mikrobus x** | **13** | - | -
- *Výprava* | 58m +1m | - | -
+ **Bus no. 2 x** | **18** | **10** | **10**
+ *Departure* | 0m +~0.3-3.5m | 10m +~3-6m | 6.3m +~4-7m
+ **Microbus x** | **13** | - | -
+ *Departure* | 58m +1m | - | -
 
- Varianta | % ľudí, ktorí nestihli zápas | Čas čakania na odvezenie | Plnosť autobusov | Zisk súkr. dopravcu
- --- | --- | --- | ---
- Bez súkr. | 7.7% | 3 minúty 40 sekúnd | 98.0% | -
- So súkr. | 5.4% | 3 minúty 23 sekúnd | 98.0% | 3120 Kč
+ Variant | % people who missed the game | Wait time for bus | Bus usage | Private gain
+ --- | --- | --- | --- | ---
+ Without private transporter | 7.7% | 3m 40s | 98.0% | -
+ With private transporter | 5.4% | 3m 23s | 98.0% | 3120 Kč
 
-Náklady takto vypravených autobusov: **245 100 000 Kč**.
+Expenses using this bus configuration: **245 100 000 Kč**.
 
-## Pozorovania
+## Observations
 
-1.	**Čakanie je výhodné pre cestujúceho, nevýhodné pre dopravcu.** Ako môžeme vidieť, čakanie na zastávke radikálne redukuje čas, ktorý cestujúci musí stráviť čakaním na vozidlo. Na druhej strane je potrebné vypraviť väčšie množstvo autobusov, a preto je pre dopravcu táto varianta neodporúčaná.
-2. **Dopravca by dokázal využil viac mikrobusov.** Pri simulovaní je jasne vidieť, že v prípade, ak by dopravca mal dostupných viac mikrobusov, priestor na ich zúžitkovanie by stále existoval. Maximálny zárobok dopravcu pri zvoze (mikrobusy "to nestihnú otočiť" od času svojej výpravy) je 3120 Kč, a teda v oboch prípadoch sa zisk súkromného dopravcu pohybuje až takmer pri hrane jeho maximálnej možnej hodnoty.
+1.	**Waiting is useful for people, wasteful for transporter.** As we can see, waiting reduces time people need to spend waiting for bus. On the other hand we need to depart more buses which makes the solution unwanted for transporters.
+2.	**Private transporter could use more vehicles**. During simulation we can clearly observe a space for private transporter having more than specified amount of vehicles to use. Maximum gain in the system (since "microbuses" can't make the turn around since their usual departure) is 3120 Kč, and in both cases the gain is almost reaching the maximum possible value.
 
-## Správnosť riešenia
+## Correctness of the solution
 
-Je zrejmé, že čím plnšie sú autobusy, ktoré prichádzajú ku štadiónu, tým lacnejšie je celkové riešenie. Na vyhodnotenie, ako plné sú autobusy používame nami vytvorenú štatistiku. Jej hodnota sa pri všetkých prípadoch pohybovala na hodnote rovnej alebo vyššej ako 98%. Takúto hodnotu pre zaplnenie autobusov môžeme intuitívne pokladať za veľmi dobrú, až optimistickú, nakoľko v reálnom svete sa s takto využitými dopravnými prostredkami nestretávame.
+It is obvious that more used are the buses, more effective is the final solution. To see, how full our buses are, we evaluate a statistic. Its value in all solutions doesn't fall under 98%. This value describing how effectively we use our buses can be intuitively understood as very good, even optimistic, since in real life we don't usually see transport vehicles used this well.
 
-**Nakoľko dokážeme "využívať kapacitu autobusov na 98%" a zároveň akékoľvek zníženie počtu autobusov na ktorejkoľvek linke by porušilo podmienky zvozu cestujúcich, považujeme naše riešenie za vyhovujúce.**
+**Since we can "use our buses to 98%" and also any descrease in bus number on any line would violate the service quality conditions, we accept our solution as correct and acceptable.**
 
-## Vyhodnotenie a záver
+## Evaluation and conclusion
 
-Na základe zistených pozorovaní a simulácie môžeme dopravcovi jasne odporučiť **zvoliť stratégiu zvozu cestujúcich bez čakania s použitím 30 autobusov č. 2**.
+On the basis of our observations and simulation we can suggest to our transporter **strategy without waiting with the use of 30 buses of no. 2**.
 
-Súkromnému dopravcovi môžeme odporučiť pri tejto stratégii rozdeliť jeho **13 mikrobusov pomerom 2:1:10 na linky A:B:C**.
+To private transporter we can suggest to divide his **13 microbuses in ratios 2:1:10 on lines A:B:C respectively**.
