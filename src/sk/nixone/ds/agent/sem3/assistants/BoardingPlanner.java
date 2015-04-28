@@ -21,8 +21,20 @@ public class BoardingPlanner extends ContinualAssistant<SimulationRun, BoardingA
 
 	@HandleMessage(code=Messages.start)
 	public void onVehicleArrival(Message message) {
-		message.getVehicle().WAITING_FOR_ARRIVALS.reset();
-		recheck(message);
+		// it was started because vehicle arrived
+		if(message.hasVehicle()) {
+			message.getVehicle().WAITING_FOR_ARRIVALS.reset();
+			recheck(message);
+		}
+		// it was started because traveler arrived
+		else {
+			Station station = message.getStation();
+			for(Vehicle vehicle : station.getVehicles()) {
+				Message msg = message.createCopy();
+				msg.setVehicle(vehicle);
+				recheck(msg);
+			}
+		}
 	}
 	
 	private void recheck(Message message) {
@@ -51,12 +63,13 @@ public class BoardingPlanner extends ContinualAssistant<SimulationRun, BoardingA
 			assistantFinished(message);
 		}
 		// or there is space but none are waiting
-		else if(!vehicle.hasOccupiedDoor() && !vehicle.isFull()) {
-			vehicle.WAITING_FOR_ARRIVALS.started(getSimulation());
+		else if(!vehicle.hasOccupiedDoor() && !vehicle.isFull() && !vehicle.WAITING_FOR_ARRIVALS.didHappen() ) {
+			double t = vehicle.getType().getWaitingTimeForArrivals();
+			vehicle.WAITING_FOR_ARRIVALS.started(getSimulation(), t);
 			
 			message = message.createCopy();
 			message.setCode(Messages.WAITING_FINISHED);
-			hold(vehicle.getType().getWaitingTimeForArrivals(), message);
+			hold(t, message);
 		}
 	}
 	

@@ -77,4 +77,24 @@ public class Message extends MessageForm {
 	public void setPerson(Person person) {
 		this.person = person;
 	}
+	
+	public boolean hasLine() {
+		return line != null;
+	}
+	
+	public boolean hasPerson() {
+		return person != null;
+	}
+	
+	public boolean hasVehicle() {
+		return vehicle != null;
+	}
+	
+	public boolean hasStation() {
+		return station != null;
+	}
+	
+	public boolean hasDoor() {
+		return door != null;
+	}
 }

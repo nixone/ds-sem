@@ -45,4 +45,11 @@ public class ModelManager extends Manager<SimulationRun, ModelAgent> {
 		message.setAddressee(getSimulation().findAgent(Components.A_VEHICLE_MOVEMENT));
 		notice(message);
 	}
+	
+	@HandleMessage(code=Messages.NEW_TRAVELER)
+	public void onNewTraveler(Message message) {
+		message = message.createCopy();
+		message.setAddressee(getSimulation().findAgent(Components.A_BOARDING));
+		notice(message);
+	}
 }

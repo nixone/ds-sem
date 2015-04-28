@@ -60,6 +60,13 @@ public class StationCanvas extends HelperCanvas {
 			progress(0, 0, 100, 30, vehicle.getFullness());
 			str(vehicle.getType().getName()+" ("+vehicle.getPeopleCount()+" / "+vehicle.getType().getCapacity()+")", 0, 0);
 			
+			if(vehicle.WAITING_FOR_ARRIVALS.didHappen() && !vehicle.WAITING_FOR_ARRIVALS.didFinish()) {
+				moveDraw(0, 25);
+				progress(0, 0, 100, 15, vehicle.WAITING_FOR_ARRIVALS.getProgress(currentTime));
+				str("Waiting...", 0, 0);
+				moveDraw(0, -25);
+			}
+			
 			moveDraw(70, 0);
 			for(Door door : vehicle.getDoors()) {
 				progress(0, 0, 20, 30, door.USAGE.getProgress(currentTime));

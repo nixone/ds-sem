@@ -20,6 +20,12 @@ public class BoardingManager extends Manager<SimulationRun, BoardingAgent>{
 		startContinualAssistant(message);
 	}
 	
+	@HandleMessage(code=Messages.NEW_TRAVELER)
+	public void onNewTraveler(Message message) {
+		message.setAddressee(getAgent().findAssistant(Components.BOARDING_PLANNER));
+		startContinualAssistant(message);
+	}
+	
 	@HandleMessage(code=Messages.finish)
 	public void onBoardingFinished(Message message) {
 		message.setCode(Messages.VEHICLE_FROM_STATION);

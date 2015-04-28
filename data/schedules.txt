@@ -7,7 +7,7 @@ true
 Line A
 Bus 1
 1
-600.0
+1800.0
 false
 Line A
 Bus 2
@@ -15,7 +15,8 @@ Bus 2
 true
 Line A
 Bus 2
-0
+1
+1800.0
 false
 Line A
 Microbus

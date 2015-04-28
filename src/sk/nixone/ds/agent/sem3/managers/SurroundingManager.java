@@ -23,6 +23,9 @@ public class SurroundingManager extends Manager<SimulationRun, SurroundingAgent>
 	
 	@HandleMessage(code=Messages.finish)
 	public void onAssistantFinished(Message message) {
-		// nothing to do actually
+		message = message.createCopy();
+		message.setCode(Messages.NEW_TRAVELER);
+		message.setAddressee(getSimulation().findAgent(Components.A_MODEL));
+		notice(message);
 	}
 }
