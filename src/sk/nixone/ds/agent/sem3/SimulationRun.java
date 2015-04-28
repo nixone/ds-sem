@@ -7,6 +7,7 @@ import sk.nixone.ds.agent.sem3.agents.ModelAgent;
 import sk.nixone.ds.agent.sem3.agents.SurroundingAgent;
 import sk.nixone.ds.agent.sem3.model.Model;
 import sk.nixone.ds.core.Randoms;
+import sk.nixone.ds.core.SequenceStatistic;
 
 public class SimulationRun extends sk.nixone.ds.agent.SimulationRun {
 	
@@ -20,6 +21,12 @@ public class SimulationRun extends sk.nixone.ds.agent.SimulationRun {
 	
 	private ExitingAgent exitingAgent;
 	
+	private int totalPeople = 0;
+	
+	private int servedPeople = 0;
+	
+	private SequenceStatistic personWaitingTime = new SequenceStatistic();
+	
 	public SimulationRun(Randoms randoms, Model model) {
 		super();
 		
@@ -28,6 +35,26 @@ public class SimulationRun extends sk.nixone.ds.agent.SimulationRun {
 		surroundingAgent = new SurroundingAgent(model, this, modelAgent);
 		boardingAgent = new BoardingAgent(model, this, modelAgent);
 		exitingAgent = new ExitingAgent(model, this, modelAgent);
+	}
+	
+	public SequenceStatistic getPersonWaitingTime() {
+		return personWaitingTime;
+	}
+	
+	public void increaseTotalPeople() {
+		totalPeople++;
+	}
+	
+	public void increaseServedPeople() {
+		servedPeople++;
+	}
+	
+	public int getTotalPeople() {
+		return totalPeople;
+	}
+	
+	public int getServedPeople() {
+		return servedPeople;
 	}
 	
 	public ModelAgent getModelAgent() {

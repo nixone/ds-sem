@@ -50,6 +50,7 @@ public class ExitingPlanner extends ContinualAssistant<SimulationRun, ExitingAge
 	
 	@HandleMessage(code=Messages.EXITING_FINISHED)
 	public void onEnteringFinished(Message message) {
+		getSimulation().increaseServedPeople();
 		message.getDoor().leaveBus();
 		message.getDoor().USAGE.ended(getSimulation());
 		message.getDoor().USAGE.reset();

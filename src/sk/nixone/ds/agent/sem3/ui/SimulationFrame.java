@@ -2,8 +2,8 @@ package sk.nixone.ds.agent.sem3.ui;
 
 import sk.nixone.ds.agent.sem3.Simulation;
 import sk.nixone.ds.agent.sem3.model.Model;
-import sk.nixone.ds.agent.sem3.model.Stations;
-import sk.nixone.ds.core.ui.property.PropertyPanel;
+import sk.nixone.ds.core.ui.StatisticPanel;
+import sk.nixone.ds.core.ui.TimeStatisticPanel;
 
 public class SimulationFrame extends SimulationFrameBase {
 	
@@ -16,6 +16,14 @@ public class SimulationFrame extends SimulationFrameBase {
 		
 		ConfigPanel configPanel = new ConfigPanel(model);
 		addTab("Config", configPanel);
+		
+		StatisticPanel statisticPanel = new StatisticPanel(simulation.getLatePeopleStatistic(), "Late people percentage");
+		simulation.getReplicationEnded().add(statisticPanel);
+		addTab("Late people", statisticPanel);
+		
+		statisticPanel = new TimeStatisticPanel(simulation.getPersonWaitingTimeStatistic(), "Person waiting time for bus");
+		simulation.getReplicationEnded().add(statisticPanel);
+		addTab("Waiting time", statisticPanel);
 	}
 
 }

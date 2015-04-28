@@ -8,9 +8,8 @@ import sk.nixone.ds.core.time.Simulation;
 
 public class TimeStatisticPanel extends StatisticPanel {
 
-	public TimeStatisticPanel(Simulation simulation, SequenceStatistic statistic,
-			String dataName) {
-		super(simulation, statistic, dataName);
+	public TimeStatisticPanel(SequenceStatistic statistic, String dataName) {
+		super(statistic, dataName);
 	}
 	
 	@Override

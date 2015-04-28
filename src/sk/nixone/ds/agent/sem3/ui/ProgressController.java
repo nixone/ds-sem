@@ -77,7 +77,7 @@ public class ProgressController extends JPanel {
 	
 	private void setSelectedTimeFactor() {
 		double timeFactor = getSelectedTimeFactor();
-		timeFactorNumber.setText(String.valueOf(timeFactor));
+		timeFactorNumber.setText(String.format("%.3E", timeFactor));
 		simulation.setTimeFactor(timeFactor);
 	}
 	

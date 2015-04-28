@@ -45,6 +45,9 @@ public class BoardingPlanner extends ContinualAssistant<SimulationRun, BoardingA
 		
 		// if person can board, board him
 		if(vehicle.hasAvailableDoors() && !vehicle.isFull() && person != null && person.WAITING_FOR_BUS.getStartTime() <= acceptableWaitingStartTime) {
+			person.WAITING_FOR_BUS.ended(getSimulation());
+			getSimulation().getPersonWaitingTime().add(person.WAITING_FOR_BUS.getDuration());
+			
 			Vehicle.Door door = vehicle.getAvailableDoor();
 			double usageDuration = vehicle.getType().getEntranceGenerator().next();
 			door.occupy(station.getFirstPerson());

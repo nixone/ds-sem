@@ -39,7 +39,6 @@ public abstract class Simulation extends sk.nixone.ds.core.statik.Simulation {
 		currentSimulationRun.registerDelegate(delegate);
 		refreshSimulationSpeed();
 		currentSimulationRun.simulate();
-		currentSimulationRun = null;
 	}
 	
 	@Override

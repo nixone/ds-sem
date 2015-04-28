@@ -47,13 +47,11 @@ public class StatisticPanel extends JPanel implements Emitter<Object> {
 	private Emitter<Double> topCIEmitter = new DelayedEmitter<Double>(createEmitter(confidenceTop), 15);
 	
 	private Statistic statistic;
-	private Simulation simulation;
 	
 	private int key = 0;
 	
-	public StatisticPanel(Simulation simulation, Statistic statistic, String dataName) {
+	public StatisticPanel(Statistic statistic, String dataName) {
 		this.statistic = statistic;
-		this.simulation = simulation;
 		
 		series = new XYSeries(dataName);
 		

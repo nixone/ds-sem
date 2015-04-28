@@ -32,6 +32,7 @@ public class ArrivalPlanner extends ContinualAssistant<SimulationRun, Surroundin
 		
 		if(time <= station.getLatestArrival()) {
 			if(time >= station.getEarliestArrival() && station.canPeopleArrive()) {
+				getSimulation().increaseTotalPeople();
 				Person person = new Person(station);
 				station.addPerson(person);
 				person.WAITING_FOR_BUS.started(getSimulation());

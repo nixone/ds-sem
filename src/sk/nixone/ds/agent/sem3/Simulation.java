@@ -3,12 +3,18 @@ package sk.nixone.ds.agent.sem3;
 import sk.nixone.ds.agent.Agent;
 import sk.nixone.ds.agent.sem3.model.Model;
 import sk.nixone.ds.core.Randoms;
+import sk.nixone.ds.core.SequenceStatistic;
 
 public class Simulation extends sk.nixone.ds.agent.Simulation {
 	
 	private Model model;
 	
 	private Randoms randoms;
+	
+	private SequenceStatistic latePeopleStatistic = new SequenceStatistic();
+	private SequenceStatistic personWaitingTimeStatistic = new SequenceStatistic();
+	
+	private SimulationRun simulationRun;
 	
 	public Simulation(Randoms randoms, Model model) {
 		super();
@@ -18,6 +24,8 @@ public class Simulation extends sk.nixone.ds.agent.Simulation {
 	
 	@Override
 	public void onStarted() {
+		latePeopleStatistic.clear();
+		personWaitingTimeStatistic.clear();
 	}
 
 	@Override
@@ -26,25 +34,36 @@ public class Simulation extends sk.nixone.ds.agent.Simulation {
 
 	@Override
 	public void onReplicationStart(int replicationIndex) {
+		
 	}
 
 	@Override
 	public void onReplicationEnd(int replicationIndex) {
+		latePeopleStatistic.add(1.-((double)simulationRun.getServedPeople() / simulationRun.getTotalPeople()));
+		personWaitingTimeStatistic.add(simulationRun.getPersonWaitingTime().getMean());
+	}
+	
+	public SequenceStatistic getLatePeopleStatistic() {
+		return latePeopleStatistic;
+	}
+	
+	public SequenceStatistic getPersonWaitingTimeStatistic() {
+		return personWaitingTimeStatistic;
 	}
 	
 	protected SimulationRun createSimulationRun() {
 		model.reset();
 		
-		SimulationRun run = new SimulationRun(randoms, model);
+		simulationRun = new SimulationRun(randoms, model);
 		
-		run.stopSimulation(model.getMatchStartTime());
+		simulationRun.stopSimulation(model.getMatchStartTime());
 		
-		Message message = new Message(run);
+		Message message = new Message(simulationRun);
 		message.setCode(Messages.INIT);
-		Agent<?> modelAgent = (Agent<?>)run.findAgent(Components.A_MODEL);
+		Agent<?> modelAgent = (Agent<?>)simulationRun.findAgent(Components.A_MODEL);
 		message.setAddressee(modelAgent);
 		modelAgent.manager().notice(message);
 		
-		return run;
+		return simulationRun;
 	}
 }
