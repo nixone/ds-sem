@@ -5,20 +5,20 @@ import sk.nixone.ds.agent.sem3.Components;
 import sk.nixone.ds.agent.sem3.SimulationRun;
 import sk.nixone.ds.agent.sem3.assistants.MovementPlanner;
 import sk.nixone.ds.agent.sem3.assistants.VehicleInitPlanner;
-import sk.nixone.ds.agent.sem3.managers.BusMovementManager;
+import sk.nixone.ds.agent.sem3.managers.MovementManager;
 import sk.nixone.ds.agent.sem3.model.Model;
 import sk.nixone.ds.agent.sem3.model.Vehicles;
 
-public class BusMovementAgent extends Agent<SimulationRun> {
+public class MovementAgent extends Agent<SimulationRun> {
 
 	private Model model;
 	
-	public BusMovementAgent(Model model, SimulationRun simulation, Agent<SimulationRun> parent) {
-		super(Components.A_VEHICLE_MOVEMENT, simulation, parent);
+	public MovementAgent(Model model, SimulationRun simulation, Agent<SimulationRun> parent) {
+		super(Components.A_MOVEMENT, simulation, parent);
 		
 		this.model = model;
 		
-		new BusMovementManager(simulation, this);
+		new MovementManager(simulation, this);
 		new MovementPlanner(simulation, this);
 		new VehicleInitPlanner(simulation, this);
 	}

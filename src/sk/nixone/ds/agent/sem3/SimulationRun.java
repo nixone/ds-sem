@@ -1,7 +1,7 @@
 package sk.nixone.ds.agent.sem3;
 
 import sk.nixone.ds.agent.sem3.agents.BoardingAgent;
-import sk.nixone.ds.agent.sem3.agents.BusMovementAgent;
+import sk.nixone.ds.agent.sem3.agents.MovementAgent;
 import sk.nixone.ds.agent.sem3.agents.ExitingAgent;
 import sk.nixone.ds.agent.sem3.agents.ModelAgent;
 import sk.nixone.ds.agent.sem3.agents.SurroundingAgent;
@@ -12,7 +12,7 @@ public class SimulationRun extends sk.nixone.ds.agent.SimulationRun {
 	
 	private ModelAgent modelAgent;
 	
-	private BusMovementAgent busMovementAgent;
+	private MovementAgent busMovementAgent;
 	
 	private SurroundingAgent surroundingAgent;
 	
@@ -24,7 +24,7 @@ public class SimulationRun extends sk.nixone.ds.agent.SimulationRun {
 		super();
 		
 		modelAgent = new ModelAgent(model, this);
-		busMovementAgent = new BusMovementAgent(model, this, modelAgent);
+		busMovementAgent = new MovementAgent(model, this, modelAgent);
 		surroundingAgent = new SurroundingAgent(model, this, modelAgent);
 		boardingAgent = new BoardingAgent(model, this, modelAgent);
 		exitingAgent = new ExitingAgent(model, this, modelAgent);
@@ -34,7 +34,7 @@ public class SimulationRun extends sk.nixone.ds.agent.SimulationRun {
 		return modelAgent;
 	}
 	
-	public BusMovementAgent getBusMovementAgent() {
+	public MovementAgent getBusMovementAgent() {
 		return busMovementAgent;
 	}
 	

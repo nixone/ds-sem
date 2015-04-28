@@ -8,11 +8,11 @@ import sk.nixone.ds.agent.sem3.Components;
 import sk.nixone.ds.agent.sem3.Message;
 import sk.nixone.ds.agent.sem3.Messages;
 import sk.nixone.ds.agent.sem3.SimulationRun;
-import sk.nixone.ds.agent.sem3.agents.BusMovementAgent;
+import sk.nixone.ds.agent.sem3.agents.MovementAgent;
 import sk.nixone.ds.agent.sem3.model.Station;
 import sk.nixone.ds.agent.sem3.model.Vehicle;
 
-public class MovementPlanner extends ContinualAssistant<SimulationRun, BusMovementAgent> {
+public class MovementPlanner extends ContinualAssistant<SimulationRun, MovementAgent> {
 
 	public MovementPlanner(Simulation mySim, CommonAgent myAgent) {
 		super(Components.MOVEMENT_PLANNER, mySim, myAgent);
