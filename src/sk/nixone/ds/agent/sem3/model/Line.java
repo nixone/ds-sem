@@ -101,4 +101,24 @@ public class Line implements Iterable<Station> {
 	public double getTimeToLastStation() {
 		return getFirstStation().getTimeToLastStation();
 	}
+	
+	public double estimateCumulativePeople(double time, double waitingTime) {
+		double people = 0;
+		double travelTime = 0;
+		
+		for(Station station : this) {
+			double meetTime = time + travelTime + waitingTime;
+			
+			if(station.getEarliestArrival() >= meetTime) {
+				continue;
+			}
+			double period = Math.min(
+					station.getLatestArrival()-station.getEarliestArrival(),
+					meetTime - station.getEarliestArrival()
+			);
+			people += period * station.getAveragePeopleArrivalPerSecond();
+			travelTime += timeToNextStation.get(station) + waitingTime;
+		}
+		return people;
+	}
 }

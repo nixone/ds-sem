@@ -1,5 +1,7 @@
 package sk.nixone.ds.agent.sem3.ui;
 
+import java.util.ArrayList;
+
 import sk.nixone.ds.agent.sem3.model.Person;
 import sk.nixone.ds.agent.sem3.model.Station;
 import sk.nixone.ds.agent.sem3.model.Vehicle;
@@ -53,7 +55,7 @@ public class StationCanvas extends HelperCanvas {
 		strBig("Vehicles", 0.2, 0.1);
 		move(0.2, 0.2);
 		
-		for(Vehicle vehicle : station.getVehicles()) {
+		for(Vehicle vehicle : new ArrayList<Vehicle>(station.getVehicles())) {
 			resetDrawPosition();
 			g.setColor(vehicle.getType().getColor());
 			point(0, 0, 20);

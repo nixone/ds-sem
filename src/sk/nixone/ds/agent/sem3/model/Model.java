@@ -91,8 +91,8 @@ public class Model {
 		
 		for(Line line : lines) {
 			for(VehicleType vehicleType : vehicleTypes) {
-				schedules.put(new HashablePair<Line, VehicleType>(line, vehicleType), new Schedule(line, vehicleType));
-				schedulesForWaiting.put(new HashablePair<Line, VehicleType>(line, vehicleType), new Schedule(line, vehicleType));
+				schedules.put(new HashablePair<Line, VehicleType>(line, vehicleType), new Schedule(this, line, vehicleType));
+				schedulesForWaiting.put(new HashablePair<Line, VehicleType>(line, vehicleType), new Schedule(this, line, vehicleType));
 			}
 		}
 		setWaitingStrategy(false);
@@ -103,6 +103,15 @@ public class Model {
 		double t = waitingStrategy ? 90 : 0;
 		vehicleTypes.BUS_1.setWaitingTimeForArrivals(t);
 		vehicleTypes.BUS_2.setWaitingTimeForArrivals(t);
+		if(waitingStrategy) {
+			for(Schedule schedule : schedulesForWaiting.values()) {
+				schedule.fromExpression(schedule.getExpression());
+			}
+		} else {
+			for(Schedule schedule : schedules.values()) {
+				schedule.fromExpression(schedule.getExpression());
+			}
+		}
 	}
 	
 	public Lines getLines() {
@@ -146,15 +155,12 @@ public class Model {
 				boolean waiting = Boolean.parseBoolean(scanner.nextLine());
 				String lineName = scanner.nextLine();
 				String vehicleTypeName = scanner.nextLine();
-				int count = scanner.nextInt(); scanner.nextLine();
 				
 				HashablePair<Line, VehicleType> p = new HashablePair<Line, VehicleType>(lines.find(lineName), vehicleTypes.find(vehicleTypeName));
 				Schedule schedule = waiting ? schedulesForWaiting.get(p) : schedules.get(p);
 				schedule.clear();
 				
-				for(int i=0; i<count; i++) {
-					schedule.add(Double.parseDouble(scanner.nextLine()));
-				}
+				schedule.fromExpression(scanner.nextLine());
 			}
 		}
 	}
@@ -170,21 +176,15 @@ public class Model {
 				
 				HashablePair<Line, VehicleType> p = new HashablePair<Line, VehicleType>(line, type);
 				Schedule schedule = schedules.get(p);
-				out.println(schedule.size());
-				for(double time : schedule) {
-					out.println(String.valueOf(time));
-				}
+				out.println(schedule.getExpression());
 				
 				out.println(true);
 				out.println(line.getName());
 				out.println(type.getName());
 				
-				 p = new HashablePair<Line, VehicleType>(line, type);
+				p = new HashablePair<Line, VehicleType>(line, type);
 				schedule = schedulesForWaiting.get(p);
-				out.println(schedule.size());
-				for(double time : schedule) {
-					out.println(String.valueOf(time));
-				}
+				out.println(schedule.getExpression());
 			}
 		}
 		

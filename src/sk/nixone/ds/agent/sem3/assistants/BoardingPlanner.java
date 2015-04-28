@@ -61,8 +61,12 @@ public class BoardingPlanner extends ContinualAssistant<SimulationRun, BoardingA
 			
 			recheck(message);
 		}
-		// or if it's just full or was waiting but finished already, leave and quit
+		// if it should immediately leave
 		else if(!vehicle.hasOccupiedDoor() && (vehicle.isFull() || vehicle.WAITING_FOR_ARRIVALS.didFinish())) {
+			// if we are waiting "cancel it"
+			if(vehicle.WAITING_FOR_ARRIVALS.didHappen() && !vehicle.WAITING_FOR_ARRIVALS.didFinish()) {
+				vehicle.WAITING_FOR_ARRIVALS.ended(getSimulation());
+			}
 			assistantFinished(message);
 		}
 		// or there is space but none are waiting
@@ -86,7 +90,12 @@ public class BoardingPlanner extends ContinualAssistant<SimulationRun, BoardingA
 	
 	@HandleMessage(code=Messages.WAITING_FINISHED)
 	public void onWaitingFinished(Message message) {
-		message.getVehicle().WAITING_FOR_ARRIVALS.ended(getSimulation());
-		recheck(message);
+		Vehicle vehicle = message.getVehicle();
+		
+		// if we didn't cancel the wait so far
+		if(vehicle.WAITING_FOR_ARRIVALS.didHappen() && !vehicle.WAITING_FOR_ARRIVALS.didFinish()) {
+			vehicle.WAITING_FOR_ARRIVALS.ended(getSimulation());
+			recheck(message);
+		}
 	}
 }

@@ -1,74 +1,72 @@
 false
 Line A
 Bus 1
-0
+
 true
 Line A
 Bus 1
-1
-1800.0
+
 false
 Line A
 Bus 2
-0
+distribute:17
 true
 Line A
 Bus 2
-1
-1800.0
+distribute:20
 false
 Line A
 Microbus
-0
+
 true
 Line A
 Microbus
-0
+static:30 5 10
 false
 Line B
 Bus 1
-0
+
 true
 Line B
 Bus 1
-0
+
 false
 Line B
 Bus 2
-0
+distribute:7
 true
 Line B
 Bus 2
-0
+distribute:10
 false
 Line B
 Microbus
-0
+
 true
 Line B
 Microbus
-0
+
 false
 Line C
 Bus 1
-0
+
 true
 Line C
 Bus 1
-0
+
 false
 Line C
 Bus 2
-0
+distribute:7
 true
 Line C
 Bus 2
-0
+distribute:10
 false
 Line C
 Microbus
-0
+
 true
 Line C
 Microbus
-0
+

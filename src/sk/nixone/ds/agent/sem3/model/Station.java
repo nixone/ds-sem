@@ -96,6 +96,10 @@ public class Station {
 	}
 	
 	public double getAveragePeopleArrivalPerSecond() {
+		if(peopleArrivalCount == 0) {
+			return 0;
+		}
+		
 		return peopleArrivalCount / (double)(latestArrival - earliestArrival);
 	}
 	
@@ -108,6 +112,10 @@ public class Station {
 	
 	public boolean canPeopleArrive() {
 		return peopleArrivedCount < peopleArrivalCount;
+	}
+	
+	public int getPeopleArrivedCount() {
+		return peopleArrivedCount;
 	}
 	
 	public double getEarliestArrival() {

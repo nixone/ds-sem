@@ -62,7 +62,7 @@ public class Vehicle {
 	}
 	
 	public int getPeopleCount() {
-		return people.size();
+		return people.size() + totalDoorCount - freeDoorCount;
 	}
 	
 	public boolean hasAvailableDoors() {
@@ -130,11 +130,11 @@ public class Vehicle {
 	}
 	
 	public boolean isFull() {
-		return people.size() >= getType().getCapacity();
+		return getPeopleCount() >= getType().getCapacity();
 	}
 	
 	public boolean isEmpty() {
-		return people.size() == 0;
+		return getPeopleCount() == 0;
 	}
 	
 	public double getFullness() {
