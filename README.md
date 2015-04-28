@@ -4,10 +4,10 @@
 
 ## Agentový diagram
 
-[Agent diagram]
+![Agent diagram]
 (https://github.com/nixone/ds-sem/raw/master/img/agent_diagram.png)
 
 ## Animátor
 
-[Animator]
+![Animator]
 (https://github.com/nixone/ds-sem/raw/master/img/animator.png)
