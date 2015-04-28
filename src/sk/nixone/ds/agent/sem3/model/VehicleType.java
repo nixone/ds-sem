@@ -69,4 +69,8 @@ public class VehicleType {
 	public double getWaitingTimeForArrivals() {
 		return waitingTimeForArrivals;
 	}
+	
+	public void setWaitingTimeForArrivals(double waitingTimeForArrivals) {
+		this.waitingTimeForArrivals = waitingTimeForArrivals;
+	}
 }

@@ -1,9 +1,9 @@
 package sk.nixone.ds.agent.sem3.model;
 
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 
-public class Lines extends HashMap<String, Line> implements Iterable<Line> {
+public class Lines extends LinkedHashMap<String, Line> implements Iterable<Line> {
 
 	public void add(Line line) {
 		put(line.getName(), line);

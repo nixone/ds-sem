@@ -6,9 +6,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Scanner;
 
 import sk.nixone.ds.core.Randoms;
 import sk.nixone.ds.core.generators.DummyDoubleGenerator;
@@ -16,7 +16,6 @@ import sk.nixone.ds.core.generators.ExponentialDelayGenerator;
 import sk.nixone.ds.core.generators.Generator;
 import sk.nixone.ds.core.generators.TriangleGenerator;
 import sk.nixone.ds.core.generators.UniformGenerator;
-import sk.nixone.ds.core.ui.property.Property;
 import sk.nixone.util.HashablePair;
 
 public class Model {
@@ -38,8 +37,10 @@ public class Model {
 	private VehicleTypes vehicleTypes;
 	private double matchStartTime;
 	private HashMap<HashablePair<Line, VehicleType>, Schedule> schedules = new HashMap<HashablePair<Line, VehicleType>, Schedule>();
+	private HashMap<HashablePair<Line, VehicleType>, Schedule> schedulesForWaiting = new HashMap<HashablePair<Line, VehicleType>, Schedule>();
+	private boolean waitingStrategy = false;
 	
-	public Model(File path, Randoms randoms) throws IOException {
+	public Model(File linesFile, Randoms randoms) throws IOException {
 		Generator<Double> busGenerator = new TriangleGenerator(randoms.getNextRandom(), 0.6, 1.2, 3.2);
 		Generator<Double> microBusEntranceGenerator = new UniformGenerator(randoms.getNextRandom(), 6, 10);
 		Generator<Double> microBusExitGenerator = new DummyDoubleGenerator(4);
@@ -50,7 +51,7 @@ public class Model {
 			new VehicleType(Color.RED, "Microbus", 8, 1, 0, 30, 360, 0, microBusEntranceGenerator, microBusExitGenerator)
 		);
 
-		try(BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(path)))) {
+		try(BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(linesFile)))) {
 			String ln = null;
 			while((ln = reader.readLine()) != null) {
 				String lineName = ln;
@@ -91,14 +92,17 @@ public class Model {
 		for(Line line : lines) {
 			for(VehicleType vehicleType : vehicleTypes) {
 				schedules.put(new HashablePair<Line, VehicleType>(line, vehicleType), new Schedule(line, vehicleType));
+				schedulesForWaiting.put(new HashablePair<Line, VehicleType>(line, vehicleType), new Schedule(line, vehicleType));
 			}
 		}
-		
-		Line line = lines.iterator().next();
-		findSchedule(line, vehicleTypes.BUS_1).add(900.);
-		findSchedule(line, vehicleTypes.BUS_1).add(1500.);
-		findSchedule(line, vehicleTypes.BUS_1).add(2000.);
-		findSchedule(line, vehicleTypes.BUS_1).add(2600.);
+		setWaitingStrategy(false);
+	}
+	
+	public void setWaitingStrategy(boolean waitingStrategy) {
+		this.waitingStrategy = waitingStrategy;
+		double t = waitingStrategy ? 90 : 0;
+		vehicleTypes.BUS_1.setWaitingTimeForArrivals(t);
+		vehicleTypes.BUS_2.setWaitingTimeForArrivals(t);
 	}
 	
 	public Lines getLines() {
@@ -122,7 +126,8 @@ public class Model {
 	}
 	
 	public Schedule findSchedule(Line line, VehicleType vehicleType) {
-		return schedules.get(new HashablePair<Line, VehicleType>(line, vehicleType));
+		HashablePair<Line, VehicleType> p = new HashablePair<Line, VehicleType>(line, vehicleType);
+		return waitingStrategy ? schedulesForWaiting.get(p) : schedules.get(p);
 	}
 	
 	public void reset() {
@@ -133,5 +138,67 @@ public class Model {
 	
 	public double getTotalDepartingTime(Line line) {
 		return matchStartTime - line.getTimeToLastStation();
+	}
+	
+	public void loadSchedules(File file) throws IOException {
+		try(Scanner scanner = new Scanner(file)) {
+			while(scanner.hasNextLine()) {
+				boolean waiting = Boolean.parseBoolean(scanner.nextLine());
+				String lineName = scanner.nextLine();
+				String vehicleTypeName = scanner.nextLine();
+				int count = scanner.nextInt(); scanner.nextLine();
+				
+				HashablePair<Line, VehicleType> p = new HashablePair<Line, VehicleType>(lines.find(lineName), vehicleTypes.find(vehicleTypeName));
+				Schedule schedule = waiting ? schedulesForWaiting.get(p) : schedules.get(p);
+				schedule.clear();
+				
+				for(int i=0; i<count; i++) {
+					schedule.add(Double.parseDouble(scanner.nextLine()));
+				}
+			}
+		}
+	}
+	
+	public void saveSchedules(File file) throws IOException {
+		PrintStream out = new PrintStream(file);
+		
+		for(Line line : lines) {
+			for(VehicleType type : vehicleTypes) {
+				out.println(false);
+				out.println(line.getName());
+				out.println(type.getName());
+				
+				HashablePair<Line, VehicleType> p = new HashablePair<Line, VehicleType>(line, type);
+				Schedule schedule = schedules.get(p);
+				out.println(schedule.size());
+				for(double time : schedule) {
+					out.println(String.valueOf(time));
+				}
+				
+				out.println(true);
+				out.println(line.getName());
+				out.println(type.getName());
+				
+				 p = new HashablePair<Line, VehicleType>(line, type);
+				schedule = schedulesForWaiting.get(p);
+				out.println(schedule.size());
+				for(double time : schedule) {
+					out.println(String.valueOf(time));
+				}
+			}
+		}
+		
+		out.close();
+	}
+	
+	public int getPrice() {
+		int price = 0;
+		for(Line line : lines) {
+			for(VehicleType type : vehicleTypes) {
+				Schedule schedule = findSchedule(line, type);
+				price += schedule.size() * type.getPrice();
+			}
+		}
+		return price;
 	}
 }

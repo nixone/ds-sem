@@ -1,6 +1,6 @@
 # TODO
 
+*	Zobrazovanie ceny danej konfiguracie
 *	Zbieranie statistik
-*	Zobrazovanie jednotlivych zastavok
-* 	Implementovat jednotlivych senderov do anotacii
+*	Agentovy diagram
 ...

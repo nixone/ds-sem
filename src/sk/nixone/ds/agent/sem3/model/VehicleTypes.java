@@ -1,9 +1,9 @@
 package sk.nixone.ds.agent.sem3.model;
 
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 
-public class VehicleTypes extends HashMap<String, VehicleType> implements Iterable<VehicleType> {
+public class VehicleTypes extends LinkedHashMap<String, VehicleType> implements Iterable<VehicleType> {
 	
 	public final VehicleType BUS_1;
 	public final VehicleType BUS_2;
@@ -21,6 +21,10 @@ public class VehicleTypes extends HashMap<String, VehicleType> implements Iterab
 	
 	public void add(VehicleType vehicleType) {
 		put(vehicleType.getName(), vehicleType);
+	}
+	
+	public VehicleType find(String name) {
+		return get(name);
 	}
 
 	@Override

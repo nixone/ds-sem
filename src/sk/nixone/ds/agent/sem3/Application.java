@@ -1,5 +1,7 @@
 package sk.nixone.ds.agent.sem3;
 
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
 
@@ -11,13 +13,18 @@ import sk.nixone.util.AppearanceUtil;
 
 public class Application {
 	public static void main(String[] args) throws IOException {
-		AppearanceUtil.setNiceSwingLookAndFeel();
+		File linesFile = new File("data/lines.txt");
+		File stationLayoutFile = new File("data/station_layout.txt");
+		final File schedulesFile = new File("data/schedules.txt");
 		
 		Randoms randoms = new Randoms();
 		
-		Model model = new Model(new File("model.txt"), randoms);
+		final Model model = new Model(linesFile, randoms);
+		if(schedulesFile.exists()) {
+			model.loadSchedules(schedulesFile);
+		}
 		
-		StationsLayout stationsLayout = new StationsLayout(new File("layout.txt"));
+		StationsLayout stationsLayout = new StationsLayout(stationLayoutFile);
 		
 		Simulation simulation = new Simulation(randoms, model);
 		
@@ -25,5 +32,34 @@ public class Application {
 		frame.setDefaultCloseOperation(SimulationFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
+		
+		frame.addWindowListener(new WindowListener() {
+			@Override
+			public void windowOpened(WindowEvent e) {}
+			
+			@Override
+			public void windowIconified(WindowEvent e) {}
+			
+			@Override
+			public void windowDeiconified(WindowEvent e) {}
+			
+			@Override
+			public void windowDeactivated(WindowEvent e) {}
+			
+			@Override
+			public void windowClosing(WindowEvent e) {
+				try {
+					model.saveSchedules(schedulesFile);
+				} catch(IOException ex) {
+					ex.printStackTrace();
+				}
+			}
+			
+			@Override
+			public void windowClosed(WindowEvent e) {}
+			
+			@Override
+			public void windowActivated(WindowEvent e) {}
+		});
 	}
 }

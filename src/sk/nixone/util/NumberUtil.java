@@ -25,4 +25,15 @@ public class NumberUtil {
 		}
 		return Integer.parseInt(input);
 	}
+	
+	static public String nicePrice(int price) {
+		String output = "";
+		while(price > 1000) {
+			int remainder = price % 1000;
+			price /= 1000;
+			output = String.format("%03d", remainder)+" "+output;
+		}
+		output = price+" "+output;
+		return output;
+	}
 }

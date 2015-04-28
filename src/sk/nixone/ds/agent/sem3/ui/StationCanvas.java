@@ -54,12 +54,12 @@ public class StationCanvas extends HelperCanvas {
 		move(0.2, 0.2);
 		
 		for(Vehicle vehicle : station.getVehicles()) {
+			resetDrawPosition();
 			g.setColor(vehicle.getType().getColor());
 			point(0, 0, 20);
 			progress(0, 0, 100, 30, vehicle.getFullness());
 			str(vehicle.getType().getName()+" ("+vehicle.getPeopleCount()+" / "+vehicle.getType().getCapacity()+")", 0, 0);
 			
-			resetDrawPosition();
 			moveDraw(70, 0);
 			for(Door door : vehicle.getDoors()) {
 				progress(0, 0, 20, 30, door.USAGE.getProgress(currentTime));

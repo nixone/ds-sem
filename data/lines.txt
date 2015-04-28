@@ -1,4 +1,4 @@
-Linka A
+Line A
 AA
 3,2
 123
@@ -45,7 +45,7 @@ ST
 15
 0
 
-Linka B
+Line B
 BA
 1,2
 79
@@ -83,7 +83,7 @@ ST
 30
 0
 
-Linka C
+Line C
 CA
 0,6
 240
