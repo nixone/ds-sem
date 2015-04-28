@@ -93,7 +93,7 @@ public abstract class SimulationFrameBase extends JFrame {
 				.addComponent(tabs)
 		);
 		
-		tabs.setPreferredSize(new Dimension(1000, 600));
+		tabs.setPreferredSize(new Dimension(1150, 600));
 		
 		pack();
 	}

@@ -1,8 +1,11 @@
 package sk.nixone.ds.agent.sem3.ui;
 
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
@@ -12,6 +15,7 @@ import javax.swing.GroupLayout;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.GroupLayout.Alignment;
@@ -30,7 +34,7 @@ public class ConfigPanel extends JPanel {
 	private Model model;
 	
 	private HashMap<HashablePair<Line, VehicleType>, JTextField> inputFields = new HashMap<HashablePair<Line, VehicleType>, JTextField>();
-	private HashMap<HashablePair<Line, VehicleType>, JLabel> inputLabels = new HashMap<HashablePair<Line, VehicleType>, JLabel>();	
+	private HashMap<HashablePair<Line, VehicleType>, JTextArea> inputLabels = new HashMap<HashablePair<Line, VehicleType>, JTextArea>();	
 	
 	private HashMap<Line, JLabel> lineLabels = new HashMap<Line, JLabel>();
 	
@@ -77,6 +81,9 @@ public class ConfigPanel extends JPanel {
 	}
 	
 	private void createLayout() {
+		summaryPanel.setPreferredSize(new Dimension(200, 100));
+		schedulesPanel.setPreferredSize(new Dimension(200, 400));
+		
 		GroupLayout layout = new GroupLayout(this);
 		setLayout(layout);
 		layout.setAutoCreateContainerGaps(true);
@@ -133,9 +140,7 @@ public class ConfigPanel extends JPanel {
 			for(VehicleType type : model.getVehicleTypes()) {
 				HashablePair<Line, VehicleType> p = new HashablePair<Line, VehicleType>(line, type);
 				inputFields.put(p, createTextField(p));
-				JLabel l = new JLabel();
-				l.setFont(l.getFont().deriveFont(Font.PLAIN, 9f));
-				inputLabels.put(p, l);
+				inputLabels.put(p, createTextArea());
 			}
 		}
 	}
@@ -147,6 +152,7 @@ public class ConfigPanel extends JPanel {
 		GridBagConstraints c = new GridBagConstraints();
 		c.weightx = 1;
 		c.weighty = 1;
+		c.insets = new Insets(10, 10, 10, 10);
 		
 		c.anchor = GridBagConstraints.CENTER;
 		
@@ -164,8 +170,10 @@ public class ConfigPanel extends JPanel {
 			c.gridx++;
 		}
 		
-		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridy = 1;
+		c.weightx = 3;
+		c.weighty = 3;
+		c.fill = GridBagConstraints.HORIZONTAL;
 		for(VehicleType type : model.getVehicleTypes()) {
 			c.gridx = 1;
 			for(Line line : model.getLines()) {
@@ -183,6 +191,8 @@ public class ConfigPanel extends JPanel {
 	
 	private JTextField createTextField(final HashablePair<Line, VehicleType> pair) {
 		final JTextField field = new JTextField();
+		field.setMinimumSize(new Dimension(200, 50));
+		field.setHorizontalAlignment(JTextField.CENTER);
 		
 		field.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
@@ -209,6 +219,14 @@ public class ConfigPanel extends JPanel {
 		return field;
 	}
 	
+	private JTextArea createTextArea() {
+		JTextArea area = new JTextArea();
+		area.setLineWrap(true);
+		area.setWrapStyleWord(true);
+		area.setSize(200, 50);
+		return area;
+	}
+	
 	private void onTextFieldChanged(JTextField field, Schedule schedule) {
 		schedule.fromExpression(field.getText());
 		reloadSchedulesData();
@@ -224,14 +242,14 @@ public class ConfigPanel extends JPanel {
 	
 	private void reloadSchedulesData() {
 		for(HashablePair<Line, VehicleType> pair : inputLabels.keySet()) {
-			JLabel label = inputLabels.get(pair);
+			JTextArea area = inputLabels.get(pair);
 			final Schedule schedule = model.findSchedule(pair.getFirst(), pair.getSecond());
 			String content = "";
 			for(double seconds : schedule) {
 				double minutes = seconds/60.;
 				content += String.format("%.1f  ", minutes);
 			}
-			label.setText(content);
+			area.setText(content);
 		}
 	}
 	

@@ -17,13 +17,17 @@ public class SimulationFrame extends SimulationFrameBase {
 		ConfigPanel configPanel = new ConfigPanel(model);
 		addTab("Config", configPanel);
 		
-		StatisticPanel statisticPanel = new StatisticPanel(simulation.getLatePeopleStatistic(), "Late people percentage");
+		StatisticPanel statisticPanel = new StatisticPanel(simulation.getLatePeopleStatistic(), "Late people ratio");
 		simulation.getReplicationEnded().add(statisticPanel);
 		addTab("Late people", statisticPanel);
 		
 		statisticPanel = new TimeStatisticPanel(simulation.getPersonWaitingTimeStatistic(), "Person waiting time for bus");
 		simulation.getReplicationEnded().add(statisticPanel);
 		addTab("Waiting time", statisticPanel);
+		
+		statisticPanel = new StatisticPanel(simulation.getGainedStatistic(), "Gained money by private contractor");
+		simulation.getReplicationEnded().add(statisticPanel);
+		addTab("Gain", statisticPanel);
 	}
 
 }

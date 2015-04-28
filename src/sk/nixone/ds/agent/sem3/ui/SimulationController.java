@@ -1,5 +1,6 @@
 package sk.nixone.ds.agent.sem3.ui;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseWheelListener;
@@ -20,7 +21,7 @@ public class SimulationController extends JPanel {
 	private Thread simulationThread = null;
 	
 	private JLabel replicationsLabel = new JLabel("Replications:");
-	private JTextField replicationsCount = new JTextField("100");
+	private JTextField replicationsCount = new JTextField("250");
 	private JCheckBox observeBox = new JCheckBox("I want to observe");
 	private ProgressController progressController;
 	private JButton startButton = new JButton("Start");
@@ -81,7 +82,6 @@ public class SimulationController extends JPanel {
 						.addComponent(replicationsLabel)
 						.addComponent(replicationsCount)
 						)
-				//.addComponent(observeBox)
 				.addComponent(progressController)
 				.addComponent(startButton)
 				.addComponent(stopButton)
@@ -92,7 +92,6 @@ public class SimulationController extends JPanel {
 						.addComponent(replicationsLabel)
 						.addComponent(replicationsCount)
 						)
-				//.addComponent(observeBox)
 				.addComponent(progressController)
 				.addComponent(startButton)
 				.addComponent(stopButton)

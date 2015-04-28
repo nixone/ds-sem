@@ -85,6 +85,7 @@ public class BoardingPlanner extends ContinualAssistant<SimulationRun, BoardingA
 		message.getDoor().getIn();
 		message.getDoor().USAGE.ended(getSimulation());
 		message.getDoor().USAGE.reset();
+		getSimulation().increaseGain(message.getVehicle().getType().getGainPerPerson());
 		recheck(message);
 	}
 	

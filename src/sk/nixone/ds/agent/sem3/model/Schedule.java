@@ -61,8 +61,8 @@ public class Schedule extends LinkedList<Double> {
 	
 	private void fromListExpression(String listPart) {
 		Scanner scanner = new Scanner(listPart);
-		while(scanner.hasNextInt()) {
-			int minute = scanner.nextInt();
+		while(scanner.hasNextDouble()) {
+			double minute = scanner.nextDouble();
 			double seconds = minute * 60;
 			add(seconds);
 		}
