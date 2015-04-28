@@ -7,6 +7,7 @@ import sk.nixone.ds.agent.sem3.Message;
 import sk.nixone.ds.agent.sem3.Messages;
 import sk.nixone.ds.agent.sem3.SimulationRun;
 import sk.nixone.ds.agent.sem3.agents.ExitingAgent;
+import sk.nixone.ds.agent.sem3.model.Vehicle;
 
 public class ExitingManager extends Manager<SimulationRun, ExitingAgent> {
 
@@ -16,6 +17,11 @@ public class ExitingManager extends Manager<SimulationRun, ExitingAgent> {
 
 	@HandleMessage(code=Messages.VEHICLE_AT_STATION)
 	public void onVehicleAtStation(Message message) {
+		Vehicle vehicle = message.getVehicle();
+		if(vehicle.getType() != getAgent().getVehicleTypes().MICROBUS) {
+			getSimulation().getBusFullnessStatistic().add(vehicle.getFullness());
+		}
+		
 		message.setAddressee(getAgent().findAssistant(Components.EXITING_PLANNER));
 		startContinualAssistant(message);
 	}

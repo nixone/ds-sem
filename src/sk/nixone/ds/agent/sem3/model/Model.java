@@ -76,8 +76,6 @@ public class Model {
 		Station furthestStation = stations.getStationWithLongestTravel();
 		matchStartTime = furthestStation.getTimeToLastStation()+ARRIVAL_TIME_OFFSET_START;
 		
-		System.out.println(matchStartTime);
-		
 		for(Station station : stations) {
 			double start = matchStartTime-ARRIVAL_TIME_OFFSET_START-station.getTimeToLastStation();
 			double stop = matchStartTime-ARRIVAL_TIME_OFFSET_STOP-station.getTimeToLastStation();

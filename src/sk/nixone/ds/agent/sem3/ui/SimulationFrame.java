@@ -28,6 +28,10 @@ public class SimulationFrame extends SimulationFrameBase {
 		statisticPanel = new StatisticPanel(simulation.getGainedStatistic(), "Gained money by private contractor");
 		simulation.getReplicationEnded().add(statisticPanel);
 		addTab("Gain", statisticPanel);
+		
+		statisticPanel = new StatisticPanel(simulation.getBusFullnessStatistic(), "Bus fullness when exiting");
+		simulation.getReplicationEnded().add(statisticPanel);
+		addTab("Fullness", statisticPanel);
 	}
 
 }

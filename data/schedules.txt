@@ -9,19 +9,19 @@ Bus 1
 false
 Line A
 Bus 2
-distribute:17
+distribute:16
 true
 Line A
 Bus 2
-distribute:20
+distribute:18
 false
 Line A
 Microbus
-static:57 2 3
+static:59 0.5 2
 true
 Line A
 Microbus
-static:58 1.5 10
+static:58 1 13
 false
 Line B
 Bus 1
@@ -41,7 +41,7 @@ distribute:10
 false
 Line B
 Microbus
-static:58 5 2
+static:62 0.5 1
 true
 Line B
 Microbus
@@ -65,8 +65,8 @@ distribute:10
 false
 Line C
 Microbus
-static:49.5 2 8
+static:53 0.5 10
 true
 Line C
 Microbus
-static:62 2 3
+

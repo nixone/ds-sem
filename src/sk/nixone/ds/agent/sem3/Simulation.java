@@ -14,6 +14,7 @@ public class Simulation extends sk.nixone.ds.agent.Simulation {
 	private SequenceStatistic latePeopleStatistic = new SequenceStatistic();
 	private SequenceStatistic personWaitingTimeStatistic = new SequenceStatistic();
 	private SequenceStatistic gainedStatistic = new SequenceStatistic();
+	private SequenceStatistic busFullnessStatistic = new SequenceStatistic();
 	
 	private SimulationRun simulationRun;
 	
@@ -28,6 +29,7 @@ public class Simulation extends sk.nixone.ds.agent.Simulation {
 		latePeopleStatistic.clear();
 		personWaitingTimeStatistic.clear();
 		gainedStatistic.clear();
+		busFullnessStatistic.clear();
 	}
 
 	@Override
@@ -44,6 +46,7 @@ public class Simulation extends sk.nixone.ds.agent.Simulation {
 		latePeopleStatistic.add(1.-((double)simulationRun.getServedPeople() / simulationRun.getTotalPeople()));
 		personWaitingTimeStatistic.add(simulationRun.getPersonWaitingTime().getMean());
 		gainedStatistic.add(simulationRun.getGained());
+		busFullnessStatistic.add(simulationRun.getBusFullnessStatistic().getMean());
 	}
 	
 	public SequenceStatistic getLatePeopleStatistic() {
@@ -56,6 +59,10 @@ public class Simulation extends sk.nixone.ds.agent.Simulation {
 	
 	public SequenceStatistic getGainedStatistic() {
 		return gainedStatistic;
+	}
+	
+	public SequenceStatistic getBusFullnessStatistic() {
+		return busFullnessStatistic;
 	}
 	
 	protected SimulationRun createSimulationRun() {

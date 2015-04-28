@@ -27,6 +27,8 @@ public class SimulationRun extends sk.nixone.ds.agent.SimulationRun {
 	
 	private SequenceStatistic personWaitingTime = new SequenceStatistic();
 	
+	private SequenceStatistic busFullnessStatistic = new SequenceStatistic();
+	
 	private int gained = 0;
 	
 	public SimulationRun(Randoms randoms, Model model) {
@@ -41,6 +43,10 @@ public class SimulationRun extends sk.nixone.ds.agent.SimulationRun {
 	
 	public SequenceStatistic getPersonWaitingTime() {
 		return personWaitingTime;
+	}
+	
+	public SequenceStatistic getBusFullnessStatistic() {
+		return busFullnessStatistic;
 	}
 	
 	public void increaseGain(int by) {

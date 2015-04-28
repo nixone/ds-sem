@@ -70,17 +70,17 @@ Pri stratégii bez čakania sa autobus okamžite po naplnení pasažiermi vyprav
 
  Vozidlo | Linka A | Linka B | Linka C
  --- | --- | --- | ---
- **Autobus č. 2 x** | **17** | **7** | **7**
- *Výprava* | 3m +~3m | 17m +~5.5m | 11.3m +~5m
- **Mikrobus x** | **3** | **2** | **8**
- *Výprava* | 57m +2m | 58m +5m | 49.5m +2m
+ **Autobus č. 2 x** | **16** | **7** | **7**
+ *Výprava* | 3.3m +~3m | 17m +~5.5m | 11.8m +~5m
+ **Mikrobus x** | **2** | **1** | **10**
+ *Výprava* | 59m +0.5m | 62m +0.5m | 53m +0.5m
 
- Varianta | % ľudí, ktorí nestihli zápas | Čas čakania na odvezenie | Zisk súkr. dopravcu
+ Varianta | % ľudí, ktorí nestihli zápas | Čas čakania na odvezenie | Plnosť autobusov | Zisk súkr. dopravcu
  --- | --- | --- | ---
- Bez súkromného dopravcu | 6.9% | 5 minút 46 sekúnd | -
- So súkromným dopravcom | 5.0% | 5 minút 13 sekúnd | 3115 Kč
+ Bez súkr. | 7.5% | 6m 29s | 98.5% | -
+ So súkr. | 5.0% | 5m 55s | 98.2% | 3118 Kč
 
-Náklady takto vypravených autobusov: **199 950 000 Kč**.
+Náklady takto vypravených autobusov: **193 500 000 Kč**.
  
 ### Stratégia s čakaním 1.5 minúty
 
@@ -88,25 +88,31 @@ Pri stratégii s čakaním autobus po vyzdvihnutí všetkých čakajúcich (v pr
 
  Vozidlo | Linka A | Linka B | Linka C
  --- | --- | --- | ---
- **Autobus č. 2 x** | **20** | **10** | **10**
- *Výprava* | 0m +~0.3-3.5m | 10m +~3-6m | 5.8m +~4-7m
- **Mikrobus x** | **10** | - | **3**
- *Výprava* | 58m +1.5m | - | 62m +2m
+ **Autobus č. 2 x** | **18** | **10** | **10**
+ *Výprava* | 0m +~0.3-3.5m | 10m +~3-6m | 6.3m +~4-7m
+ **Mikrobus x** | **13** | - | -
+ *Výprava* | 58m +1m | - | -
 
- Varianta | % ľudí, ktorí nestihli zápas | Čas čakania na odvezenie | Zisk súkr. dopravcu
+ Varianta | % ľudí, ktorí nestihli zápas | Čas čakania na odvezenie | Plnosť autobusov | Zisk súkr. dopravcu
  --- | --- | --- | ---
- Bez súkromného dopravcu | 7.9% | 3 minúty 7 sekúnd | -
- So súkromným dopravcom | 5.6% | 2 minúty 52 sekúnd | 3102 Kč
+ Bez súkr. | 7.7% | 3 minúty 40 sekúnd | 98.0% | -
+ So súkr. | 5.4% | 3 minúty 23 sekúnd | 98.0% | 3120 Kč
 
-Náklady takto vypravených autobusov: **258 000 000 Kč**.
+Náklady takto vypravených autobusov: **245 100 000 Kč**.
 
 ## Pozorovania
 
 1.	**Čakanie je výhodné pre cestujúceho, nevýhodné pre dopravcu.** Ako môžeme vidieť, čakanie na zastávke radikálne redukuje čas, ktorý cestujúci musí stráviť čakaním na vozidlo. Na druhej strane je potrebné vypraviť väčšie množstvo autobusov, a preto je pre dopravcu táto varianta neodporúčaná.
 2. **Dopravca by dokázal využil viac mikrobusov.** Pri simulovaní je jasne vidieť, že v prípade, ak by dopravca mal dostupných viac mikrobusov, priestor na ich zúžitkovanie by stále existoval. Maximálny zárobok dopravcu pri zvoze (mikrobusy "to nestihnú otočiť" od času svojej výpravy) je 3120 Kč, a teda v oboch prípadoch sa zisk súkromného dopravcu pohybuje až takmer pri hrane jeho maximálnej možnej hodnoty.
 
+## Správnosť riešenia
+
+Je zrejmé, že čím plnšie sú autobusy, ktoré prichádzajú ku štadiónu, tým lacnejšie je celkové riešenie. Na vyhodnotenie, ako plné sú autobusy používame nami vytvorenú štatistiku. Jej hodnota sa pri všetkých prípadoch pohybovala na hodnote rovnej alebo vyššej ako 98%. Takúto hodnotu pre zaplnenie autobusov môžeme intuitívne pokladať za veľmi dobrú, až optimistickú, nakoľko v reálnom svete sa s takto využitými dopravnými prostredkami nestretávame.
+
+**Nakoľko dokážeme "využívať kapacitu autobusov na 98%" a zároveň akékoľvek zníženie počtu autobusov na ktorejkoľvek linke by porušilo podmienky zvozu cestujúcich, považujeme naše riešenie za vyhovujúce.**
+
 ## Vyhodnotenie a záver
 
-Na základe zistených pozorovaní a simulácie môžeme dopravcovi jasne odporučiť **zvoliť stratégiu zvozu cestujúcich bez čakania s použitím 31 autobusov č. 2**.
+Na základe zistených pozorovaní a simulácie môžeme dopravcovi jasne odporučiť **zvoliť stratégiu zvozu cestujúcich bez čakania s použitím 30 autobusov č. 2**.
 
-Súkromnému dopravcovi môžeme odporučiť pri tejto stratégii rozdeliť jeho **13 mikrobusov pomerom 3:2:8 na linky A:B:C**.
+Súkromnému dopravcovi môžeme odporučiť pri tejto stratégii rozdeliť jeho **13 mikrobusov pomerom 2:1:10 na linky A:B:C**.

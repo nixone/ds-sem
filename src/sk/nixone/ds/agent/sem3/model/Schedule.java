@@ -8,7 +8,7 @@ public class Schedule extends LinkedList<Double> {
 	
 	private static final double ESTIMATION_TIME_RESOLUTION = 15;
 	
-	private static final double ESTIMATION_CORRECT_FACTOR = 1.;
+	private static final double ESTIMATION_CORRECT_FACTOR = 0.9125;
 	
 	private Model model;
 	
