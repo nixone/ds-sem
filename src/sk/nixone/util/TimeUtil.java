@@ -4,6 +4,10 @@ public class TimeUtil {
 	
 	
 	public static String toString(long total) {
+		if(total < 0) {
+			total = 0;
+		}
+		
 		long seconds = total % 60; total /= 60;
 		long minutes = total % 60; total /= 60;
 		long hours = total % 24; total /= 24;

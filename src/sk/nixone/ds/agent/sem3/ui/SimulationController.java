@@ -43,6 +43,8 @@ public class SimulationController extends JPanel {
 	}
 	
 	private void createComponents() {
+		replicationsCount.setMaximumSize(new Dimension(150, 30));
+		
 		observeBox.setSelected(true);
 		stopButton.setEnabled(false);
 		

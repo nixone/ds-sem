@@ -17,11 +17,11 @@ distribute:18
 false
 Line A
 Microbus
-static:59 0.5 2
+
 true
 Line A
 Microbus
-static:58 1 13
+
 false
 Line B
 Bus 1
@@ -41,7 +41,7 @@ distribute:10
 false
 Line B
 Microbus
-static:62 0.5 1
+
 true
 Line B
 Microbus
@@ -65,7 +65,7 @@ distribute:10
 false
 Line C
 Microbus
-static:53 0.5 10
+
 true
 Line C
 Microbus

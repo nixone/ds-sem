@@ -1,10 +1,10 @@
 package sk.nixone.ds.agent.sem3.ui;
 
-import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 
-import javax.swing.GroupLayout;
 import javax.swing.JPanel;
-import javax.swing.GroupLayout.Alignment;
 
 import sk.nixone.ds.agent.sem3.model.Model;
 import sk.nixone.ds.core.Emitter;
@@ -25,27 +25,24 @@ public class VisualisationPanel extends JPanel {
 		
 		townCanvas.setStationCanvas(stationCanvas);
 		
-		townCanvas.setPreferredSize(new Dimension(800, 600));
-		stationCanvas.setPreferredSize(new Dimension(600, 600));
-		
 		createLayout();
 	}
 	
 	private void createLayout() {
-		GroupLayout layout = new GroupLayout(this);
+		GridBagLayout layout = new GridBagLayout();
 		setLayout(layout);
-		layout.setAutoCreateContainerGaps(true);
-		layout.setAutoCreateGaps(true);
+		GridBagConstraints c = new GridBagConstraints();
+		c.insets = new Insets(5, 5, 5, 5);
+		c.weighty = 1;
+		c.gridy = 0;
+		c.fill = GridBagConstraints.BOTH;
 		
-		layout.setHorizontalGroup(layout.createSequentialGroup()
-				.addComponent(townCanvas)
-				.addComponent(stationCanvas)
-				);
-		
-		layout.setVerticalGroup(layout.createParallelGroup(Alignment.CENTER)
-				.addComponent(townCanvas)
-				.addComponent(stationCanvas)
-				);
+		c.weightx = 5;
+		c.gridx = 0;
+		add(townCanvas, c);
+		c.weightx = 3;
+		c.gridx = 1;
+		add(stationCanvas, c);
 	}
 	
 	public Emitter<Double> getRefresher() {

@@ -64,6 +64,8 @@ Experimentami s našim simulačným modelom sme dospeli k dátam, na základe kt
 
 *Časové značky sú udávané od momentu 1h 13 minút pred začiatkom zápasu, nakoľko tento moment značí začiatok prichádzania cestujúcich na zastávky.* 
 
+*Všetky dáta boli získané po vykonaní 1000 replikácií simulácie.*
+
 ### Stratégia bez čakania
 
 Pri stratégii bez čakania sa autobus okamžite po naplnení pasažiermi vypraví na cestu na ďaľšiu zastávku.
@@ -77,8 +79,8 @@ Pri stratégii bez čakania sa autobus okamžite po naplnení pasažiermi vyprav
 
  Varianta | % ľudí, ktorí nestihli zápas | Čas čakania na odvezenie | Plnosť autobusov | Zisk súkr. dopravcu
  --- | --- | --- | --- | ---
- Bez súkr. | 7.5% | 6m 29s | 98.5% | -
- So súkr. | 5.0% | 5m 55s | 98.2% | 3118 Kč
+ Bez súkr. | 7.51% | 6m 30s | 98.54% | -
+ So súkr. | 5.09% | 5m 54s | 98.18% | 3117 Kč
 
 Náklady takto vypravených autobusov: **193 500 000 Kč**.
  
@@ -95,8 +97,8 @@ Pri stratégii s čakaním autobus po vyzdvihnutí všetkých čakajúcich (v pr
 
  Varianta | % ľudí, ktorí nestihli zápas | Čas čakania na odvezenie | Plnosť autobusov | Zisk súkr. dopravcu
  --- | --- | --- | --- | ---
- Bez súkr. | 7.7% | 3m 40s | 98.0% | -
- So súkr. | 5.4% | 3m 23s | 98.0% | 3120 Kč
+ Bez súkr. | 7.73% | 3m 40s | 97.96% | -
+ So súkr. | 5.37% | 3m 23s | 98.02% | 3119 Kč
 
 Náklady takto vypravených autobusov: **245 100 000 Kč**.
 
@@ -107,9 +109,9 @@ Náklady takto vypravených autobusov: **245 100 000 Kč**.
 
 ## Správnosť riešenia
 
-Je zrejmé, že čím plnšie sú autobusy, ktoré prichádzajú ku štadiónu, tým efektívnejšie a výhodnejšie je riešenie. Na vyhodnotenie, ako plné sú autobusy používame nami vytvorenú štatistiku. Jej hodnota sa pri všetkých prípadoch pohybovala na hodnote rovnej alebo vyššej ako 98%. Takúto hodnotu pre zaplnenie autobusov môžeme intuitívne pokladať za veľmi dobrú, až optimistickú, nakoľko v reálnom svete sa s takto využitými dopravnými prostredkami nestretávame.
+Je zrejmé, že čím plnšie sú autobusy, ktoré prichádzajú ku štadiónu, tým efektívnejšie a výhodnejšie je riešenie. Na vyhodnotenie, ako plné sú autobusy používame nami vytvorenú štatistiku. Jej hodnota sa pri všetkých prípadoch pohybovala na hodnote vyššej ako 97%. Takúto hodnotu pre zaplnenie autobusov môžeme intuitívne pokladať za veľmi dobrú, až optimistickú, nakoľko v reálnom svete sa s takto využitými dopravnými prostredkami nestretávame.
 
-**Nakoľko dokážeme "využívať kapacitu autobusov na 98%" a zároveň akékoľvek zníženie počtu autobusov na ktorejkoľvek linke by porušilo podmienky zvozu cestujúcich, považujeme naše riešenie za vyhovujúce.**
+**Nakoľko dokážeme "využívať kapacitu autobusov na 97%" a zároveň akékoľvek zníženie počtu autobusov na ktorejkoľvek linke by porušilo podmienky zvozu cestujúcich, považujeme naše riešenie za vyhovujúce.**
 
 ## Vyhodnotenie a záver
 

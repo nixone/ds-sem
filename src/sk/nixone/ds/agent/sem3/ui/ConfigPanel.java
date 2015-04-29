@@ -81,9 +81,6 @@ public class ConfigPanel extends JPanel {
 	}
 	
 	private void createLayout() {
-		summaryPanel.setPreferredSize(new Dimension(200, 100));
-		schedulesPanel.setPreferredSize(new Dimension(200, 400));
-		
 		GroupLayout layout = new GroupLayout(this);
 		setLayout(layout);
 		layout.setAutoCreateContainerGaps(true);
@@ -152,7 +149,7 @@ public class ConfigPanel extends JPanel {
 		GridBagConstraints c = new GridBagConstraints();
 		c.weightx = 1;
 		c.weighty = 1;
-		c.insets = new Insets(10, 10, 10, 10);
+		c.insets = new Insets(2, 10, 2, 10);
 		
 		c.anchor = GridBagConstraints.CENTER;
 		
@@ -223,7 +220,7 @@ public class ConfigPanel extends JPanel {
 		JTextArea area = new JTextArea();
 		area.setLineWrap(true);
 		area.setWrapStyleWord(true);
-		area.setSize(200, 50);
+		area.setSize(100, 50);
 		return area;
 	}
 	

@@ -61,6 +61,8 @@ By experiments with our simulation model we came to data, on which we can clearl
 
 *Timestamps are indicated since the moment 1h 13 minutes before the ice hockey game start, since this moment marks the start of people arriving to stations.*
 
+*All data were aquired after running 1000 simulation replications.*
+
 ### Strategy without waiting
 
 With strategy without waiting, the bus leaves immediately after filling up or getting all people from the station aboard.
@@ -74,8 +76,8 @@ With strategy without waiting, the bus leaves immediately after filling up or ge
 
  Variant | % people who missed the game | Wait time for bus | Bus usage | Private gain
  --- | --- | --- | --- | ---
- Without private transporter | 7.5% | 6m 29s | 98.5% | -
- With private transporter | 5.0% | 5m 55s | 98.2% | 3118 Kč
+ Without private transporter | 7.51% | 6m 30s | 98.54% | -
+ With private transporter | 5.09% | 5m 54s | 98.18% | 3117 Kč
 
 Expenses using this bus configuration: **193 500 000 Kč**.
  
@@ -92,8 +94,8 @@ With strategy with waiting the bus is waiting for 1.5 minutes after it picks up 
 
  Variant | % people who missed the game | Wait time for bus | Bus usage | Private gain
  --- | --- | --- | --- | ---
- Without private transporter | 7.7% | 3m 40s | 98.0% | -
- With private transporter | 5.4% | 3m 23s | 98.0% | 3120 Kč
+ Without private transporter | 7.73% | 3m 40s | 97.96% | -
+ With private transporter | 5.37% | 3m 23s | 98.02% | 3119 Kč
 
 Expenses using this bus configuration: **245 100 000 Kč**.
 
@@ -104,9 +106,9 @@ Expenses using this bus configuration: **245 100 000 Kč**.
 
 ## Correctness of the solution
 
-It is obvious that more used are the buses, more effective is the final solution. To see, how full our buses are, we evaluate a statistic. Its value in all solutions doesn't fall under 98%. This value describing how effectively we use our buses can be intuitively understood as very good, even optimistic, since in real life we don't usually see transport vehicles used this well.
+It is obvious that more used are the buses, more effective is the final solution. To see, how full our buses are, we evaluate a statistic. Its value in all solutions doesn't fall under 97%. This value describing how effectively we use our buses can be intuitively understood as very good, even optimistic, since in real life we don't usually see transport vehicles used this well.
 
-**Since we can "use our buses to 98%" and also any descrease in bus number on any line would violate the service quality conditions, we accept our solution as correct and acceptable.**
+**Since we can "use our buses to 97%" and also any descrease in bus number on any line would violate the service quality conditions, we accept our solution as correct and acceptable.**
 
 ## Evaluation and conclusion
 

@@ -72,12 +72,12 @@ public class StatisticPanel extends JPanel implements Emitter<Object> {
 			confidenceTop.setVisible(false);
 			confidenceAppendix.setVisible(false);
 		}
-		confidenceLabel.setFont(confidenceLabel.getFont().deriveFont(24f));
-		confidenceSuffix.setFont(confidenceSuffix.getFont().deriveFont(24f));
-		confidenceBottom.setFont(confidenceBottom.getFont().deriveFont(24f));
-		confidenceSeparator.setFont(confidenceSeparator.getFont().deriveFont(24f));
-		confidenceTop.setFont(confidenceTop.getFont().deriveFont(24f));
-		confidenceAppendix.setFont(confidenceAppendix.getFont().deriveFont(24f));
+		confidenceLabel.setFont(confidenceLabel.getFont().deriveFont(18f));
+		confidenceSuffix.setFont(confidenceSuffix.getFont().deriveFont(18f));
+		confidenceBottom.setFont(confidenceBottom.getFont().deriveFont(18f));
+		confidenceSeparator.setFont(confidenceSeparator.getFont().deriveFont(18f));
+		confidenceTop.setFont(confidenceTop.getFont().deriveFont(18f));
+		confidenceAppendix.setFont(confidenceAppendix.getFont().deriveFont(18f));
 		confidenceBottom.setFont(confidenceBottom.getFont().deriveFont(Font.BOLD));
 		confidenceTop.setFont(confidenceTop.getFont().deriveFont(Font.BOLD));
 		
@@ -86,10 +86,9 @@ public class StatisticPanel extends JPanel implements Emitter<Object> {
 		axis.setAutoRangeIncludesZero(false);
 		
 		chartPanel = new ChartPanel(chart);
-		chartPanel.setPreferredSize(new Dimension(800, 600));
 		
-		meanLabel.setFont(meanLabel.getFont().deriveFont(24f));
-		meanData.setFont(meanData.getFont().deriveFont(30f).deriveFont(Font.BOLD));
+		meanLabel.setFont(meanLabel.getFont().deriveFont(18f));
+		meanData.setFont(meanData.getFont().deriveFont(22f).deriveFont(Font.BOLD));
 	}
 
 	/**
