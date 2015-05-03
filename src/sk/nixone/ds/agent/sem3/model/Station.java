@@ -24,9 +24,15 @@ public class Station {
 	
 	private HashSet<Vehicle> vehicles = new HashSet<Vehicle>();
 	
+	private HashSet<Line> lines = new HashSet<Line>();
+	
 	public Station(String name, int capacity) {
 		this.name = name;
 		peopleArrivalCount = capacity;
+	}
+	
+	public HashSet<Line> getLines() {
+		return lines;
 	}
 	
 	public HashSet<Vehicle> getVehicles() {

@@ -8,7 +8,9 @@ public class Schedule extends LinkedList<Double> {
 	
 	private static final double ESTIMATION_TIME_RESOLUTION = 15;
 	
-	private static final double ESTIMATION_CORRECT_FACTOR = 0.9125;
+	private static final double ESTIMATION_CORRECT_TIME = 0;
+	private static final double ESTIMATION_CORRECT_FACTOR_GLOBAL = 1;
+	private static final double ESTIMATION_CORRECT_FACTOR_LOCAL = 0.7575;
 	
 	private Model model;
 	
@@ -76,13 +78,14 @@ public class Schedule extends LinkedList<Double> {
 		int servedCapacity = 0;
 		while(availableVehicleCount > 0 && time < model.getMatchStartTime()) {
 			double estimatedPeople = line.estimateCumulativePeople(time, vehicleType.getWaitingTimeForArrivals());
-			estimatedPeople *= ESTIMATION_CORRECT_FACTOR;
+			estimatedPeople *= ESTIMATION_CORRECT_FACTOR_GLOBAL;
 			estimatedPeople -= servedCapacity;
+			estimatedPeople *= ESTIMATION_CORRECT_FACTOR_LOCAL;
 			
 			if(estimatedPeople >= vehicleType.getCapacity()) {
 				availableVehicleCount--;
 				servedCapacity += vehicleType.getCapacity();
-				add(time);
+				add(Math.max(0, time + ESTIMATION_CORRECT_TIME));
 			}
 			
 			time += ESTIMATION_TIME_RESOLUTION;

@@ -24,6 +24,14 @@ public class Lines extends LinkedHashMap<String, Line> implements Iterable<Line>
 		}
 	}
 	
+	public void setStationLineOwnership() {
+		for(Line line : this) {
+			for(Station station : line) {
+				station.getLines().add(line);
+			}
+		}
+	}
+	
 	public void reset() {
 		// nothing to do
 	}

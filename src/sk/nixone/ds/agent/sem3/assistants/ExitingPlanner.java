@@ -20,6 +20,9 @@ public class ExitingPlanner extends ContinualAssistant<SimulationRun, ExitingAge
 
 	@HandleMessage(code=Messages.start)
 	public void onVehicleArrival(Message message) {
+		int people = message.getVehicle().getPeopleCount();
+		getSimulation().increaseServedPeople(message.getVehicle().getLine(), people);
+		getSimulation().increaseServedPeople(people);
 		recheck(message);
 	}
 	
@@ -27,7 +30,7 @@ public class ExitingPlanner extends ContinualAssistant<SimulationRun, ExitingAge
 		Vehicle vehicle = message.getVehicle();
 		
 		// if person can exit, exit him
-		if(!vehicle.isEmpty() && vehicle.hasAvailableDoors()) {
+		if(vehicle.hasPeopleInside() && vehicle.hasAvailableDoors()) {
 			Vehicle.Door door = vehicle.getAvailableDoor();
 			Person person = vehicle.getFirstPerson();
 			door.occupy(person);
@@ -40,7 +43,7 @@ public class ExitingPlanner extends ContinualAssistant<SimulationRun, ExitingAge
 			msg.setCode(Messages.EXITING_FINISHED);
 			hold(usageTime, msg);
 			
-			//recheck(message);
+			recheck(message);
 		}
 		// or if we are done, done...
 		else if(vehicle.isEmpty() && !vehicle.hasOccupiedDoor()) {
@@ -50,7 +53,6 @@ public class ExitingPlanner extends ContinualAssistant<SimulationRun, ExitingAge
 	
 	@HandleMessage(code=Messages.EXITING_FINISHED)
 	public void onEnteringFinished(Message message) {
-		getSimulation().increaseServedPeople();
 		message.getDoor().leaveBus();
 		message.getDoor().USAGE.ended(getSimulation());
 		message.getDoor().USAGE.reset();

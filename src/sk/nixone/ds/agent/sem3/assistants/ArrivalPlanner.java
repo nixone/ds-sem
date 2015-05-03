@@ -9,6 +9,7 @@ import sk.nixone.ds.agent.sem3.Message;
 import sk.nixone.ds.agent.sem3.Messages;
 import sk.nixone.ds.agent.sem3.SimulationRun;
 import sk.nixone.ds.agent.sem3.agents.SurroundingAgent;
+import sk.nixone.ds.agent.sem3.model.Line;
 import sk.nixone.ds.agent.sem3.model.Person;
 import sk.nixone.ds.agent.sem3.model.Station;
 
@@ -32,6 +33,9 @@ public class ArrivalPlanner extends ContinualAssistant<SimulationRun, Surroundin
 		
 		if(time <= station.getLatestArrival()) {
 			if(time >= station.getEarliestArrival() && station.canPeopleArrive()) {
+				for(Line line : station.getLines()) {
+					getSimulation().increaseTotalPeople(line);
+				}
 				getSimulation().increaseTotalPeople();
 				Person person = new Person(station);
 				station.addPerson(person);

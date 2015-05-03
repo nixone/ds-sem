@@ -1,6 +1,9 @@
 package sk.nixone.ds.agent.sem3;
 
+import java.util.HashMap;
+
 import sk.nixone.ds.agent.Agent;
+import sk.nixone.ds.agent.sem3.model.Line;
 import sk.nixone.ds.agent.sem3.model.Model;
 import sk.nixone.ds.core.Randoms;
 import sk.nixone.ds.core.SequenceStatistic;
@@ -15,6 +18,7 @@ public class Simulation extends sk.nixone.ds.agent.Simulation {
 	private SequenceStatistic personWaitingTimeStatistic = new SequenceStatistic();
 	private SequenceStatistic gainedStatistic = new SequenceStatistic();
 	private SequenceStatistic busFullnessStatistic = new SequenceStatistic();
+	private HashMap<Line, SequenceStatistic> linesLateStatistic = new HashMap<Line, SequenceStatistic>();
 	
 	private SimulationRun simulationRun;
 	
@@ -22,6 +26,10 @@ public class Simulation extends sk.nixone.ds.agent.Simulation {
 		super();
 		this.randoms = randoms;
 		this.model = model;
+		
+		for(Line line : model.getLines()) {
+			linesLateStatistic.put(line, new SequenceStatistic());
+		}
 	}
 	
 	@Override
@@ -30,6 +38,10 @@ public class Simulation extends sk.nixone.ds.agent.Simulation {
 		personWaitingTimeStatistic.clear();
 		gainedStatistic.clear();
 		busFullnessStatistic.clear();
+		
+		for(Line line : model.getLines()) {
+			linesLateStatistic.get(line).clear();
+		}
 	}
 
 	@Override
@@ -47,6 +59,17 @@ public class Simulation extends sk.nixone.ds.agent.Simulation {
 		personWaitingTimeStatistic.add(simulationRun.getPersonWaitingTime().getMean());
 		gainedStatistic.add(simulationRun.getGained());
 		busFullnessStatistic.add(simulationRun.getBusFullnessStatistic().getMean());
+		
+		for(Line line : model.getLines()) {
+			linesLateStatistic.get(line).add(1.-(
+					(double)simulationRun.getServedPeople(line) / simulationRun.getTotalPeople(line)
+				)
+			);
+		}
+	}
+	
+	public SequenceStatistic getLineLateStatistic(Line line) {
+		return linesLateStatistic.get(line);
 	}
 	
 	public SequenceStatistic getLatePeopleStatistic() {

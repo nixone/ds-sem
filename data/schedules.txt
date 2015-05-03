@@ -9,7 +9,7 @@ Bus 1
 false
 Line A
 Bus 2
-distribute:16
+static:3 3 14
 true
 Line A
 Bus 2
@@ -33,7 +33,7 @@ Bus 1
 false
 Line B
 Bus 2
-distribute:7
+static:11 3 6
 true
 Line B
 Bus 2
@@ -57,7 +57,7 @@ Bus 1
 false
 Line C
 Bus 2
-distribute:7
+static:13 5 6
 true
 Line C
 Bus 2

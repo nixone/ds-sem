@@ -133,6 +133,10 @@ public class Vehicle {
 		return getPeopleCount() >= getType().getCapacity();
 	}
 	
+	public boolean hasPeopleInside() {
+		return people.size() > 0;
+	}
+	
 	public boolean isEmpty() {
 		return getPeopleCount() == 0;
 	}

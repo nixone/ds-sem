@@ -121,4 +121,8 @@ public class Line implements Iterable<Station> {
 		}
 		return people;
 	}
+	
+	public double getTimeOfTurnArounds(int number) {
+		return number * getTimeToLastStation()+(number-1)*timeToNextStation.get(getLastStation());
+	}
 }

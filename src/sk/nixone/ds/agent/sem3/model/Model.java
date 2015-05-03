@@ -72,6 +72,7 @@ public class Model {
 		}
 		
 		lines.updateTimesToLastStation();
+		lines.setStationLineOwnership();
 		
 		Station furthestStation = stations.getStationWithLongestTravel();
 		matchStartTime = furthestStation.getTimeToLastStation()+ARRIVAL_TIME_OFFSET_START;
