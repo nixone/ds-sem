@@ -39,6 +39,13 @@ Súčasťou zostaveného programu je takisto animátor, pomocou ktorého môže 
 
 *Po kliknutí na jednotlivé zastávky je možné zobraziť detail nastupovania ľudí do konkrétnych autobusov na zastávkach.*
 
+## Vlastné štatistiky
+
+Jednou z úloh semestrálnej práce bolo navrhnúť a vyhodnotiť vlastné štatistiky. My sme navrhli tieto:
+
+*	Plnosť autobusu - Popisuje percentuálne zaplnenie autobusu pri príchode na štadión. Táto štatistika sa ukázala počas experimentovania ako vhodná na ich intuitívne usmerňovanie.
+*	Podiel zmeškania na konkrétnych linkách - Pre každú linku popisuje percenuálny podiel ľudí, ktorí z tej linky nestihli zápas. Numerické výsledky tejto štatistiky sú iba odhadové a popisné, nakoľko sa linky križujú a nie je jasné, ku ktorej linke započítať cestujúcich, ktorí prídu na zastávky, kde sa križuje viacero liniek. Tieto štatistiky sa však ukázali ako najprospešnejšie, nakoľko jasne udali, na ktorej linke je potrebné experimentovať s výpravou autobusov, nakoľko bolo jasné, ktorá linka zhoršuje celkové štatistiky.
+
 # Simulačná štúdia
 
 Pri vypracovaní neboli poskytnuté presné špecifikácie niektorých častí systému, a teda sme mali postupovať pri vypracovávaní logicky, učiniť vlastné ale podložené rozhodnutia.
@@ -50,9 +57,13 @@ Jedným z takýchto rozhodnutí je **ignorácia prvého typu autobusu**. Je úpl
 
 ## 2. Skúška kumulatívnej predpovede
 
-Veľmi dôležitým rozhodnutím pri vypravovaní autobusov je **časové oneskorenie jednotlivých autobusov na danej linke**. Nakoľko máme veľmi podrobné informácie o príchodoch ľudí na zastávky, je vcelku jednoduché zostaviť tzv. *kumulatívnu predpoveď počtu ľudí na zastávke* pre čas, ktorý ešte nenastal. Toto je funkcia pre danú linku, ktorá nám pre určitý čas vráti predpoveď počtu ľudí, ktorí sa tam v tomto čase budú nachádzať, ak ich nikto nevyzdvihne. Nakoľko presne vieme, aký čas nám trva dostaviť sa na zastávku, a koľko tam v tom čase bude ľudí, je veľmi jednoduché následne zostaviť sekvenciu výprav autobusov tak, aby sme maximalizovali využitie autobusov ale minimalizovali čakanie ľudí na zastávkach.
+Veľmi dôležitým rozhodnutím pri vypravovaní autobusov je **časové oneskorenie jednotlivých autobusov na danej linke**. 
 
-### Experiment bez čakania č. 1 (#2)
+*Úvaha:* Nakoľko máme veľmi podrobné informácie o príchodoch ľudí na zastávky, je vcelku jednoduché zostaviť tzv. *kumulatívnu predpoveď počtu ľudí na zastávke* pre čas, ktorý ešte nenastal. Toto je funkcia pre danú linku, ktorá nám pre určitý čas vráti predpoveď počtu ľudí, ktorí sa tam v tomto čase budú nachádzať, ak ich nikto nevyzdvihne. Nakoľko presne vieme, aký čas nám trva dostaviť sa na zastávku, a koľko tam v tom čase bude ľudí, je veľmi jednoduché následne zostaviť sekvenciu výprav autobusov tak, aby sme maximalizovali využitie autobusov ale minimalizovali čakanie ľudí na zastávkach.
+
+## 3. Stratégia bez čakania
+
+### Experiment bez čakania č. 1
 
  Vozidlo | Linka A | Linka B | Linka C
  --- | --- | --- | ---
@@ -63,11 +74,9 @@ Veľmi dôležitým rozhodnutím pri vypravovaní autobusov je **časové onesko
  --- | --- | --- | ---
 7.73% | 8m 08s | 97.95%
 
-## 3. Zlepšovanie riešenia
-
 Riešenie kumulatívnej predpovede takmer okamžite prinieslo dobrý výsledok, ale za použitia príliš veľkého počtu autobusov a vidíme priestor na zlepšenie.
 
-### Experiment bez čakania č. 2 (#3)
+### Experiment bez čakania č. 2
 
 Ako základné riešenie sa snažíme použiť riešenie čo najbližšie tomu navrhnutému z kroku 2., avšak použitím rovnakých rozostupov odchodov autobusov.
 
@@ -82,7 +91,7 @@ Ako základné riešenie sa snažíme použiť riešenie čo najbližšie tomu n
 
 Po tomto experimente sme sa priblížili hranici splniteľnosti modelu za podobnej výpravy autobusov, ako nám bola odporúčaná pomocou kumulatívnej predpovede.
 
-### Experiment bez čakania č. 3 (#5)
+### Experiment bez čakania č. 3
 
 Po experimentovaní zisťujeme, že sa nám oplatí meniť hlavne výpravy linky B, nakoľko akékoľvek úpravy na ostatných linkách nám zhoršujú štatistiky a zároveň vidíme, že podiel nedopravených ľudí na štadión je z linky B najväčší.
 
@@ -97,7 +106,7 @@ Po experimentovaní zisťujeme, že sa nám oplatí meniť hlavne výpravy linky
 
 Vidíme, že pri použití rovnakého počtu autobusov na jednotlivých linkách sme zmenou ich výpravy síce zvýšili priemerný čas čakania cestujúcich na autobus, ale ušetrili sme podiel ľudí, ktorí sa na zápas nedostavia.
 
-### Experiment bez čakania č. 4 (#6)
+### Experiment bez čakania č. 4
 
 Keďže akékoľvek experimentovanie s výpravou autobusov už neprinášalo priaznivejšie výsledky, skúšali sme redukovať počet autobusov na jednotlivých linkách. Jediná linka, ktorá nám pri dodržaní požiadaviek takúto redukciu povolila, bola linka A, kde sme boli schopní odobrať jeden autobus.
 
@@ -112,7 +121,7 @@ Keďže akékoľvek experimentovanie s výpravou autobusov už neprinášalo pri
 
 Akýmkoľvek ďaľším experimentovaním sme dosahovali horšie výsledky a nesplnili sme požiadavky na kvalitu prevozu cestujúcich, preto **výsledky experimentu č. 4 považujeme za finálne pre stratégiu bez čakania** a cena takéhoto riešenia je stanovená na **167 700 000 Kč**.
 
-## Stratégia s čakaním
+## 4. Stratégia s čakaním
 
 Pri stratégii s čakaním znova začíname riešením, ktoré nám je odporučené použitím výprav kumulatívnej predpovede.
 
@@ -187,30 +196,53 @@ Dopravnému podniku ponúkame tieto výsledky experimentov:
 
 Stratégia | Použité autobusy č. 2 | % ľudí, ktorí nestihli zápas | Čas čakania na autobus | Cena riešenia
  --- | --- | --- | --- | ---
-Bez čakania | 26 | 7.95% | 9m 58s| **167 700 000 Kč**
+Bez čakania | 26 | 7.95% | 9m 58s | **167 700 000 Kč**
 S čakaním | 36 | 7.86% | 5m 22s | **232 200 000 Kč**
 
 Dopravnému podniku teda ponúkame stratégiu **bez čakania pri použití 26 autobusov** pri cene **167 700 000 Kč**.
 
-## Kedy vypraviť mikrobusy súkromného dopravcu?
+## 5. Kedy vypraviť mikrobusy súkromného dopravcu?
 
-Výprava mikrobusov dáva zmysel, ak sa vyskytuje časový priestor na zastávkach, počas ktorého nie sú pokryté normálnou dopravou, a musí sa čakať na "druhú otočku" autobusov. Počas normálneho vypravovania autobusov sú tieto vypravované tak, aby sa snažili pokryť potreby všetkých potencionálnych cestujúcich a preto nenehávajú priestor na vypravenie mikrobusov.
+*Úvaha:* Výprava mikrobusov dáva zmysel, ak sa vyskytuje časový priestor na zastávkach, počas ktorého nie sú pokryté normálnou dopravou, a musí sa čakať na "druhú otočku" autobusov. Počas normálneho vypravovania autobusov sú tieto vypravované tak, aby sa snažili pokryť potreby všetkých potencionálnych cestujúcich a preto nenehávajú priestor na vypravenie mikrobusov.
 
 Mikrobusy teda vypravujeme po skončení "prvej vlny" vypravených autobusov, a to tak, aby boli všetci cestujúci, ktorým sa mikrobusy ponúknu, ochotní nimi cestovať.
 
-## Pozorovania
+### Experiment č. 1
 
-1.	**Čakanie je výhodné pre cestujúceho, nevýhodné pre dopravcu.** Ako môžeme vidieť, čakanie na zastávke radikálne redukuje čas, ktorý cestujúci musí stráviť čakaním na vozidlo. Na druhej strane je potrebné vypraviť väčšie množstvo autobusov, a preto je pre dopravcu táto varianta neodporúčaná.
-2. **Dopravca by dokázal využil viac mikrobusov.** Pri simulovaní je jasne vidieť, že v prípade, ak by dopravca mal dostupných viac mikrobusov, priestor na ich zúžitkovanie by stále existoval. Maximálny zárobok dopravcu pri zvoze (mikrobusy "to nestihnú otočiť" od času svojej výpravy) je 3120 Kč, a teda v oboch prípadoch sa zisk súkromného dopravcu pohybuje až takmer pri hrane jeho maximálnej možnej hodnoty.
+Linka A | Linka B | Linka C | Zisk
+ --- | --- | --- | --- 
+`static:53 0.1 13` | - | - | 3120 Kč
 
-## Správnosť riešenia
+Počas experimentovania sme zistili, že vypravovať mikrobusy priskoro nemá zmysel, nakoľko nie sú do nich ochotní cestujúci nastupovať. Naša úvaha sa aspoň podľa našich experimentov javí ako správna. Pri vypravení v časovej bubline medzi prvými vlnami autobusov však nemajú mikrobusy dosť času na druhé kolo zbierania cestujúcich a preto je cena 3120 Kč maximum, ktoré môžu vyzbierať (30 Kč x 13 mikrobusov x 8 ľudí = 3120 Kč).
 
-Je zrejmé, že čím plnšie sú autobusy, ktoré prichádzajú ku štadiónu, tým efektívnejšie a výhodnejšie je riešenie. Na vyhodnotenie, ako plné sú autobusy používame nami vytvorenú štatistiku. Jej hodnota sa pri všetkých prípadoch pohybovala na hodnote vyššej ako 97%. Takúto hodnotu pre zaplnenie autobusov môžeme intuitívne pokladať za veľmi dobrú, až optimistickú, nakoľko v reálnom svete sa s takto využitými dopravnými prostredkami nestretávame.
+Výsledkom nášho experimentu je teda rada súkromnému dopravcovi, ktorá bude znieť: **Vypravte všetkých 13 mikrobusov na linku A, takmer po sebe v 53 minúte**.
 
-**Nakoľko dokážeme "využívať kapacitu autobusov na 97%" a zároveň akékoľvek zníženie počtu autobusov na ktorejkoľvek linke by porušilo podmienky zvozu cestujúcich, považujeme naše riešenie za vyhovujúce.**
+## 6. Vyhodnotenie zmien štatistík pri výprave súkromného dopravcu
 
-## Vyhodnotenie a záver
+Môžeme vidieť, že pri výprave mikrobusov súkromného dopravcu sa nám mení stav systému vzhľadom na požiadavky, a obecne sú cestovatelia spokojnejší, nakoľko sú dopravení na zápas s väčšou pravdepodobnosťou a takisto čakať na odvoz nemusia priemerne tak dlho.
 
-Na základe zistených pozorovaní a simulácie môžeme dopravcovi jasne odporučiť **zvoliť stratégiu zvozu cestujúcich bez čakania s použitím 30 autobusov č. 2**.
+Varianta | % ľudí, ktorí nestihli zápas | Čas čakania na odvezenie
+ --- | --- | ---
+Bez súkromného dopravcu | 7.95% | 9m 58s
+So súkromným dopravcom | 6.58% | 9m 41s
 
-Súkromnému dopravcovi môžeme odporučiť pri tejto stratégii rozdeliť jeho **13 mikrobusov pomerom 2:1:10 na linky A:B:C**.
+# Záver
+
+### Odporúčanie dopravnému podniku
+
+Na základe simulačnej štúdie bolo dopravnému podniku odporúčené zvoliť stratégiu zvozu cestujúcich bez čakania pri použití 26 autobusov typu č. 2:
+
+Vozidlo | Linka A | Linka B | Linka C
+ --- | --- | --- | ---
+**Autobus č. 2 x** | **14** | **6** | **6**
+*Výprava* | `static:3 3 14` | `static:11 3 6` | `static:13 5 6`
+ 
+Cena tohto riešenia je **167 700 000 Kč**.
+ 
+### Odporúčanie súkromnému dopravcovi
+ 
+Na základe simulačnej štúdie bolo odporúčené vypraviť všetkých 13 mikrobusov na linku A v čase 53 minút. Takáto výprava mikrobusov mu zabezpečí najväčší zisk, vo výške 3120 Kč.
+
+### Zmena systému pri výprave súkromného dopravcu
+
+Ako sme zo simulačnej štúdie videli, použitie mikrobusov pri zvoze na zápas bolo priaznivé pre cestujúcich, nakoľko väčšie množstvo z nich sa dokázalo dostať na zápas včas a takisto nemuseli čakať tak dlho, ako pri variante bez výpravy mikrobusov.
