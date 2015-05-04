@@ -37,8 +37,8 @@ public class Schedule extends LinkedList<Double> {
 			String [] parts = expression.split(Pattern.quote(":"));
 			if(parts[0].contentEquals("list")) {
 				fromListExpression(parts[1]);
-			} else if(parts[0].contentEquals("distribute")) {
-				fromDistributeExpression(parts[1]);
+			} else if(parts[0].contentEquals("cumulative")) {
+				fromCumulativeExpression(parts[1]);
 			} else if(parts[0].contentEquals("static")) {
 				fromStaticExpression(parts[1]);
 			}
@@ -71,7 +71,7 @@ public class Schedule extends LinkedList<Double> {
 		scanner.close();
 	}
 	
-	private void fromDistributeExpression(String distributePart) {
+	private void fromCumulativeExpression(String distributePart) {
 		int availableVehicleCount = Integer.parseInt(distributePart);
 		
 		double time = 0;

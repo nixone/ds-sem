@@ -48,7 +48,7 @@ public class ConfigPanel extends JPanel {
 	private JLabel priceLabel = new JLabel("Solution price:");
 	private JLabel priceNumber = new JLabel();
 	
-	private JLabel helpLabel = new JLabel("distribute:Vehicles | list:T1[m] t2[m]... | static:Start[m] Offset[m] Vehicles ");
+	private JLabel helpLabel = new JLabel("cumulative:Vehicles | list:T1[m] t2[m]... | static:Start[m] Offset[m] Vehicles ");
 	
 	private JPanel summaryPanel;
 	
