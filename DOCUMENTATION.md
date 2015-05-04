@@ -63,6 +63,8 @@ Veľmi dôležitým rozhodnutím pri vypravovaní autobusov je **časové onesko
 
 ## 3. Stratégia bez čakania
 
+*Pri všetkých experimentoch boli dáta získané z 250 replikácií simulácie.*
+
 ### Experiment bez čakania č. 1
 
  Vozidlo | Linka A | Linka B | Linka C
@@ -122,6 +124,8 @@ Keďže akékoľvek experimentovanie s výpravou autobusov už neprinášalo pri
 Akýmkoľvek ďaľším experimentovaním sme dosahovali horšie výsledky a nesplnili sme požiadavky na kvalitu prevozu cestujúcich, preto **výsledky experimentu č. 4 považujeme za finálne pre stratégiu bez čakania** a cena takéhoto riešenia je stanovená na **167 700 000 Kč**.
 
 ## 4. Stratégia s čakaním
+
+*Pri všetkých experimentoch boli dáta získané z 250 replikácií simulácie.*
 
 Pri stratégii s čakaním znova začíname riešením, ktoré nám je odporučené použitím výprav kumulatívnej predpovede.
 
@@ -221,10 +225,10 @@ Výsledkom nášho experimentu je teda rada súkromnému dopravcovi, ktorá bude
 
 Môžeme vidieť, že pri výprave mikrobusov súkromného dopravcu sa nám mení stav systému vzhľadom na požiadavky, a obecne sú cestovatelia spokojnejší, nakoľko sú dopravení na zápas s väčšou pravdepodobnosťou a takisto čakať na odvoz nemusia priemerne tak dlho.
 
-Varianta | % ľudí, ktorí nestihli zápas | Čas čakania na odvezenie
+ Varianta | % ľudí, ktorí nestihli zápas | Čas čakania na odvezenie
  --- | --- | ---
-Bez súkromného dopravcu | 7.95% | 9m 58s
-So súkromným dopravcom | 6.58% | 9m 41s
+ Bez súkromného dopravcu | 7.95% | 9m 58s
+ So súkromným dopravcom | 6.58% | 9m 41s
 
 # Záver
 
@@ -241,7 +245,7 @@ Cena tohto riešenia je **167 700 000 Kč**.
  
 ### Odporúčanie súkromnému dopravcovi
  
-Na základe simulačnej štúdie bolo odporúčené vypraviť všetkých 13 mikrobusov na linku A v čase 53 minút. Takáto výprava mikrobusov mu zabezpečí najväčší zisk, vo výške 3120 Kč.
+Na základe simulačnej štúdie bolo odporúčené **vypraviť všetkých 13 mikrobusov na linku A v čase 53 minút**. Takáto výprava mikrobusov mu zabezpečí **najväčší zisk, vo výške 3120 Kč**.
 
 ### Zmena systému pri výprave súkromného dopravcu
 
