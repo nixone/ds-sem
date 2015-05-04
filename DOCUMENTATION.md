@@ -225,10 +225,10 @@ Výsledkom nášho experimentu je teda rada súkromnému dopravcovi, ktorá bude
 
 Môžeme vidieť, že pri výprave mikrobusov súkromného dopravcu sa nám mení stav systému vzhľadom na požiadavky, a obecne sú cestovatelia spokojnejší, nakoľko sú dopravení na zápas s väčšou pravdepodobnosťou a takisto čakať na odvoz nemusia priemerne tak dlho.
 
- Varianta | % ľudí, ktorí nestihli zápas | Čas čakania na odvezenie
- --- | --- | ---
- Bez súkromného dopravcu | 7.95% | 9m 58s
- So súkromným dopravcom | 6.58% | 9m 41s
+Varianta | % ľudí, ktorí nestihli zápas | Čas čakania na odvezenie 
+ --- | --- | --- 
+Bez súkromného dopravcu | 7.95% | 9m 58s
+So súkromným dopravcom | 6.58% | 9m 41s
 
 # Záver
 
